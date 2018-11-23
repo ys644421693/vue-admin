@@ -1,5 +1,5 @@
 <template>
-  <el-row :gutter="20">
+  <el-row :gutter="20" id="topMenuCss">
     <el-col :span="3" style="text-align: left">
       <span>管控台</span>
     </el-col>
@@ -9,9 +9,9 @@
         class="el-menu-demo"
         mode="horizontal"
         @select="handleSelect"
-        background-color="#252a2f"
+        background-color="#293c55"
         text-color="#fff"
-        active-text-color="#ffd04b">
+        active-text-color="#00B8EC">
         <el-menu-item index="1">处理中心</el-menu-item>
         <el-submenu index="2">
           <template slot="title">我的工作台</template>
@@ -30,16 +30,16 @@
       </el-menu>
     </el-col>
     <el-col :span="6" style="text-align: right">
-      <el-badge :value="100" :max="10" class="item" style="border: 0px">
+      <el-badge :value="100" :max="10" type="primary" class="item">
         <el-head-button type="info" url="https://gss0.baidu.com/-vo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/960a304e251f95ca34336f4ac2177f3e6609520c.jpg" size="mini" circle></el-head-button>
       </el-badge>
-      <el-badge :value="100" :max="1" class="item" style="border: 0px">
+      <el-badge :value="100" class="item">
         <el-button type="info" icon="el-icon-edit" size="mini" circle></el-button>
       </el-badge>
-      <el-badge :value="100" :max="10" class="item" style="border: 0px">
+      <el-badge :value="100" :max="10" class="item">
         <el-button type="info" icon="el-icon-edit" size="mini" circle></el-button>
       </el-badge>
-      <el-badge :value="100" :max="10" class="item" style="border: 0px">
+      <el-badge :value="100" :max="10" class="item">
         <el-button type="info" icon="el-icon-edit" size="mini" circle></el-button>
       </el-badge>
       <el-tooltip class="item" effect="dark" content="login out" placement="bottom">
@@ -72,5 +72,11 @@ export default {
   .item {
     margin-right: 20px;
     line-height: normal;
+  }
+
+  #topMenuCss{
+    box-shadow: 1px 3px 11px rgba(0,0,0,.2);
+    -moz-box-shadow: 1px 3px 11px rgba(0,0,0,.2);
+    -webkit-box-shadow: 1px 3px 11px rgba(0,0,0,.2);
   }
 </style>

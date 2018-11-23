@@ -3,9 +3,9 @@
     class="el-menu-vertical-demo"
     @open="handleOpen"
     @close="handleClose"
-    background-color="#252a2f"
+    background-color="#293c55"
     text-color="#fff"
-    active-text-color="#ffd04b"
+    active-text-color="#00B8EC"
     :collapse="isCollapse">
     <div id="menuButton">
       <el-button type="info" icon="el-icon-menu" @click="isCollapse=!isCollapse" size="mini"></el-button>

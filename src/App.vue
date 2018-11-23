@@ -38,7 +38,7 @@ export default {
 </script>
 <style>
   .el-header, .el-footer {
-    background-color: #252a2f;
+    background-color: #293c55;
     color: #333;
     text-align: center;
     line-height: 60px;

@@ -230,7 +230,7 @@ export default {
   }
 
   .days li .active {
-    padding: 6px 10px;
+    padding: 10px 10px;
     border-radius: 50%;
     background: #00B8EC;
     color: #fff;
