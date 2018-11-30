@@ -1,37 +1,52 @@
 <template>
-  <el-menu
-    class="el-menu-vertical-demo"
-    @open="handleOpen"
-    @close="handleClose"
-    background-color="#293c55"
-    text-color="#fff"
-    active-text-color="#00B8EC"
-    :collapse="isCollapse">
-    <div id="menuButton">
-      <el-button type="info" icon="el-icon-menu" @click="isCollapse=!isCollapse" size="mini"></el-button>
+  <div class="leftElement">
+    <el-menu
+      class="el-menu-vertical-demo"
+      @open="handleOpen"
+      @close="handleClose"
+      background-color="#293c55"
+      text-color="#fff"
+      active-text-color="#00B8EC"
+      :collapse="isCollapse">
+      <div id="menuButton">
+        <el-button type="info" icon="el-icon-menu" @click="isCollapse=!isCollapse" size="mini"></el-button>
+      </div>
+      <nav v-for="menu in menus" :key="menu.index">
+        <el-submenu :index="menu.index" v-if="menu.childs.length > 0">
+          <template slot="title">
+            <i :class="menu.icon"></i>
+            <span slot="title" v-show="!isCollapse">{{menu.title}}</span>
+          </template>
+          <router-link :to="child.view" :key="child.index" v-for="child in menu.childs" v-if="menu.childs.length > 0">
+            <el-menu-item :index="child.index">{{child.title}}</el-menu-item>
+          </router-link>
+        </el-submenu>
+        <router-link :to="menu.view" v-if="menu.childs.length == 0">
+          <el-menu-item :index="menu.index">
+            <i :class="menu.icon"></i>
+            <span slot="title">{{menu.title}}</span>
+          </el-menu-item>
+        </router-link>
+      </nav>
+    </el-menu>
+    <div class="footerElement" v-if="!isCollapse">
+      <el-head-button url="https://gss0.baidu.com/-vo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/960a304e251f95ca34336f4ac2177f3e6609520c.jpg"
+                      size="normal" circle></el-head-button>
+      <div class="userInfo">
+        <h2>John Doe</h2>
+        <p class="title">CEO & Founder, Example</p>
+        <p>Harvard University</p>
+      </div>
+      <hr style="width: 80%"/>
     </div>
-    <nav v-for="menu in menus" :key="menu.index">
-    <el-submenu :index="menu.index"   v-if="menu.childs.length > 0" >
-      <template slot="title">
-        <i :class="menu.icon"></i>
-        <span slot="title" v-show="!isCollapse">{{menu.title}}</span>
-      </template>
-      <router-link :to="child.view"  :key="child.index" v-for="child in menu.childs" v-if="menu.childs.length > 0">
-        <el-menu-item :index="child.index">{{child.title}}</el-menu-item>
-      </router-link>
-    </el-submenu>
-    <router-link :to="menu.view"  v-if="menu.childs.length == 0">
-      <el-menu-item :index="menu.index">
-        <i :class="menu.icon"></i>
-        <span slot="title">{{menu.title}}</span>
-      </el-menu-item>
-    </router-link>
-    </nav>
-  </el-menu>
+  </div>
 </template>
 
 <script>
+import elHeadButton from '../util/HeadPic'
+
 export default {
+  components: {elHeadButton},
   data () {
     return {
       isCollapse: false,
@@ -104,5 +119,26 @@ export default {
   }
   a:hover{
     text-decoration:none;
+  }
+  .footerElement{
+    width: 100%;
+    text-align: center;
+    bottom:60px;
+    position:absolute;
+    padding-top: 20px;
+  }
+  .leftElement{
+    min-height: 300px;
+    position:relative;
+    border-right: solid 2px #e6e6e6;
+    background-color: #293c55
+  }
+  .leftElement .el-menu{
+    border-right: none;
+  }
+  .userInfo{
+    color: #ffffff;
+    line-height: 30px;
+    margin-top: 10px;
   }
 </style>

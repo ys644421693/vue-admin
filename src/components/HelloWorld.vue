@@ -1,19 +1,14 @@
 <template>
   <div class="hello">
     <el-row>
-      <el-col :span="8">
+      <el-col :span="17">
         <el-card class="box-card">
+          <ve-line :data="chartData"></ve-line>
+        </el-card>
+      </el-col>
+      <el-col :span="7">
+        <el-card class="box-card" style="text-align: left">
           <calendar></calendar>
-        </el-card>
-      </el-col>
-      <el-col :span="8">
-        <el-card class="box-card">
-          <ve-line :data="chartData"></ve-line>
-        </el-card>
-      </el-col>
-      <el-col :span="8">
-        <el-card class="box-card">
-          <ve-line :data="chartData"></ve-line>
         </el-card>
       </el-col>
     </el-row>
@@ -22,6 +17,7 @@
 
 <script>
 import calendar from './Calendar'
+import { Notification } from 'element-ui'
 export default {
   name: 'HelloWorld',
   data () {
@@ -36,7 +32,12 @@ export default {
         rows: [
           { '日期': '2018-05-22', '访问用户': 32371, '下单用户': 19810 },
           { '日期': '2018-05-23', '访问用户': 12328, '下单用户': 4398 },
-          { '日期': '2018-05-24', '访问用户': 92381, '下单用户': 52910 }
+          { '日期': '2018-05-24', '访问用户': 12328, '下单用户': 4398 },
+          { '日期': '2018-05-25', '访问用户': 12328, '下单用户': 4398 },
+          { '日期': '2018-05-26', '访问用户': 12328, '下单用户': 4398 },
+          { '日期': '2018-05-27', '访问用户': 12328, '下单用户': 4398 },
+          { '日期': '2018-05-28', '访问用户': 12328, '下单用户': 4398 },
+          { '日期': '2018-05-29', '访问用户': 92381, '下单用户': 52910 }
         ]
       },
       demoEvents: [{
@@ -51,8 +52,21 @@ export default {
     }
   },
   methods: {
+    open (title, date) {
+      this.$notify({
+        title: title,
+        message: '这是一条警告的提示消息',
+        type: 'warning',
+        position: 'bottom-right',
+        offset: 100,
+        duration: 10000
+      })
+    }
   },
-  components: {calendar}
+  components: {calendar, Notification},
+  mounted () {
+    this.open('今日待办', '')
+  }
 }
 </script>
 
@@ -73,9 +87,9 @@ a {
   color: #42b983;
 }
 .box-card {
-  max-width: 400px;
   margin-left: 60px;
   max-height: 600px;
+  height: 520px;
 }
 .clearfix{
   line-height:normal;
@@ -95,4 +109,7 @@ a {
 .el-date-table th{
   max-height: 30px;
 }
+  .hello{
+    min-height: 300px;
+  }
 </style>

@@ -9,7 +9,9 @@
         <el-main>
           <router-view/>
         </el-main>
-        <el-footer>Footer</el-footer>
+        <el-footer style="height: 100px">
+          <footer-info></footer-info>
+        </el-footer>
       </el-container>
     </el-container>
   </el-container>
@@ -19,20 +21,14 @@
 
 import LeftMenu from './components/LeftMenu'
 import TopMenu from './components/TopMenu'
+import FooterInfo from './components/FooterInfo'
 
 export default {
   name: 'App',
-  components: {TopMenu, LeftMenu},
+  components: {FooterInfo, TopMenu, LeftMenu},
   mounted: function () {
-    this.open()
   },
   methods: {
-    open () {
-      this.$message({
-        message: 'welcome here',
-        type: 'success'
-      })
-    }
   }
 }
 </script>
@@ -75,5 +71,7 @@ export default {
     top:0;
     width:100%;
     height:100%;
+    min-height: 600px;
+    min-width: 900px;
   }
 </style>
