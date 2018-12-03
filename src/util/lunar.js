@@ -181,7 +181,7 @@ export const lunarByBetween = function (year, between) {
 }
 // 中文月份
 export const chineseMonth = function (month) {
-  var monthHash = ['', '正月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '冬月', '腊月']
+  var monthHash = ['', '春节', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '冬月', '腊月']
   return monthHash[month]
 }
 // 中文日期

@@ -9,6 +9,7 @@ import VCharts from 'v-charts'
 import VeLine from 'v-charts/lib/line.common'
 import '../node_modules/element-ui/lib/theme-chalk/index.css'
 import './assets/css/reset.css'
+import 'font-awesome/scss/font-awesome.scss'
 
 Vue.config.productionTip = false
 Vue.prototype.$http = axios
