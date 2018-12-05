@@ -4,6 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import ElementUI from 'element-ui'
+import store from './store/index'
 import axios from 'axios'
 import VCharts from 'v-charts'
 import VeLine from 'v-charts/lib/line.common'
@@ -19,6 +20,7 @@ Vue.component(VeLine.name, VeLine)
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

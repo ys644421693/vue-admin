@@ -42,22 +42,52 @@
       </el-menu>
     </el-aside>
     <el-main>
-      <div class="edit"></div>
+      <div class="edit">
+      </div>
     </el-main>
+    <el-aside class="right-attr" width="210px">
+      <br/>
+      <h1 style="color: #ffffff">属性</h1>
+      <hr/>
+      <div :is="componentAttr" :attr="props"></div>
+      <el-row>
+        <el-button type="primary" size="mini" icon="el-icon-view" plain @click="showDialogVisible">预览</el-button>
+        <el-button type="success" size="mini" icon="el-icon-edit-outline" plain>代码</el-button>
+      </el-row>
+    </el-aside>
+    <el-dialog title="组件预览" :visible.sync="dialogVisible">
+      <div :is="component" :attr="props"></div>
+    </el-dialog>
   </el-container>
 </template>
 
 <script>
+const PageFramework = r => require.ensure([], () => r(require('./components/framework/PageFramework.vue')), 'PageFramework')
+const PageFrameworkAttr = r => require.ensure([], () => r(require('./components/framework/PageFrameworkAttr.vue')), 'PageFrameworkAttr')
 export default {
   name: 'CmsIndex',
+  data () {
+    return {
+      dialogVisible: false,
+      component: 'PageFramework',
+      componentAttr: 'PageFrameworkAttr',
+      props: {attr: ''}
+    }
+  },
   methods: {
     handleOpen (key, keyPath) {
       console.log(key, keyPath)
     },
     handleClose (key, keyPath) {
       console.log(key, keyPath)
+    },
+    showDialogVisible () {
+      this.props.framework = 'leftHeaderMain'
+      this.component = 'PageFramework'
+      this.dialogVisible = true
     }
-  }
+  },
+  components: {PageFramework, PageFrameworkAttr}
 }
 </script>
 
@@ -90,5 +120,9 @@ export default {
   }
   .el-menu{
     height: 100%;
+  }
+  .right-attr{
+    background-color: #545c64;
+    padding: 20px 5px;
   }
 </style>

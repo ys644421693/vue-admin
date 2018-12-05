@@ -12,8 +12,8 @@
         background-color="#293c55"
         text-color="#fff"
         active-text-color="#00B8EC">
-        <el-menu-item index="1"><router-link to="/">管控台</router-link></el-menu-item>
-        <el-menu-item index="2"><router-link to="/cms">CMS</router-link></el-menu-item>
+        <el-menu-item index="1">管控台</el-menu-item>
+        <el-menu-item index="2">CMS</el-menu-item>
         <el-submenu index="3">
           <template slot="title">我的工作台</template>
           <el-menu-item index="3-1">选项1</el-menu-item>
@@ -66,6 +66,11 @@ export default {
   },
   methods: {
     handleSelect (key, keyPath) {
+      if (key === '1') {
+        window.location.href = '/#/'
+      } else if (key === '2') {
+        window.location.href = '/#/cms'
+      }
     },
     defaultSelect () {
       if (location.href.indexOf('cms') !== -1) {
