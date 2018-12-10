@@ -41,11 +41,12 @@
         </el-menu-item>
       </el-menu>
     </el-aside>
-    <el-main>
+    <el-main id="containerSet">
       <div class="edit">
+        <div :is="componentLayout" :layoutAttr="props"></div>
       </div>
     </el-main>
-    <el-aside class="right-attr" width="210px">
+    <el-aside class="right-attr" width="240px">
       <br/>
       <h1 style="color: #ffffff">属性</h1>
       <hr/>
@@ -70,8 +71,9 @@ export default {
     return {
       dialogVisible: false,
       component: 'PageFramework',
+      componentLayout: 'PageFramework',
       componentAttr: 'PageFrameworkAttr',
-      props: {attr: ''}
+      props: {layoutAttr: {framework: 'leftHeaderMain'}}
     }
   },
   methods: {
@@ -82,8 +84,8 @@ export default {
       console.log(key, keyPath)
     },
     showDialogVisible () {
-      this.props.framework = 'leftHeaderMain'
-      this.component = 'PageFramework'
+      this.props.layoutAttr.framework = 'leftHeaderMain'
+      this.componentLayout = 'PageFramework'
       this.dialogVisible = true
     }
   },
