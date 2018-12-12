@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="layout-edit">
     <el-container v-if="layoutAttr.framework==='headerMain'">
       <el-header>Header</el-header>
       <el-main>main</el-main>
@@ -51,22 +51,31 @@
         <el-footer>Footer</el-footer>
       </el-container>
     </el-container>
-    {{layoutAttr}}
   </div>
 </template>
 
 <script>
+import {addEditButton} from '../../js/cmsScript.js'
 export default {
   name: 'PageFramework',
   data () {
     return {}
   },
-  props: {layoutAttr: {
-    framework: 'headerMain'
-  }}
+  mounted: function () {
+    addEditButton()
+    $('.layout-edit').draggable({
+      connectToSortable: '.edit',
+      helper: 'clone',
+      revert: 'invalid',
+      handle: '.edit .layout-drag'
+    })
+  },
+  props: {layoutAttr: {}}
 }
 </script>
 
 <style scoped>
-
+.el-container{
+  height: 100%;
+}
 </style>

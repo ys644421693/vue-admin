@@ -1,0 +1,20 @@
+.layout-edit{
+  display: block;
+  position: relative;
+  opacity: 1;
+  left: 0px;
+  top: 0px;
+}
+.layout-drag,.layout-delete{
+  position: absolute;
+  top: 5px;
+}
+.layout-drag{
+  right: 80px;
+  z-index: 10;
+
+}
+.layout-delete{
+  right: 5px;
+  z-index: 10;
+}

@@ -63,6 +63,12 @@
 </template>
 
 <script>
+import './css/cmsCss.css'
+import 'jquery-ui/themes/base/draggable.css'
+import 'jquery-ui/themes/base/sortable.css'
+import {addEditButton} from './js/cmsScript.js'
+import draggable from 'jquery-ui/ui/widgets/draggable'
+import sortable from 'jquery-ui/ui/widgets/sortable'
 const PageFramework = r => require.ensure([], () => r(require('./components/framework/PageFramework.vue')), 'PageFramework')
 const PageFrameworkAttr = r => require.ensure([], () => r(require('./components/framework/PageFrameworkAttr.vue')), 'PageFrameworkAttr')
 export default {
@@ -73,8 +79,20 @@ export default {
       component: 'PageFramework',
       componentLayout: 'PageFramework',
       componentAttr: 'PageFrameworkAttr',
-      props: {layoutAttr: {framework: 'leftHeaderMain'}}
+      props: {framework: 'leftHeaderMain'}
     }
+  },
+  mounted: function () {
+    addEditButton()
+    $('.edit').sortable({
+      revert: true
+    })
+    $('#draggable').draggable({
+      connectToSortable: '.edit',
+      helper: 'clone',
+      revert: 'invalid',
+      handle: '.edit .layout-drag'
+    })
   },
   methods: {
     handleOpen (key, keyPath) {
@@ -84,12 +102,12 @@ export default {
       console.log(key, keyPath)
     },
     showDialogVisible () {
-      this.props.layoutAttr.framework = 'leftHeaderMain'
+      this.props.framework = 'leftHeaderMain'
       this.componentLayout = 'PageFramework'
       this.dialogVisible = true
     }
   },
-  components: {PageFramework, PageFrameworkAttr}
+  components: {PageFramework, PageFrameworkAttr, draggable, sortable}
 }
 </script>
 
