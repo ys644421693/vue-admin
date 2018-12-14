@@ -104,6 +104,8 @@ export default {
     loadData: function () {
       this.$http.get('http://www.baidu.com', {}).then((response) => {
         console.log(response.data)
+      }).catch((er) => {
+        console.error(er)
       })
     }
   }

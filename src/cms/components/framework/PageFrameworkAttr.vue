@@ -66,11 +66,6 @@ export default {
         value: 'vertical',
         label: '垂直'
       }],
-      height: '100%',
-      layoutValue: 'header-main-vertical',
-      directionValue: 'horizontal',
-      width: '100%',
-      heightBottom: '100%',
       form: {
         name: '',
         region: '',
@@ -80,6 +75,48 @@ export default {
         type: [],
         resource: '',
         desc: ''
+      }
+    }
+  },
+  computed: {
+    heightBottom: {
+      get () {
+        return this.$store.state.frameworkAttr.heightBottom
+      },
+      set (value) {
+        this.$store.commit('FRAMEWORK_ATTR_HEIGHTBOTTOM', value)
+      }
+    },
+    height: {
+      get () {
+        return this.$store.state.frameworkAttr.height
+      },
+      set (value) {
+        this.$store.commit('FRAMEWORK_ATTR_HEIGHT', value)
+      }
+    },
+    layoutValue: {
+      get () {
+        return this.$store.state.frameworkAttr.layoutValue
+      },
+      set (value) {
+        this.$store.commit('FRAMEWORK_ATTR_LAYOUTVALUE', value)
+      }
+    },
+    directionValue: {
+      get () {
+        return this.$store.state.frameworkAttr.directionValue
+      },
+      set (value) {
+        this.$store.commit('FRAMEWORK_ATTR_DIRECTIONVALUE', value)
+      }
+    },
+    width: {
+      get () {
+        return this.$store.state.frameworkAttr.width
+      },
+      set (value) {
+        this.$store.commit('FRAMEWORK_ATTR_WIDTH', value)
       }
     }
   }

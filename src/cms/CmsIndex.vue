@@ -14,18 +14,7 @@
             <i class="fa-file fa fa-lg"> </i>
             <span>布局</span>
           </template>
-          <el-menu-item-group>
-            <template slot="title">分组一</template>
-            <el-menu-item index="1-1">选项1</el-menu-item>
-            <el-menu-item index="1-2">选项2</el-menu-item>
-          </el-menu-item-group>
-          <el-menu-item-group title="分组2">
-            <el-menu-item index="1-3">选项3</el-menu-item>
-          </el-menu-item-group>
-          <el-submenu index="1-4">
-            <template slot="title">选项4</template>
-            <el-menu-item index="1-4-1">选项1</el-menu-item>
-          </el-submenu>
+          <el-menu-item index="1-3">选项3 <span class="label">拖动</span></el-menu-item>
         </el-submenu>
         <el-menu-item index="2">
           <i class="fa-navicon fa fa-lg"></i>
@@ -43,6 +32,7 @@
     </el-aside>
     <el-main id="containerSet">
       <div class="edit">
+        {{loadAttr}}
         <div :is="componentLayout" :layoutAttr="props"></div>
       </div>
     </el-main>
@@ -69,10 +59,13 @@ import 'jquery-ui/themes/base/sortable.css'
 import {addEditButton} from './js/cmsScript.js'
 import draggable from 'jquery-ui/ui/widgets/draggable'
 import sortable from 'jquery-ui/ui/widgets/sortable'
+import store from './store/index'
+import {mapGetters} from 'vuex'
 const PageFramework = r => require.ensure([], () => r(require('./components/framework/PageFramework.vue')), 'PageFramework')
 const PageFrameworkAttr = r => require.ensure([], () => r(require('./components/framework/PageFrameworkAttr.vue')), 'PageFrameworkAttr')
 export default {
   name: 'CmsIndex',
+  store,
   data () {
     return {
       dialogVisible: false,
@@ -85,7 +78,8 @@ export default {
   mounted: function () {
     addEditButton()
     $('.edit').sortable({
-      revert: true
+      revert: true,
+      handle: '.layout-drag'
     })
     $('#draggable').draggable({
       connectToSortable: '.edit',
@@ -93,6 +87,7 @@ export default {
       revert: 'invalid',
       handle: '.edit .layout-drag'
     })
+    console.info(this.$store.state.framework)
   },
   methods: {
     handleOpen (key, keyPath) {
@@ -106,6 +101,16 @@ export default {
       this.componentLayout = 'PageFramework'
       this.dialogVisible = true
     }
+  },
+  computed: {
+    loadAttr: function () {
+      console.info(this.$store.getters.frameworkAttrHeightBottom)
+      return this.$store.getters.frameworkAttrHeightBottom
+    },
+    ...mapGetters([
+      'doneTodos',
+      'doneTodosCount'
+    ])
   },
   components: {PageFramework, PageFrameworkAttr, draggable, sortable}
 }
