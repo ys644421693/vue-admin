@@ -84,7 +84,11 @@ export default {
         return this.$store.state.frameworkAttr.heightBottom
       },
       set (value) {
-        this.$store.commit('FRAMEWORK_ATTR_HEIGHTBOTTOM', value)
+        this.$store.dispatch({
+          type: 'updateFrameworkAttr',
+          key: 'FRAMEWORK_ATTR_HEIGHTBOTTOM',
+          value: value
+        })
       }
     },
     height: {
@@ -92,7 +96,11 @@ export default {
         return this.$store.state.frameworkAttr.height
       },
       set (value) {
-        this.$store.commit('FRAMEWORK_ATTR_HEIGHT', value)
+        this.$store.dispatch({
+          type: 'updateFrameworkAttr',
+          key: 'FRAMEWORK_ATTR_HEIGHT',
+          value: value
+        })
       }
     },
     layoutValue: {
@@ -100,7 +108,11 @@ export default {
         return this.$store.state.frameworkAttr.layoutValue
       },
       set (value) {
-        this.$store.commit('FRAMEWORK_ATTR_LAYOUTVALUE', value)
+        this.$store.dispatch({
+          type: 'updateFrameworkAttr',
+          key: 'FRAMEWORK_ATTR_LAYOUTVALUE',
+          value: value
+        })
       }
     },
     directionValue: {
@@ -108,7 +120,11 @@ export default {
         return this.$store.state.frameworkAttr.directionValue
       },
       set (value) {
-        this.$store.commit('FRAMEWORK_ATTR_DIRECTIONVALUE', value)
+        this.$store.dispatch({
+          type: 'updateFrameworkAttr',
+          key: 'FRAMEWORK_ATTR_DIRECTIONVALUE',
+          value: value
+        })
       }
     },
     width: {
@@ -116,7 +132,11 @@ export default {
         return this.$store.state.frameworkAttr.width
       },
       set (value) {
-        this.$store.commit('FRAMEWORK_ATTR_WIDTH', value)
+        this.$store.dispatch({
+          type: 'updateFrameworkAttr',
+          key: 'FRAMEWORK_ATTR_WIDTH',
+          value: value
+        })
       }
     }
   }

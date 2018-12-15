@@ -6,7 +6,13 @@ import * as mutations from './mutations/frameworkMutation'
 
 Vue.use(Vuex)
 const state = {
-  frameworkAttr: {}
+  frameworkAttr: {
+    height: '',
+    layoutValue: '',
+    directionValue: '',
+    width: '',
+    heightBottom: ''
+  }
 }
 export default new Vuex.Store({
   state,

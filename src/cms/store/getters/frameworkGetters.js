@@ -3,22 +3,21 @@ export const frameworkData = (state) => {
   return state.frameworkAttr
 }
 export const frameworkAttrHeight = (state) => {
-  state.frameworkAttr.height = state.height
-  return state.frameworkAttr
+  return state.frameworkAttr.height
 }
 export const frameworkAttrLayoutValue = (state) => {
-  state.frameworkAttr.layoutValue = state.layoutValue
-  return state.frameworkAttr
+  return state.frameworkAttr.layoutValue
 }
 export const frameworkAttrDirectionValue = (state) => {
-  state.frameworkAttr.directionValue = state.directionValue
-  return state.frameworkAttr
+  return state.frameworkAttr.directionValue
 }
 export const frameworkAttrWidth = (state) => {
-  state.frameworkAttr.width = state.width
-  return state.frameworkAttr
+  return state.frameworkAttr.width
 }
 export const frameworkAttrHeightBottom = (state) => {
-  state.frameworkAttr.heightBottom = state.heightBottom
+  console.info(state)
+  return state.frameworkAttr.heightBottom
+}
+export const getFrameworkAttr = (state) => {
   return state.frameworkAttr
 }

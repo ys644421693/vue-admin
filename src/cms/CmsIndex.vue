@@ -102,16 +102,9 @@ export default {
       this.dialogVisible = true
     }
   },
-  computed: {
-    loadAttr: function () {
-      console.info(this.$store.getters.frameworkAttrHeightBottom)
-      return this.$store.getters.frameworkAttrHeightBottom
-    },
-    ...mapGetters([
-      'doneTodos',
-      'doneTodosCount'
-    ])
-  },
+  computed: mapGetters({
+    loadAttr: 'frameworkAttrHeightBottom'
+  }),
   components: {PageFramework, PageFrameworkAttr, draggable, sortable}
 }
 </script>
