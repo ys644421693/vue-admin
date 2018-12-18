@@ -43,7 +43,7 @@ const actions = {
   frameworkDirectionValueAction ({ commit, state }, value) {
     commit('setFrameworkDirectionValue', value)
   },
-  frameworkWidthhtAction ({ commit, state }, value) {
+  frameworkWidthAction ({ commit, state }, value) {
     commit('setFrameworkWidth', value)
   },
   frameworkHeightBottomAction ({ commit, state }, value) {
