@@ -32,7 +32,6 @@
     </el-aside>
     <el-main id="containerSet">
       <div class="edit">
-        {{loadAttr}}
         <div :is="componentLayout" :layoutAttr="props"></div>
       </div>
     </el-main>
@@ -87,7 +86,6 @@ export default {
       revert: 'invalid',
       handle: '.edit .layout-drag'
     })
-    console.info(this.$store.state.framework)
   },
   methods: {
     handleOpen (key, keyPath) {
@@ -102,9 +100,16 @@ export default {
       this.dialogVisible = true
     }
   },
-  computed: mapGetters({
-    loadAttr: 'frameworkAttrHeightBottom'
-  }),
+  computed: {
+    ...mapGetters('framework', {
+      height: 'frameworkAttrHeight',
+      layoutValue: 'frameworkAttrLayoutValue',
+      directionValue: 'frameworkAttrDirectionValue',
+      width: 'frameworkAttrWidth',
+      data: 'frameworkAttrData',
+      heightBottom: 'frameworkAttrHeightBottom'
+    })
+  },
   components: {PageFramework, PageFrameworkAttr, draggable, sortable}
 }
 </script>

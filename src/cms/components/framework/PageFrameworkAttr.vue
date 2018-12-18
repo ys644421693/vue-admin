@@ -81,62 +81,42 @@ export default {
   computed: {
     heightBottom: {
       get () {
-        return this.$store.state.frameworkAttr.heightBottom
+        return this.$store.state.framework.heightBottom
       },
       set (value) {
-        this.$store.dispatch({
-          type: 'updateFrameworkAttr',
-          key: 'FRAMEWORK_ATTR_HEIGHTBOTTOM',
-          value: value
-        })
+        this.$store.dispatch('framework/frameworkHeightBottomAction', value)
       }
     },
     height: {
       get () {
-        return this.$store.state.frameworkAttr.height
+        return this.$store.state.framework.height
       },
       set (value) {
-        this.$store.dispatch({
-          type: 'updateFrameworkAttr',
-          key: 'FRAMEWORK_ATTR_HEIGHT',
-          value: value
-        })
+        this.$store.dispatch('framework/frameworkHeightAction', value)
       }
     },
     layoutValue: {
       get () {
-        return this.$store.state.frameworkAttr.layoutValue
+        return this.$store.state.framework.layoutValue
       },
       set (value) {
-        this.$store.dispatch({
-          type: 'updateFrameworkAttr',
-          key: 'FRAMEWORK_ATTR_LAYOUTVALUE',
-          value: value
-        })
+        this.$store.dispatch('framework/frameworkLayoutValueAction', value)
       }
     },
     directionValue: {
       get () {
-        return this.$store.state.frameworkAttr.directionValue
+        return this.$store.state.framework.directionValue
       },
       set (value) {
-        this.$store.dispatch({
-          type: 'updateFrameworkAttr',
-          key: 'FRAMEWORK_ATTR_DIRECTIONVALUE',
-          value: value
-        })
+        this.$store.dispatch('framework/frameworkDirectionValueAction', value)
       }
     },
     width: {
       get () {
-        return this.$store.state.frameworkAttr.width
+        return this.$store.state.framework.width
       },
       set (value) {
-        this.$store.dispatch({
-          type: 'updateFrameworkAttr',
-          key: 'FRAMEWORK_ATTR_WIDTH',
-          value: value
-        })
+        this.$store.dispatch('framework/frameworkWidthAction', value)
       }
     }
   }

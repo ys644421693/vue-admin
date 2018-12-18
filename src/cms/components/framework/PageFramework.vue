@@ -69,7 +69,6 @@ export default {
       revert: 'invalid',
       handle: '.edit .layout-drag'
     })
-    console.info(this.$store.state.frameworkAttr)
   },
   props: {layoutAttr: {}}
 }
