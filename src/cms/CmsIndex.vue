@@ -1,12 +1,12 @@
 <template>
   <el-container>
-    <el-aside width="210px">
+    <div class="leftElement">
       <el-menu
-        default-active="2"
         class="el-menu-vertical-demo"
         @open="handleOpen"
         @close="handleClose"
         background-color="#545c64"
+        :collapse="isOpenNav"
         text-color="#fff"
         active-text-color="#ffd04b">
         <el-submenu index="1">
@@ -29,7 +29,7 @@
           <span slot="title">导航四</span>
         </el-menu-item>
       </el-menu>
-    </el-aside>
+    </div>
     <el-main id="containerSet">
       <div class="edit">
         <div :is="componentLayout" :layoutAttr="props"></div>
@@ -37,7 +37,7 @@
     </el-main>
     <el-aside class="right-attr" width="240px">
       <br/>
-      <h1 style="color: #ffffff">属性</h1>
+      <h1 style="color: #ffffff">属性 <el-button type="danger" icon="el-icon-menu" circle size="mini" @click="showNav"></el-button></h1>
       <hr/>
       <div :is="componentAttr" :attr="props"></div>
       <el-row>
@@ -98,16 +98,22 @@ export default {
       this.props.framework = 'leftHeaderMain'
       this.componentLayout = 'PageFramework'
       this.dialogVisible = true
+    },
+    showNav () {
+      const value = !this.$store.state.root.isOpenNav
+      this.$store.dispatch('root/setOpenNav', value)
     }
   },
   computed: {
     ...mapGetters('framework', {
       height: 'frameworkAttrHeight',
       layoutValue: 'frameworkAttrLayoutValue',
-      directionValue: 'frameworkAttrDirectionValue',
       width: 'frameworkAttrWidth',
       data: 'frameworkAttrData',
       heightBottom: 'frameworkAttrHeightBottom'
+    }),
+    ...mapGetters('root', {
+      isOpenNav: 'getOpenNav'
     })
   },
   components: {PageFramework, PageFrameworkAttr, draggable, sortable}
@@ -116,15 +122,15 @@ export default {
 
 <style scoped>
   .edit{
-    height: 70%;
+    height: 98%;
     min-height: 300px;
     border: 1px solid #dcdfe6;
     border-radius: 4px;
     position: relative;
     word-wrap: break-word;
+    overflow-x: scroll;
   }
   .el-main {
-    background-color: #F2F6FC;
     color: #333;
     text-align: center;
   }
@@ -144,8 +150,18 @@ export default {
   .el-menu{
     height: 100%;
   }
+  .el-menu-vertical-demo:not(.el-menu--collapse) {
+    width: 200px;
+    height: 100%;
+  }
   .right-attr{
     background-color: #545c64;
     padding: 20px 5px;
+  }
+  .leftElement{
+    min-height: 300px;
+    position:relative;
+    border-right: solid 2px #e6e6e6;
+    background-color: #293c55
   }
 </style>

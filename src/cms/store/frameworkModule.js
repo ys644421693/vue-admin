@@ -2,11 +2,10 @@
 // initial state
 // shape: [{ id, quantity }]
 const state = {
-  height: '',
+  height: '100px',
   layoutValue: 'header-main-vertical',
-  directionValue: '',
-  width: '',
-  heightBottom: '',
+  width: '200px',
+  heightBottom: '100px',
   data: {}
 }
 
@@ -39,9 +38,6 @@ const actions = {
   },
   frameworkLayoutValueAction ({ commit, state }, value) {
     commit('setFrameworkLayoutValue', value)
-  },
-  frameworkDirectionValueAction ({ commit, state }, value) {
-    commit('setFrameworkDirectionValue', value)
   },
   frameworkWidthAction ({ commit, state }, value) {
     commit('setFrameworkWidth', value)

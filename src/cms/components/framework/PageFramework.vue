@@ -1,54 +1,54 @@
 <template>
   <div class="layout-edit">
-    <el-container v-if="layoutAttr.framework==='headerMain'">
-      <el-header>Header</el-header>
-      <el-main>main</el-main>
+    <el-container v-if="layoutValue==='header-main-vertical'" direction="vertical">
+      <el-header :height="height"></el-header>
+      <el-main></el-main>
     </el-container>
 
-    <el-container v-if="layoutAttr.framework==='headerMainFooter'">
-      <el-header>Header</el-header>
-      <el-main>Main</el-main>
-      <el-footer>Footer</el-footer>
+    <el-container v-if="layoutValue==='header-main-footer-vertical'" direction="vertical">
+      <el-header :height="height"></el-header>
+      <el-main></el-main>
+      <el-footer></el-footer>
     </el-container>
 
-    <el-container v-if="layoutAttr.framework==='navMain'">
-      <el-aside width="200px">Aside</el-aside>
-      <el-main>Main</el-main>
+    <el-container v-if="layoutValue==='aside-main-horizontal'" direction="horizontal">
+      <el-aside :width="width"></el-aside>
+      <el-main></el-main>
     </el-container>
 
-    <el-container v-if="layoutAttr.framework==='headNavMain'">
-      <el-header>Header</el-header>
+    <el-container v-if="layoutValue==='header-aside-Main'" direction="vertical">
+      <el-header :height="height"></el-header>
       <el-container>
-        <el-aside width="200px">Aside</el-aside>
-        <el-main>Main</el-main>
+        <el-aside :width="width"></el-aside>
+        <el-main></el-main>
       </el-container>
     </el-container>
 
-    <el-container v-if="layoutAttr.framework==='headerLeftMainFooter'">
-      <el-header>Header</el-header>
+    <el-container v-if="layoutValue==='header-aside-main-footer'" direction="vertical">
+      <el-header :height="height"></el-header>
       <el-container>
-        <el-aside width="200px">Aside</el-aside>
+        <el-aside :width="width"></el-aside>
         <el-container>
-          <el-main>Main</el-main>
-          <el-footer>Footer</el-footer>
+          <el-main></el-main>
+          <el-footer></el-footer>
         </el-container>
       </el-container>
     </el-container>
 
-    <el-container v-if="layoutAttr.framework==='leftHeaderMain'">
-      <el-aside width="200px">Aside</el-aside>
-      <el-container>
-        <el-header>Header</el-header>
-        <el-main>Main</el-main>
+    <el-container v-if="layoutValue==='aside-header-main'" direction="horizontal">
+      <el-aside :width="width"></el-aside>
+      <el-container direction="vertical">
+        <el-header :height="height"></el-header>
+        <el-main></el-main>
       </el-container>
     </el-container>
 
-    <el-container v-if="layoutAttr.framework==='leftHeaderMainFooter'">
-      <el-aside width="200px">Aside</el-aside>
-      <el-container>
-        <el-header>Header</el-header>
-        <el-main>Main</el-main>
-        <el-footer height="">Footer</el-footer>
+    <el-container v-if="layoutValue==='aside-header-main-footer'" direction="horizontal">
+      <el-aside :width="width"></el-aside>
+      <el-container direction="vertical">
+        <el-header :height="height"></el-header>
+        <el-main></el-main>
+        <el-footer :height="heightBottom"></el-footer>
       </el-container>
     </el-container>
   </div>
@@ -56,6 +56,7 @@
 
 <script>
 import {addEditButton} from '../../js/cmsScript.js'
+import {mapGetters} from 'vuex'
 export default {
   name: 'PageFramework',
   data () {
@@ -70,6 +71,15 @@ export default {
       handle: '.edit .layout-drag'
     })
   },
+  computed: {
+    ...mapGetters('framework', {
+      height: 'frameworkAttrHeight',
+      layoutValue: 'frameworkAttrLayoutValue',
+      width: 'frameworkAttrWidth',
+      data: 'frameworkAttrData',
+      heightBottom: 'frameworkAttrHeightBottom'
+    })
+  },
   props: {layoutAttr: {}}
 }
 </script>
@@ -77,5 +87,19 @@ export default {
 <style scoped>
 .el-container{
   height: 100%;
+}
+.el-header, .el-footer {
+  background-color: #B3C0D1;
+  color: #333;
+}
+
+.el-aside {
+  background-color: #D3DCE6;
+  color: #333;
+}
+
+.el-main {
+  background-color: #E9EEF3;
+  color: #333;
 }
 </style>

@@ -10,16 +10,6 @@
         </el-option>
       </el-select>
     </el-form-item>
-    <el-form-item label="子元素排列">
-      <el-select placeholder="请选择" size="mini" v-model="directionValue">
-        <el-option
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-          v-for="item in direction">
-        </el-option>
-      </el-select>
-    </el-form-item>
     <el-form-item label="顶栏高度">
         <el-input v-model="height" size="mini"></el-input>
     </el-form-item>
@@ -59,13 +49,6 @@ export default {
         value: 'aside-header-main-footer',
         label: 'asideHeaderMainFooter'
       }],
-      direction: [{
-        value: 'horizontal ',
-        label: '水平'
-      }, {
-        value: 'vertical',
-        label: '垂直'
-      }],
       form: {
         name: '',
         region: '',
@@ -101,14 +84,6 @@ export default {
       },
       set (value) {
         this.$store.dispatch('framework/frameworkLayoutValueAction', value)
-      }
-    },
-    directionValue: {
-      get () {
-        return this.$store.state.framework.directionValue
-      },
-      set (value) {
-        this.$store.dispatch('framework/frameworkDirectionValueAction', value)
       }
     },
     width: {
