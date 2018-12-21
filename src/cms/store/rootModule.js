@@ -2,7 +2,7 @@
 // initial state
 // shape: [{ id, quantity }]
 const state = {
-  isOpenNav: true
+  isOpenNav: false
 }
 
 // getters

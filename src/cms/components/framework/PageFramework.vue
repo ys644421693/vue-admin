@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import {addEditButton} from '../../js/cmsScript.js'
+import {addEditButton, initDraggable} from '../../js/cmsScript.js'
 import {mapGetters} from 'vuex'
 export default {
   name: 'PageFramework',
@@ -64,12 +64,7 @@ export default {
   },
   mounted: function () {
     addEditButton()
-    $('.layout-edit').draggable({
-      connectToSortable: '.edit',
-      helper: 'clone',
-      revert: 'invalid',
-      handle: '.edit .layout-drag'
-    })
+    initDraggable()
   },
   computed: {
     ...mapGetters('framework', {

@@ -2,9 +2,8 @@
   <el-container>
     <div class="leftElement">
       <el-menu
+        default-active="1-1"
         class="el-menu-vertical-demo"
-        @open="handleOpen"
-        @close="handleClose"
         background-color="#545c64"
         :collapse="isOpenNav"
         text-color="#fff"
@@ -14,7 +13,12 @@
             <i class="fa-file fa fa-lg"> </i>
             <span>布局</span>
           </template>
-          <el-menu-item index="1-3">选项3 <span class="label">拖动</span></el-menu-item>
+          <el-menu-item index="1-1" @click="loadAttr('framework')">布局容器
+            <div class="component">
+              <page-framework></page-framework>
+            </div>
+          </el-menu-item>
+          <el-menu-item index="1-2" class="component-item">布局</el-menu-item>
         </el-submenu>
         <el-menu-item index="2">
           <i class="fa-navicon fa fa-lg"></i>
@@ -31,9 +35,21 @@
       </el-menu>
     </div>
     <el-main id="containerSet">
-      <div class="edit">
-        <div :is="componentLayout" :layoutAttr="props"></div>
-      </div>
+      <el-tabs v-model="activeName" @tab-click="handleClick" style="width: 100%; height: 100%">
+        <el-tab-pane label="设计页面" name="page" style="height: 100%">
+          <div class="edit">
+        </div>
+        </el-tab-pane>
+        <el-tab-pane label="组件预览" name="componentReview" class="tab_cont">
+          <div class="tab_cont">
+            <div :is="component" :attr="props"></div>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="代码" name="codeReview" class="tab_cont">
+          <div class="tab_cont">
+          </div>
+        </el-tab-pane>
+      </el-tabs>
     </el-main>
     <el-aside class="right-attr" width="240px">
       <br/>
@@ -45,9 +61,6 @@
         <el-button type="success" size="mini" icon="el-icon-edit-outline" plain>代码</el-button>
       </el-row>
     </el-aside>
-    <el-dialog title="组件预览" :visible.sync="dialogVisible">
-      <div :is="component" :attr="props"></div>
-    </el-dialog>
   </el-container>
 </template>
 
@@ -55,11 +68,12 @@
 import './css/cmsCss.css'
 import 'jquery-ui/themes/base/draggable.css'
 import 'jquery-ui/themes/base/sortable.css'
-import {addEditButton} from './js/cmsScript.js'
+import {addBut} from './js/cmsScript.js'
 import draggable from 'jquery-ui/ui/widgets/draggable'
 import sortable from 'jquery-ui/ui/widgets/sortable'
 import store from './store/index'
 import {mapGetters} from 'vuex'
+
 const PageFramework = r => require.ensure([], () => r(require('./components/framework/PageFramework.vue')), 'PageFramework')
 const PageFrameworkAttr = r => require.ensure([], () => r(require('./components/framework/PageFrameworkAttr.vue')), 'PageFrameworkAttr')
 export default {
@@ -71,28 +85,19 @@ export default {
       component: 'PageFramework',
       componentLayout: 'PageFramework',
       componentAttr: 'PageFrameworkAttr',
-      props: {framework: 'leftHeaderMain'}
+      props: {framework: 'leftHeaderMain'},
+      activeName: 'page'
     }
   },
   mounted: function () {
-    addEditButton()
-    $('.edit').sortable({
-      revert: true,
-      handle: '.layout-drag'
-    })
-    $('#draggable').draggable({
-      connectToSortable: '.edit',
-      helper: 'clone',
-      revert: 'invalid',
-      handle: '.edit .layout-drag'
-    })
+    addBut()
   },
   methods: {
-    handleOpen (key, keyPath) {
-      console.log(key, keyPath)
-    },
-    handleClose (key, keyPath) {
-      console.log(key, keyPath)
+    loadAttr (value) {
+      if (value === 'framework') {
+        this.props.framework = 'leftHeaderMain'
+        this.componentLayout = 'PageFramework'
+      }
     },
     showDialogVisible () {
       this.props.framework = 'leftHeaderMain'
@@ -102,6 +107,9 @@ export default {
     showNav () {
       const value = !this.$store.state.root.isOpenNav
       this.$store.dispatch('root/setOpenNav', value)
+    },
+    handleClick (tab, event) {
+      console.log(tab)
     }
   },
   computed: {
@@ -115,6 +123,11 @@ export default {
     ...mapGetters('root', {
       isOpenNav: 'getOpenNav'
     })
+  },
+  watch: {
+    isOpenNav (val, oldVal) {
+      addBut()
+    }
   },
   components: {PageFramework, PageFrameworkAttr, draggable, sortable}
 }
@@ -163,5 +176,12 @@ export default {
     position:relative;
     border-right: solid 2px #e6e6e6;
     background-color: #293c55
+  }
+  .leftElement .layout-edit{
+    display: none;
+  }
+  .tab_cont{
+    width: 100%;
+    height: 100%;
   }
 </style>
