@@ -88,7 +88,26 @@ export default {
 </script>
 
 <style scoped>
-  .el-collapse-item >>> .el-collapse-item__header, .el-collapse-item >>> .el-collapse-item__content {
+  .el-collapse-item >>> .el-collapse-item__header {
     background-color: transparent;
+    color: #ffffff;
+    border-bottom: none;
+  }
+
+  .el-collapse-item >>> .el-collapse-item__content {
+    background-color: #545c64;
+    padding-bottom: 0px;
+  }
+
+  .el-collapse {
+    border-bottom: none;
+    border-top: none;
+  }
+  .el-collapse-item >>> .el-collapse-item__wrap{
+    border-bottom: none;
+    background-color: #545c64;
+  }
+  .el-form-item{
+    margin-bottom: 0px;
   }
 </style>

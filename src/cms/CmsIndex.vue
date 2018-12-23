@@ -46,7 +46,7 @@
         </el-tab-pane>
         <el-tab-pane label="组件预览" name="componentReview" class="tab_cont">
           <div class="tab_cont">
-            <div :is="component" :attr="props"></div>
+            <div :is="component"></div>
           </div>
         </el-tab-pane>
         <el-tab-pane label="代码" name="codeReview" class="tab_cont">
@@ -91,7 +91,6 @@ export default {
       component: 'PageFramework',
       componentLayout: 'PageFramework',
       componentAttr: 'PageFrameworkAttr',
-      props: {framework: 'leftHeaderMain'},
       activeName: 'page'
     }
   },
@@ -103,13 +102,14 @@ export default {
       if (value === 'framework') {
         this.componentAttr = 'PageFrameworkAttr'
         this.componentLayout = 'PageFramework'
+        this.component = 'PageFramework'
       } else if (value === 'row') {
         this.componentLayout = 'ElRowCol'
         this.componentAttr = 'ElRowAttr'
+        this.component = 'ElRowCol'
       }
     },
     showDialogVisible () {
-      this.props.framework = 'leftHeaderMain'
       this.componentLayout = 'PageFramework'
       this.dialogVisible = true
     },
