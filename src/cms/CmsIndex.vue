@@ -18,7 +18,11 @@
               <page-framework></page-framework>
             </div>
           </el-menu-item>
-          <el-menu-item index="1-2" class="component-item">布局</el-menu-item>
+          <el-menu-item @click="loadAttr('row')" index="1-2">布局
+            <div class="component">
+              <el-row-col></el-row-col>
+            </div>
+          </el-menu-item>
         </el-submenu>
         <el-menu-item index="2">
           <i class="fa-navicon fa fa-lg"></i>
@@ -76,6 +80,8 @@ import {mapGetters} from 'vuex'
 
 const PageFramework = r => require.ensure([], () => r(require('./components/framework/PageFramework.vue')), 'PageFramework')
 const PageFrameworkAttr = r => require.ensure([], () => r(require('./components/framework/PageFrameworkAttr.vue')), 'PageFrameworkAttr')
+const ElRowCol = r => require.ensure([], () => r(require('./components/row/ElRowCol.vue')), 'ElRowCol')
+const ElRowAttr = r => require.ensure([], () => r(require('./components/row/ElRowAttr.vue')), 'ElRowAttr')
 export default {
   name: 'CmsIndex',
   store,
@@ -95,8 +101,11 @@ export default {
   methods: {
     loadAttr (value) {
       if (value === 'framework') {
-        this.props.framework = 'leftHeaderMain'
+        this.componentAttr = 'PageFrameworkAttr'
         this.componentLayout = 'PageFramework'
+      } else if (value === 'row') {
+        this.componentLayout = 'ElRowCol'
+        this.componentAttr = 'ElRowAttr'
       }
     },
     showDialogVisible () {
@@ -129,7 +138,7 @@ export default {
       addBut()
     }
   },
-  components: {PageFramework, PageFrameworkAttr, draggable, sortable}
+  components: {PageFramework, PageFrameworkAttr, draggable, sortable, ElRowCol, ElRowAttr}
 }
 </script>
 
