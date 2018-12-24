@@ -2,21 +2,22 @@
 // initial state
 // shape: [{ id, quantity }]
 const state = {
-  gutter: '',
+  gutter: 0,
   type: '',
   justify: '',
   align: '',
   tag: '',
   cols: [{
-    span: '',
-    offset: '',
-    push: '',
-    pull: '',
-    xs: '',
-    sm: '',
-    md: '',
-    lg: '',
-    xl: '',
+    id: 1,
+    span: 24,
+    offset: 0,
+    push: 0,
+    pull: 0,
+    xs: 0,
+    sm: 0,
+    md: 0,
+    lg: 0,
+    xl: 0,
     tag: ''
   }]
 }
@@ -62,6 +63,12 @@ const actions = {
   },
   setCols ({ commit, state }, value) {
     commit('setElCols', value)
+  },
+  addCol ({ commit }) {
+    commit('addElCols')
+  },
+  removeCols ({ commit, state }, value) {
+    commit('removeElCols', value)
   }
 }
 
@@ -84,6 +91,42 @@ const mutations = {
   },
   setElCols (state, value) {
     state.cols = value
+  },
+  addElCols (state) {
+    var col = {
+      id: 1,
+      span: 1,
+      offset: 0,
+      push: 0,
+      pull: 0,
+      xs: '',
+      sm: '',
+      md: '',
+      lg: '',
+      xl: '',
+      tag: ''
+    }
+    var id = 0
+    let count = 0
+    for (let temp of state.cols) {
+      if (temp.id > id) {
+        id = temp.id
+      }
+      count = count + temp.span + temp.offset + temp.push + temp.pull
+    }
+    col.id = id + 1
+    col.span = 24 - count
+    state.cols.push(col)
+    return state.cols
+  },
+  removeElCols (state, id) {
+    for (var index = state.cols.length - 1; index > 0; index--) {
+      if (state.cols[index].id === id) {
+        state.cols.splice(index, 1)
+        break
+      }
+    }
+    return state.cols
   }
 }
 

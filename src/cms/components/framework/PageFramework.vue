@@ -1,5 +1,5 @@
 <template>
-  <div class="layout-edit">
+  <div class="layout-edit pageHeight">
     <el-container v-if="layoutValue==='header-main-vertical'" direction="vertical">
       <el-header :height="height"></el-header>
       <el-main></el-main>
@@ -74,8 +74,7 @@ export default {
       data: 'frameworkAttrData',
       heightBottom: 'frameworkAttrHeightBottom'
     })
-  },
-  props: {layoutAttr: {}}
+  }
 }
 </script>
 

@@ -14,7 +14,7 @@
             <span>布局</span>
           </template>
           <el-menu-item index="1-1" @click="loadAttr('framework')">布局容器
-            <div class="component">
+            <div class="component pageHeight">
               <page-framework></page-framework>
             </div>
           </el-menu-item>
@@ -59,11 +59,7 @@
       <br/>
       <h1 style="color: #ffffff">属性 <el-button type="danger" icon="el-icon-menu" circle size="mini" @click="showNav"></el-button></h1>
       <hr/>
-      <div :is="componentAttr" :attr="props"></div>
-      <el-row>
-        <el-button type="primary" size="mini" icon="el-icon-view" plain @click="showDialogVisible">预览</el-button>
-        <el-button type="success" size="mini" icon="el-icon-edit-outline" plain>代码</el-button>
-      </el-row>
+      <div :is="componentAttr"></div>
     </el-aside>
   </el-container>
 </template>

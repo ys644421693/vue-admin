@@ -4,6 +4,8 @@
   opacity: 1;
   left: 0px;
   top: 0px;
+}
+.pageHeight{
   height: 100%;
 }
 .layout-drag,.layout-delete{
@@ -37,7 +39,6 @@
   right: 5px;
 }
 .component{
-  height: 100%;
   width: 100%;
   position: relative;
 }
