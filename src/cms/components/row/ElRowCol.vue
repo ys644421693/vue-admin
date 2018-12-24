@@ -41,7 +41,7 @@ export default {
   }
   .grid-content {
     border-radius: 4px;
-    min-height: 36px;
+    min-height: 70px;
   }
   .row-bg {
     padding: 10px 0;

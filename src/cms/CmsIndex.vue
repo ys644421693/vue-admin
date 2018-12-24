@@ -19,7 +19,7 @@
             </div>
           </el-menu-item>
           <el-menu-item @click="loadAttr('row')" index="1-2">布局
-            <div class="component">
+            <div class="component rowEdit">
               <el-row-col></el-row-col>
             </div>
           </el-menu-item>

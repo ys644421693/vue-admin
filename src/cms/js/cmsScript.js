@@ -1,4 +1,8 @@
 export const addEditButton = function () {
+  var counts = $('.leftElement .layout-edit').find('.layout-delete').length
+  if (counts >= 1) {
+    return
+  }
   var a = $('<span class="layout-delete el-button el-button--danger el-button--mini">删除</span> <span class="el-button el-button--info el-button--mini layout-drag">拖动</span>')
   $('.leftElement .layout-edit').append(a)
 }
