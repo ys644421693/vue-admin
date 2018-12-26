@@ -24,10 +24,17 @@
             </div>
           </el-menu-item>
         </el-submenu>
-        <el-menu-item index="2">
+        <el-submenu index="2">
+          <template slot="title">
           <i class="fa-navicon fa fa-lg"></i>
-          <span slot="title">导航二</span>
-        </el-menu-item>
+          <span slot="title">数据组件</span>
+          </template>
+          <el-menu-item index="2-1" @click="loadAttr('dataTable')">数据表
+            <div class="component">
+              <data-table></data-table>
+            </div>
+          </el-menu-item>
+        </el-submenu>
         <el-menu-item index="3" disabled>
           <i class="fa-navicon fa fa-lg"></i>
           <span slot="title">导航三</span>
@@ -78,6 +85,9 @@ const PageFramework = r => require.ensure([], () => r(require('./components/fram
 const PageFrameworkAttr = r => require.ensure([], () => r(require('./components/framework/PageFrameworkAttr.vue')), 'PageFrameworkAttr')
 const ElRowCol = r => require.ensure([], () => r(require('./components/row/ElRowCol.vue')), 'ElRowCol')
 const ElRowAttr = r => require.ensure([], () => r(require('./components/row/ElRowAttr.vue')), 'ElRowAttr')
+const dataTable = r => require.ensure([], () => r(require('./components/table/dataTable.vue')), 'dataTable')
+const dataTableAttr = r => require.ensure([], () => r(require('./components/table/dataTableAttr.vue')), 'dataTableAttr')
+const ElPaginationAttr = r => require.ensure([], () => r(require('./components/pagination/ElPaginationAttr.vue')), 'ElPaginationAttr')
 export default {
   name: 'CmsIndex',
   store,
@@ -92,6 +102,9 @@ export default {
   },
   mounted: function () {
     addBut()
+    this.$on('componentAttr', function (value) {
+      this.componentAttr = value
+    })
   },
   methods: {
     loadAttr (value) {
@@ -103,6 +116,10 @@ export default {
         this.componentLayout = 'ElRowCol'
         this.componentAttr = 'ElRowAttr'
         this.component = 'ElRowCol'
+      } else if (value === 'dataTable') {
+        this.componentLayout = 'dataTable'
+        this.componentAttr = 'dataTableAttr'
+        this.component = 'dataTable'
       }
     },
     showDialogVisible () {
@@ -134,7 +151,7 @@ export default {
       addBut()
     }
   },
-  components: {PageFramework, PageFrameworkAttr, draggable, sortable, ElRowCol, ElRowAttr}
+  components: {PageFramework, PageFrameworkAttr, draggable, sortable, ElRowCol, ElRowAttr, dataTable, dataTableAttr, ElPaginationAttr}
 }
 </script>
 
