@@ -8,6 +8,19 @@
       <el-switch v-model="background" active-color="#13ce66" inactive-color="#ff4949">
       </el-switch>
     </el-form-item>
+    <el-form-item label="每页数">
+     <el-input v-model="pageSizeList" size="mini"></el-input>
+    </el-form-item>
+    <el-form-item label="显示页数">
+      <el-select placeholder="请选择" size="mini" v-model="pagerCount">
+        <el-option
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+          v-for="item in pageCounts">
+        </el-option>
+      </el-select>
+    </el-form-item>
     <el-form-item label="组件布局">
       <el-checkbox-group v-model="layoutAttrList" @change="layoutCheck">
         <el-checkbox label="total"></el-checkbox>
@@ -29,6 +42,32 @@ export default {
   data () {
     return {
       layoutAttrList: [],
+      pageSizeList: '',
+      pageCounts: [{
+        value: 7,
+        label: '7'
+      }, {
+        value: 9,
+        label: '9'
+      }, {
+        value: 11,
+        label: '11'
+      }, {
+        value: 13,
+        label: '13'
+      }, {
+        value: 15,
+        label: '15'
+      }, {
+        value: 17,
+        label: '17'
+      }, {
+        value: 19,
+        label: '19'
+      }, {
+        value: 21,
+        label: '21'
+      }],
       form: {
         name: '',
         region: '',
@@ -155,6 +194,24 @@ export default {
       }
       attrs = attrs.substr(0, attrs.length - 1)
       this.$store.dispatch('paginationModule/setLayout', attrs)
+    }
+  },
+  mounted: function () {
+    this.layoutAttrList = this.$store.state.paginationModule.layout.split(',')
+    var lt = ''
+    for (let attr of this.$store.state.paginationModule.pageSizes) {
+      lt = lt + attr + ','
+    }
+    this.pageSizeList = lt.substr(0, lt.length - 1)
+  },
+  watch: {
+    pageSizeList (curVal, oldVal) {
+      var listValue = curVal.split(',')
+      var temp = []
+      for (let at of listValue) {
+        temp.push(Number(at))
+      }
+      this.$store.dispatch('paginationModule/setPageSizes', temp)
     }
   }
 }

@@ -10,7 +10,7 @@ const state = {
   pagerCount: 7,
   currentPage: 1,
   layout: 'prev,pager,next,jumper,->,total',
-  pageSizes: [],
+  pageSizes: [10, 20, 30, 40],
   popperClass: '',
   prevText: '',
   nextText: '',

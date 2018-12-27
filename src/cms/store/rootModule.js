@@ -3,8 +3,8 @@
 // shape: [{ id, quantity }]
 const state = {
   isOpenNav: false,
-  component: '',
-  componentAttr: ''
+  component: 'PageFramework',
+  componentAttr: 'PageFrameworkAttr'
 }
 
 // getters

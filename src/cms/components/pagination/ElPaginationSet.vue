@@ -6,11 +6,12 @@
       @prev-click="prevClick"
       @next-click="nextClick"
       :current-page="currentPage"
-      :page-sizes="[10, 20, 30, 40]"
+      :page-sizes="pageSizes"
       :page-size="100"
       :layout="layoutAttr"
       :background="backgroundAttr"
       :small="small"
+      :pager-count="pagerCount"
       :total="400">
     </el-pagination>
   </div>
@@ -47,6 +48,8 @@ export default {
     ...mapGetters('paginationModule', {
       layoutAttr: 'getLayout',
       small: 'getSmall',
+      pageSizes: 'getPageSizes',
+      pagerCount: 'getPagerCount',
       backgroundAttr: 'getBackground'
     })
   }
