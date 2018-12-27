@@ -1,5 +1,25 @@
 <template>
   <el-form label-width="100px" ref="form" v-model="form">
+    <el-form-item label="小型分页">
+      <el-switch v-model="small" active-color="#13ce66" inactive-color="#ff4949">
+      </el-switch>
+    </el-form-item>
+    <el-form-item label="背景颜色">
+      <el-switch v-model="background" active-color="#13ce66" inactive-color="#ff4949">
+      </el-switch>
+    </el-form-item>
+    <el-form-item label="组件布局">
+      <el-checkbox-group v-model="layoutAttrList" @change="layoutCheck">
+        <el-checkbox label="total"></el-checkbox>
+        <el-checkbox label="sizes"></el-checkbox>
+        <el-checkbox label="prev"></el-checkbox>
+        <el-checkbox label="pager"></el-checkbox>
+        <el-checkbox label="next"></el-checkbox>
+        <el-checkbox label="jumper"></el-checkbox>
+        <el-checkbox label="->"></el-checkbox>
+        <el-checkbox label="slot"></el-checkbox>
+      </el-checkbox-group>
+    </el-form-item>
   </el-form>
 </template>
 
@@ -8,6 +28,7 @@ export default {
   name: 'elPaginationAttr',
   data () {
     return {
+      layoutAttrList: [],
       form: {
         name: '',
         region: '',
@@ -77,7 +98,7 @@ export default {
         this.$store.dispatch('paginationModule/setCurrentPage', value)
       }
     },
-    layout: {
+    layoutAttr: {
       get () {
         return this.$store.state.paginationModule.layout
       },
@@ -125,10 +146,25 @@ export default {
         this.$store.dispatch('paginationModule/setDisabled', value)
       }
     }
+  },
+  methods: {
+    layoutCheck () {
+      let attrs = ''
+      for (let attr of this.layoutAttrList) {
+        attrs = attrs + attr + ','
+      }
+      attrs = attrs.substr(0, attrs.length - 1)
+      this.$store.dispatch('paginationModule/setLayout', attrs)
+    }
   }
 }
 </script>
 
 <style scoped>
-
+  .el-form-item >>>.el-form-item__label{
+    color: white;
+  }
+  .el-form-item >>>.el-checkbox__label{
+    color: white;
+  }
 </style>

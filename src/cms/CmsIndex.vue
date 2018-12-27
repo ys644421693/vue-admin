@@ -94,44 +94,30 @@ export default {
   data () {
     return {
       dialogVisible: false,
-      component: 'PageFramework',
-      componentLayout: 'PageFramework',
-      componentAttr: 'PageFrameworkAttr',
       activeName: 'page'
     }
   },
   mounted: function () {
     addBut()
-    this.$on('componentAttr', function (value) {
-      this.componentAttr = value
-    })
   },
   methods: {
     loadAttr (value) {
       if (value === 'framework') {
-        this.componentAttr = 'PageFrameworkAttr'
-        this.componentLayout = 'PageFramework'
-        this.component = 'PageFramework'
+        this.$store.dispatch('root/setComponentAttr', 'PageFrameworkAttr')
+        this.$store.dispatch('root/setComponent', 'PageFramework')
       } else if (value === 'row') {
-        this.componentLayout = 'ElRowCol'
-        this.componentAttr = 'ElRowAttr'
-        this.component = 'ElRowCol'
+        this.$store.dispatch('root/setComponentAttr', 'ElRowAttr')
+        this.$store.dispatch('root/setComponent', 'ElRowCol')
       } else if (value === 'dataTable') {
-        this.componentLayout = 'dataTable'
-        this.componentAttr = 'dataTableAttr'
-        this.component = 'dataTable'
+        this.$store.dispatch('root/setComponentAttr', 'dataTableAttr')
+        this.$store.dispatch('root/setComponent', 'dataTable')
       }
-    },
-    showDialogVisible () {
-      this.componentLayout = 'PageFramework'
-      this.dialogVisible = true
     },
     showNav () {
       const value = !this.$store.state.root.isOpenNav
       this.$store.dispatch('root/setOpenNav', value)
     },
     handleClick (tab, event) {
-      console.log(tab)
     }
   },
   computed: {
@@ -143,7 +129,9 @@ export default {
       heightBottom: 'frameworkAttrHeightBottom'
     }),
     ...mapGetters('root', {
-      isOpenNav: 'getOpenNav'
+      isOpenNav: 'getOpenNav',
+      component: 'getComponent',
+      componentAttr: 'getComponentAttr'
     })
   },
   watch: {

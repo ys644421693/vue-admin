@@ -168,6 +168,10 @@ export default {
     removeCol (id) {
       this.$store.dispatch('elDataTable/removeCols', id)
     }
+  },
+  mounted: function () {
+    this.$store.dispatch('elDataTable/setMaxHeight', '')
+    this.$store.dispatch('elDataTable/setHeight', '')
   }
 }
 </script>
@@ -194,5 +198,8 @@ export default {
   }
   .el-form-item{
     margin-bottom: 0px;
+  }
+  .el-collapse-item >>>.el-form-item__label{
+    color: white;
   }
 </style>

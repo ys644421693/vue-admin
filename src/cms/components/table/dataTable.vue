@@ -1,19 +1,21 @@
 <template>
   <div class="layout-edit">
-    <el-table
-      :data="tableData"
-      :stripe="stripe"
-      :border="border"
-      :height="heightHead"
-      :max-height="maxHeight"
-      :row-class-name="tableRowClassName"
-      @selection-change="handleSelectionChange"
-      style="width: 100%">
-      <el-table-column type="selection" width="55" v-if="isCheckBox">
-      </el-table-column>
-      <el-table-column v-for="col in columns" :prop="col.prop" :type="col.type" :label="col.label" :width="col.width" :key="col.id" :sortable="col.sortable">
-      </el-table-column>
-    </el-table>
+    <div @click="activeTable">
+      <el-table
+        :data="tableData"
+        :stripe="stripe"
+        :border="border"
+        :height="heightHead"
+        :max-height="maxHeight"
+        :row-class-name="tableRowClassName"
+        @selection-change="handleSelectionChange"
+        style="width: 100%">
+        <el-table-column type="selection" width="55" v-if="isCheckBox">
+        </el-table-column>
+        <el-table-column v-for="col in columns" :prop="col.prop" :type="col.type" :label="col.label" :width="col.width" :key="col.id" :sortable="col.sortable">
+        </el-table-column>
+      </el-table>
+    </div>
     <el-pagination-set v-if="isPagination"></el-pagination-set>
   </div>
 </template>
@@ -21,6 +23,7 @@
 <script>
 import {mapGetters} from 'vuex'
 import ElPaginationSet from '../pagination/ElPaginationSet'
+
 export default {
   name: 'dataTable',
   components: {ElPaginationSet},
@@ -61,6 +64,9 @@ export default {
     },
     handleSelectionChange (val) {
       this.multipleSelection = val
+    },
+    activeTable () {
+      this.$store.dispatch('root/setComponentAttr', 'dataTableAttr')
     }
   },
   computed: {

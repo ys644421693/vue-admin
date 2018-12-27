@@ -9,7 +9,7 @@ const state = {
   pageCount: 10,
   pagerCount: 7,
   currentPage: 1,
-  layout: '',
+  layout: 'prev,pager,next,jumper,->,total',
   pageSizes: [],
   popperClass: '',
   prevText: '',
@@ -83,8 +83,8 @@ const actions = {
   setCurrentPage ({ commit, state }, value) {
     commit('setElCurrentPage', value)
   },
-  setLayout ({ commit }) {
-    commit('setElLayout')
+  setLayout ({ commit }, value) {
+    commit('setElLayout', value)
   },
   setPageSizes ({ commit, state }, value) {
     commit('setElPageSizes', value)

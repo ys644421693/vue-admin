@@ -76,7 +76,6 @@ export default {
         return this.$store.state.rowModule.gutter
       },
       set (value) {
-        console.log(this.$store)
         this.$store.dispatch('rowModule/setGutter', value)
       }
     },

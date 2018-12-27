@@ -2,13 +2,21 @@
 // initial state
 // shape: [{ id, quantity }]
 const state = {
-  isOpenNav: false
+  isOpenNav: false,
+  component: '',
+  componentAttr: ''
 }
 
 // getters
 const getters = {
   getOpenNav: (state, getters, rootState, rootGetters) => {
     return state.isOpenNav
+  },
+  getComponent: (state, getters, rootState, rootGetters) => {
+    return state.component
+  },
+  getComponentAttr: (state, getters, rootState, rootGetters) => {
+    return state.componentAttr
   }
 }
 
@@ -16,6 +24,12 @@ const getters = {
 const actions = {
   setOpenNav ({ commit, state }, value) {
     commit('setRootOpen', value)
+  },
+  setComponent ({ commit, state }, value) {
+    commit('setRootComponent', value)
+  },
+  setComponentAttr ({ commit, state }, value) {
+    commit('setRootComponentAttr', value)
   }
 }
 
@@ -23,6 +37,12 @@ const actions = {
 const mutations = {
   setRootOpen (state, value) {
     state.isOpenNav = value
+  },
+  setRootComponent (state, value) {
+    state.component = value
+  },
+  setRootComponentAttr (state, value) {
+    state.componentAttr = value
   }
 }
 
