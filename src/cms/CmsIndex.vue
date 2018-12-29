@@ -48,7 +48,8 @@
     <el-main id="containerSet">
       <el-tabs v-model="activeName" @tab-click="handleClick" style="width: 100%; height: 100%">
         <el-tab-pane label="设计页面" name="page" style="height: 100%">
-          <div class="edit">
+          <div class="edit cms-container">
+            <div :is="component"></div>
         </div>
         </el-tab-pane>
         <el-tab-pane label="组件预览" name="componentReview" class="tab_cont">
@@ -136,7 +137,6 @@ export default {
   },
   watch: {
     isOpenNav (val, oldVal) {
-      addBut()
     }
   },
   components: {PageFramework, PageFrameworkAttr, draggable, sortable, ElRowCol, ElRowAttr, dataTable, dataTableAttr, ElPaginationAttr}

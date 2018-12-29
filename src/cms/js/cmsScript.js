@@ -1,10 +1,10 @@
 export const addEditButton = function () {
-  var counts = $('.leftElement .layout-edit').find('.layout-delete').length
-  if (counts >= 1) {
-    return
-  }
+  // var counts = $('.leftElement .layout-edit').find('.layout-delete').length
+  // if (counts >= 1) {
+  //   return
+  // }
   var a = $('<span class="layout-delete el-button el-button--danger el-button--mini">删除</span> <span class="el-button el-button--info el-button--mini layout-drag">拖动</span>')
-  $('.leftElement .layout-edit').append(a)
+  $('.layout-edit').append(a)
 }
 export const addBut = function () {
   var find = $('.leftElement').find('.item-label')
@@ -16,7 +16,7 @@ export const addBut = function () {
 }
 
 export const initDraggable = function () {
-  $('.edit').sortable({
+  $('.cms-container').sortable({
     revert: true,
     handle: '.layout-drag'
   })
@@ -24,10 +24,10 @@ export const initDraggable = function () {
     handle: '.item-label',
     cursor: 'move',
     opacity: 0.5,
-    connectWith: '.edit'
+    connectWith: '.cms-container'
   })
   $('.component').draggable({
-    connectToSortable: '.edit',
+    connectToSortable: '.cms-container',
     helper: 'clone',
     handle: '.item-label',
     revert: 'invalid',

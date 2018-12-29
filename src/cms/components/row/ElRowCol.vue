@@ -1,13 +1,14 @@
 <template>
   <div class="layout-edit">
     <el-row :gutter="gutter">
-      <el-col v-for="col in cols" :key="col.id" :span="col.span" :offset="col.offset" :push="col.push" :pull="col.pull" class="grid-content bg-purple"></el-col>
+      <el-col v-for="col in cols" :key="col.id" :span="col.span" :offset="col.offset" :push="col.push" :pull="col.pull" class="grid-content bg-purple cms-container"></el-col>
     </el-row>
   </div>
 </template>
 
 <script>
 import {mapGetters} from 'vuex'
+import {initDraggable, addEditButton} from '../../js/cmsScript.js'
 export default {
   name: 'elRowCol',
   computed: {
@@ -19,6 +20,10 @@ export default {
       tag: 'getTag',
       cols: 'getCols'
     })
+  },
+  mounted: function () {
+    initDraggable()
+    addEditButton()
   }
 }
 </script>

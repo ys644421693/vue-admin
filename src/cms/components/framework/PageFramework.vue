@@ -1,8 +1,8 @@
 <template>
   <div class="layout-edit pageHeight">
     <el-container v-if="layoutValue==='header-main-vertical'" direction="vertical">
-      <el-header :height="height"></el-header>
-      <el-main></el-main>
+      <el-header :height="height" class="cms-container"></el-header>
+      <el-main class="cms-container"></el-main>
     </el-container>
 
     <el-container v-if="layoutValue==='header-main-footer-vertical'" direction="vertical">
@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import {addEditButton, initDraggable} from '../../js/cmsScript.js'
+import {initDraggable, addEditButton} from '../../js/cmsScript.js'
 import {mapGetters} from 'vuex'
 export default {
   name: 'PageFramework',
@@ -63,8 +63,8 @@ export default {
     return {}
   },
   mounted: function () {
-    addEditButton()
     initDraggable()
+    addEditButton()
   },
   computed: {
     ...mapGetters('framework', {
