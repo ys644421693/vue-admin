@@ -59,14 +59,14 @@ export default {
           childs: []
         },
         {
-          title: '导航一',
+          title: '页面设置',
           index: '1',
           icon: 'el-icon-location',
           childs: [{
-            title: '导航er',
+            title: '产品设置',
             index: '2',
             icon: 'el-icon-menu',
-            view: '/home/first'
+            view: '/product'
           }]
         },
         {
