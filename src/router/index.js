@@ -4,6 +4,7 @@ import HelloWorld from '@/components/HelloWorld'
 import ContentIndex from '@/components/ContentIndex'
 import CmsIndex from '@/cms/CmsIndex'
 import ProductSetting from '@/components/ProductSetting'
+import PersonnelInfo from '@/components/PersonnelInfo'
 
 Vue.use(Router)
 
@@ -19,6 +20,10 @@ export default new Router({
       {
         path: '/product',
         component: ProductSetting
+      },
+      {
+        path: '/PersonnelInfo',
+        component: PersonnelInfo
       }]
     },
     {

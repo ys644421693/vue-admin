@@ -61,11 +61,14 @@
                 </el-form>
               </template>
             </el-table-column>
-            <el-table-column label="商品 ID"  prop="id"></el-table-column>
-            <el-table-column label="商品名称" prop="name"></el-table-column>
-            <el-table-column label="商品分类" prop="region" :formatter="typeTransfer"></el-table-column>
-            <el-table-column label="提供商" show-overflow-tooltip prop="provide"></el-table-column>
-            <el-table-column label="价格" prop="price" :formatter="amountUnit"></el-table-column>
+            <el-table-column label="工号ID"  prop="id"></el-table-column>
+            <el-table-column label="姓名" prop="name"></el-table-column>
+            <el-table-column label="昵称" prop="alias"></el-table-column>
+            <el-table-column label="邮箱" prop="email"></el-table-column>
+            <el-table-column label="手机" prop="phone"></el-table-column>
+            <el-table-column label="生日" prop="birthday"></el-table-column>
+            <el-table-column label="身份证" prop="idCard"></el-table-column>
+            <el-table-column label="性别" prop="gender"></el-table-column>
             <el-table-column label="状态" prop="state">
               <template slot-scope="scope">
                 <el-tag :type="scope.row.state === 1 ? 'success' : 'danger'" disable-transitions size="mini">{{scope.row.state ===1?'销售中':'下架'}}</el-tag>
@@ -74,7 +77,7 @@
             <el-table-column label="排序" prop="sortNumber"></el-table-column>
             <el-table-column align="center">
               <template slot="header" slot-scope="scope" class="operaClass">
-                <el-button type="primary" size="mini" @click="dialogFormVisible = true">添加商品</el-button>
+                <el-button type="primary" size="mini" @click="dialogFormVisible = true">添加员工</el-button>
               </template>
               <template slot-scope="scope">
                 <el-button type="primary" size="mini" @click="updateData(scope.row)">修改</el-button>

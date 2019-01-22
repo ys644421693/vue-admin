@@ -6,10 +6,10 @@
       <a href="#">腾迅房产</a> |
       <a href="#">找货网</a> |
       <a href="#">北极绒</a> |
-      <a href="#">阿里巴巴</a> |
+      <a href="#">阿里巴巴</a>
     </div>
     <p>
-      ©Copyright 2018 海盗侠科技公司版权所有 | 上海ICP备12438170号-4
+      ©Copyright 2019 海盗侠科技公司版权所有 | 上海ICP备12438170号-4
     </p>
   </div>
 </template>

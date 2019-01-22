@@ -59,7 +59,7 @@ export default {
           childs: []
         },
         {
-          title: '页面设置',
+          title: '主页信息',
           index: '1',
           icon: 'el-icon-location',
           childs: [{
@@ -67,6 +67,12 @@ export default {
             index: '2',
             icon: 'el-icon-menu',
             view: '/product'
+          },
+          {
+            title: '员工信息',
+            index: '6',
+            icon: 'el-icon-menu',
+            view: '/PersonnelInfo'
           }]
         },
         {
