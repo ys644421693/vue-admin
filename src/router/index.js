@@ -41,7 +41,10 @@ const router = [{
 {
   path: '/cms',
   name: 'CMS',
-  component: CmsIndex
+  component: CmsIndex,
+  meta: {
+    requireAuth: true
+  }
 },
 {
   path: '/login',

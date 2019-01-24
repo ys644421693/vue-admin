@@ -99,6 +99,7 @@ export default {
   name: 'LeftMenu',
   mounted: function () {
     this.loadData()
+    $('.el-header').show()
   },
   methods: {
     handleOpen (key, keyPath) {

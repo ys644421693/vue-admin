@@ -2,10 +2,10 @@
   <div id="loginId">
   <div class="login">
     <h1>Login</h1>
-    <form method="post">
-      <input type="text" name="u" placeholder="用户名" required="required"/>
-      <input type="password" name="p" placeholder="密码" required="required"/>
-      <button type="submit" class="btn btn-primary btn-block btn-large">登录</button>
+    <form>
+      <input type="text" v-model="login.userName" name="userName" placeholder="用户名" required="required"/>
+      <input type="password" v-model="login.password" name="password" placeholder="密码" required="required"/>
+      <button class="btn btn-primary btn-block btn-large" @click="submit">登录</button>
     </form>
   </div>
   </div>
@@ -14,9 +14,23 @@
 <script>
 export default {
   name: 'Login',
+  data () {
+    return {
+      login: {}
+    }
+  },
   mounted () {
     // 隐藏头信息
     $('.el-header').hide()
+  },
+  methods: {
+    submit: function () {
+      this.$http.post('http://www.tianmao.com', this.login).then((response) => {
+        console.log(response.data)
+      }).catch((er) => {
+        console.error(er)
+      })
+    }
   }
 }
 </script>

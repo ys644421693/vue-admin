@@ -100,6 +100,7 @@ export default {
   },
   mounted: function () {
     addBut()
+    $('.el-header').show()
   },
   methods: {
     loadAttr (value) {
