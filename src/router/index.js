@@ -5,40 +5,70 @@ import ContentIndex from '@/components/ContentIndex'
 import CmsIndex from '@/cms/CmsIndex'
 import ProductSetting from '@/components/ProductSetting'
 import PersonnelInfo from '@/components/PersonnelInfo'
+import Login from '@/components/Login'
+import store from '../store/eunion/store'
+import * as types from '../store/eunion/type'
 
 Vue.use(Router)
 
-export default new Router({
-  routes: [
-    {
-      path: '/',
-      component: ContentIndex,
-      children: [{
-        path: '/',
-        component: HelloWorld
-      },
-      {
-        path: '/product',
-        component: ProductSetting
-      },
-      {
-        path: '/PersonnelInfo',
-        component: PersonnelInfo
-      }]
-    },
-    {
-      path: '/ContentRouter',
-      name: 'ContentRouter',
-      component: ContentIndex,
-      children: [{
-        path: '/ContentRouter/HelloWorld',
-        component: HelloWorld
-      }]
-    },
-    {
-      path: '/cms',
-      name: 'CMS',
-      component: CmsIndex
-    }
-  ]
+const router = [{
+  path: '/',
+  component: ContentIndex,
+  children: [{
+    path: '/',
+    component: HelloWorld
+  },
+  {
+    path: '/product',
+    component: ProductSetting
+  },
+  {
+    path: '/PersonnelInfo',
+    component: PersonnelInfo
+  }],
+  meta: {
+    requireAuth: true
+  }},
+{
+  path: '/ContentRouter',
+  name: 'ContentRouter',
+  component: ContentIndex,
+  children: [{
+    path: '/ContentRouter/HelloWorld',
+    component: HelloWorld
+  }]
+},
+{
+  path: '/cms',
+  name: 'CMS',
+  component: CmsIndex
+},
+{
+  path: '/login',
+  name: 'login',
+  component: Login
+}]
+// 页面刷新时，重新赋值token
+if (window.localStorage.getItem('token')) {
+  store.commit(types.LOGIN, window.localStorage.getItem('token'))
+}
+const routers = new Router({
+  routes: router
 })
+
+routers.beforeEach((to, from, next) => {
+  if (to.matched.some(r => r.meta.requireAuth)) {
+    if (store.state.token) {
+      next()
+    } else {
+      next({
+        path: '/login',
+        query: {redirect: to.fullPath}
+      })
+    }
+  } else {
+    next()
+  }
+})
+
+export default routers
