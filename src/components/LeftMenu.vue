@@ -44,9 +44,11 @@
 
 <script>
 import elHeadButton from '../util/HeadPic'
+import store from '../store/eunion/store'
 
 export default {
   components: {elHeadButton},
+  store,
   data () {
     return {
       isCollapse: false,

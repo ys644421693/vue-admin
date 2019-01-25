@@ -5,7 +5,7 @@ import Vuex from 'vuex'
 import App from './App'
 import router from './router'
 import ElementUI from 'element-ui'
-import axios from 'axios'
+import axios from './util/httpUtil'
 import VCharts from 'v-charts'
 import VeLine from 'v-charts/lib/line.common'
 import '../node_modules/element-ui/lib/theme-chalk/index.css'
@@ -19,6 +19,7 @@ Vue.component(VeLine.name, VeLine)
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
+  axios,
   router,
   components: { App },
   template: '<App/>'

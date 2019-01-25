@@ -1,19 +1,22 @@
 <template>
   <div id="loginId">
-  <div class="login">
-    <h1>Login</h1>
-    <form>
-      <input type="text" v-model="login.userName" name="userName" placeholder="用户名" required="required"/>
-      <input type="password" v-model="login.password" name="password" placeholder="密码" required="required"/>
-      <button class="btn btn-primary btn-block btn-large" @click="submit">登录</button>
-    </form>
-  </div>
+    <div class="login">
+      <h1>E-union Login</h1>
+      <form>
+        <input type="text" v-model="login.userName" name="userName" placeholder="用户名" required="required"/>
+        <input type="password" v-model="login.password" name="password" placeholder="密码" required="required"/>
+        <button class="btn btn-primary btn-block btn-large" @click="submit">登录</button>
+      </form>
+    </div>
   </div>
 </template>
 
 <script>
+import store from '../store/eunion/store'
+import { Message } from 'element-ui'
 export default {
   name: 'Login',
+  store,
   data () {
     return {
       login: {}
@@ -25,8 +28,18 @@ export default {
   },
   methods: {
     submit: function () {
-      this.$http.post('http://www.tianmao.com', this.login).then((response) => {
-        console.log(response.data)
+      let formData = new FormData()
+      formData.append('userName', this.login.userName)
+      formData.append('password', this.login.password)
+      let config = {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+      this.$http.post(this.$store.state.baseUrl + 'login', formData, config).then((response) => {
+        if (response.data.errorCode === 'LOGIN_FAIL') {
+          Message.error({message: response.data.errorMsg})
+        }
       }).catch((er) => {
         console.error(er)
       })

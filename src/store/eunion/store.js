@@ -9,7 +9,7 @@ export default new Vuex.Store({
     user: {},
     token: null,
     title: '',
-    baseUrl: 'http://localhost:8080/'
+    baseUrl: 'http://localhost:8011/sys/'
   },
   mutations: {
     [types.LOGIN]: (state, data) => {
