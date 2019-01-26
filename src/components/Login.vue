@@ -32,11 +32,23 @@ export default {
       formData.append('userName', this.login.userName)
       formData.append('password', this.login.password)
       let config = {
+        url: this.$store.state.baseUrl + 'login',
+        method: 'post',
+        data: this.login,
+        transformRequest: [function (data) {
+          // Do whatever you want to transform the data
+          let ret = ''
+          for (let it in data) {
+            //  如果要发送中文 编码
+            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+          }
+          return ret
+        }],
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'application/x-www-form-urlencoded'
         }
       }
-      this.$http.post(this.$store.state.baseUrl + 'login', formData, config).then((response) => {
+      this.$http.request(config).then((response) => {
         if (response.data.errorCode === 'LOGIN_FAIL') {
           Message.error({message: response.data.errorMsg})
         }
