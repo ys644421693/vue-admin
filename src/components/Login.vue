@@ -2,11 +2,9 @@
   <div id="loginId">
     <div class="login">
       <h1>E-union Login</h1>
-      <form>
         <input type="text" v-model="login.userName" name="userName" placeholder="用户名" required="required"/>
         <input type="password" v-model="login.password" name="password" placeholder="密码" required="required"/>
         <button class="btn btn-primary btn-block btn-large" @click="submit">登录</button>
-      </form>
     </div>
   </div>
 </template>
@@ -28,9 +26,6 @@ export default {
   },
   methods: {
     submit: function () {
-      let formData = new FormData()
-      formData.append('userName', this.login.userName)
-      formData.append('password', this.login.password)
       let config = {
         url: this.$store.state.baseUrl + 'login',
         method: 'post',
