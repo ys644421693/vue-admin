@@ -26,6 +26,14 @@ export default {
   },
   methods: {
     submit: function () {
+      if (!this.login.userName) {
+        Message.warning('请填用户名')
+        return
+      }
+      if (!this.login.password) {
+        Message.warning('请填密码')
+        return
+      }
       let config = {
         url: this.$store.state.baseUrl + 'login',
         method: 'post',
@@ -100,7 +108,6 @@ export default {
   }
 
   mark {
-    background: #ff0;
     color: #000
   }
 

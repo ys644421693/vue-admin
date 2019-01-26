@@ -12,7 +12,7 @@ var loadinginstace
 // http request 拦截器
 axios.interceptors.request.use(
   config => {
-    loadinginstace = Loading.service({ fullscreen: true })
+    loadinginstace = Loading.service({ target: '#loginId', fullscreen: true, background: 'rgba(255, 255, 255, 0.3)' })
     if (store.state.token) {
       config.headers.Authorization = `token ${store.state.token}`
     }
@@ -37,7 +37,7 @@ axios.interceptors.response.use(
   },
   error => {
     loadinginstace.close()
-    Message.error({message: '登录失败'})
+    Message.error({message: '请求失败'})
     if (error.response) {
       switch (error.response.status) {
         case 401:
