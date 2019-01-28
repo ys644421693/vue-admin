@@ -12,6 +12,7 @@
 <script>
 import store from '../store/eunion/store'
 import { Message } from 'element-ui'
+import * as types from '../store/eunion/type'
 export default {
   name: 'Login',
   store,
@@ -34,26 +35,13 @@ export default {
         Message.warning('请填密码')
         return
       }
-      let config = {
-        url: this.$store.state.baseUrl + 'login',
-        method: 'post',
-        data: this.login,
-        transformRequest: [function (data) {
-          // Do whatever you want to transform the data
-          let ret = ''
-          for (let it in data) {
-            //  如果要发送中文 编码
-            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
-          }
-          return ret
-        }],
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      }
-      this.$http.request(config).then((response) => {
+      this.postRequest('login', this.login).then((response) => {
         if (response.data.errorCode === 'LOGIN_FAIL') {
           Message.error({message: response.data.errorMsg})
+        }
+        if (response.data.errorCode === 'SUCCESS') {
+          this.$store.commit(types.LOGIN, 'SUCCESS')
+          window.location.href = '/#' + this.$route.query.redirect
         }
       }).catch((er) => {
         console.error(er)

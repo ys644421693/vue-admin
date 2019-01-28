@@ -102,6 +102,7 @@ export default {
   mounted: function () {
     this.loadData()
     $('.el-header').show()
+    console.log(window.localStorage)
   },
   methods: {
     handleOpen (key, keyPath) {
@@ -111,7 +112,7 @@ export default {
       console.log(key, keyPath)
     },
     loadData: function () {
-      this.$http.get('http://www.baidu.com', {}).then((response) => {
+      this.getRequest('user/getUserInfo').then((response) => {
         console.log(response.data)
       }).catch((er) => {
         console.error(er)

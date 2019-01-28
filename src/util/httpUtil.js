@@ -5,7 +5,7 @@ import router from '../router/index'
 import { Loading, Message } from 'element-ui'
 
 // axios 配置
-axios.defaults.timeout = 5000
+axios.defaults.timeout = 10000
 axios.defaults.baseURL = store.state.baseUrl
 
 var loadinginstace
@@ -37,14 +37,15 @@ axios.interceptors.response.use(
   },
   error => {
     loadinginstace.close()
-    Message.error({message: '请求失败'})
+    Message.error({message: '请求失败' + error.message})
     if (error.response) {
       switch (error.response.status) {
         case 401:
           store.commit(types.LOGOUT)
+          router.currentRoute.path !== 'login' &&
           router.replace({
             path: 'login',
-            query: {redirect: router.currentRoute.fullPath}
+            query: { redirect: router.currentRoute.path }
           })
       }
     }
@@ -52,5 +53,79 @@ axios.interceptors.response.use(
     return Promise.reject(error.response.data)
   }
 )
-
-export default axios
+export const postRequest = (url, params) => {
+  return axios({
+    method: 'post',
+    url: `${store.state.baseUrl}${url}`,
+    data: params,
+    xhrFields: {
+      withCredentials: true
+    },
+    crossDomain: true,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  })
+}
+export const uploadFileRequest = (url, params) => {
+  return axios({
+    method: 'post',
+    url: `${store.state.baseUrl}${url}`,
+    data: params,
+    xhrFields: {
+      withCredentials: true
+    },
+    crossDomain: true,
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+}
+export const putRequest = (url, params) => {
+  return axios({
+    method: 'put',
+    url: `${store.state.baseUrl}${url}`,
+    data: params,
+    xhrFields: {
+      withCredentials: true
+    },
+    crossDomain: true,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  })
+}
+export const deleteRequest = (url) => {
+  return axios({
+    method: 'delete',
+    xhrFields: {
+      withCredentials: true
+    },
+    crossDomain: true,
+    url: `${store.state.baseUrl}${url}`
+  })
+}
+export const getRequest = (url) => {
+  return axios({
+    method: 'get',
+    xhrFields: {
+      withCredentials: true
+    },
+    crossDomain: true,
+    url: `${store.state.baseUrl}${url}`
+  })
+}

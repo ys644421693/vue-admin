@@ -48,7 +48,7 @@
         <el-button type="info" icon="el-icon-edit" size="mini" circle></el-button>
       </el-badge>
       <el-tooltip class="item" effect="dark" content="login out" placement="bottom">
-        <el-button type="danger" icon="el-icon-upload2" size="mini" circle></el-button>
+        <el-button type="danger" icon="el-icon-upload2" size="mini" circle @click="loginOut"></el-button>
       </el-tooltip>
     </el-col>
   </el-row>
@@ -56,7 +56,8 @@
 
 <script>
 import elHeadButton from '../util/HeadPic'
-
+import * as types from '../store/eunion/type'
+import store from '../store/eunion/store'
 export default {
   name: 'topMenu',
   data () {
@@ -78,6 +79,10 @@ export default {
       } else {
         this.activeIndex = '1'
       }
+    },
+    loginOut () {
+      store.commit(types.LOGOUT)
+      window.location.href = '/#/login'
     }
   },
   mounted: function () {
