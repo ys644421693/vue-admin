@@ -35,14 +35,17 @@ export default {
         Message.warning('请填密码')
         return
       }
-      this.postRequest('login', this.login).then((response) => {
-        if (response.data.errorCode === 'LOGIN_FAIL') {
-          Message.error({message: response.data.errorMsg})
-        }
-        if (response.data.errorCode === 'SUCCESS') {
-          this.$store.commit(types.LOGIN, 'SUCCESS')
-          window.location.href = '/#' + this.$route.query.redirect
-        }
+      this.postRequest('sys/login', this.login).then((response) => {
+        // if (response.data.errorCode === 'LOGIN_FAIL') {
+        //   Message.error({message: response.data.errorMsg})
+        // }
+        // if (response.data.errorCode === 'SUCCESS') {
+        //   this.$store.commit(types.LOGIN, 'SUCCESS')
+        //   window.location.href = '/#' + this.$route.query.redirect
+        // }
+        this.$store.commit(types.LOGIN, 'SUCCESS')
+        let redirect = decodeURIComponent(this.$route.query.redirect || '/')
+        this.$router.push({path: redirect})
       }).catch((er) => {
         console.error(er)
       })

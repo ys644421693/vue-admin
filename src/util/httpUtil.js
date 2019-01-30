@@ -7,6 +7,7 @@ import { Loading, Message } from 'element-ui'
 // axios 配置
 axios.defaults.timeout = 10000
 axios.defaults.baseURL = store.state.baseUrl
+axios.defaults.withCredentials = true
 
 var loadinginstace
 // http request 拦截器
@@ -28,6 +29,7 @@ axios.interceptors.request.use(
 // http response 拦截器
 axios.interceptors.response.use(
   response => {
+    console.log(response)
     loadinginstace.close()
     router.replace({
       path: '/',
@@ -62,6 +64,7 @@ export const postRequest = (url, params) => {
       withCredentials: true
     },
     crossDomain: true,
+    withCredentials: true,
     transformRequest: [function (data) {
       let ret = ''
       for (let it in data) {
@@ -83,6 +86,7 @@ export const uploadFileRequest = (url, params) => {
       withCredentials: true
     },
     crossDomain: true,
+    withCredentials: true,
     headers: {
       'Content-Type': 'multipart/form-data'
     }
@@ -97,6 +101,7 @@ export const putRequest = (url, params) => {
       withCredentials: true
     },
     crossDomain: true,
+    withCredentials: true,
     transformRequest: [function (data) {
       let ret = ''
       for (let it in data) {
@@ -126,6 +131,7 @@ export const getRequest = (url) => {
       withCredentials: true
     },
     crossDomain: true,
+    withCredentials: true,
     url: `${store.state.baseUrl}${url}`
   })
 }

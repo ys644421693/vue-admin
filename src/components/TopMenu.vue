@@ -81,8 +81,11 @@ export default {
       }
     },
     loginOut () {
-      store.commit(types.LOGOUT)
-      window.location.href = '/#/login'
+      this.postRequest('sys/logout', this.login).then((response) => {
+        console.log(response)
+        store.commit(types.LOGOUT)
+        window.location.href = '/#/login'
+      })
     }
   },
   mounted: function () {
