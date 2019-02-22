@@ -24,6 +24,12 @@ export default {
   mounted () {
     // 隐藏头信息
     $('.el-header').hide()
+    document.onkeydown = e => {
+      let _key = window.event.keyCode
+      if (_key === 13) {
+        this.submit()
+      }
+    }
   },
   methods: {
     submit: function () {
@@ -35,6 +41,7 @@ export default {
         Message.warning('请填密码')
         return
       }
+      console.log(this.login)
       this.postRequest('sys/login', this.login).then((response) => {
         // if (response.data.errorCode === 'LOGIN_FAIL') {
         //   Message.error({message: response.data.errorMsg})
@@ -43,7 +50,8 @@ export default {
         //   this.$store.commit(types.LOGIN, 'SUCCESS')
         //   window.location.href = '/#' + this.$route.query.redirect
         // }
-        this.$store.commit(types.LOGIN, 'SUCCESS')
+        console.log(window.localStorage.getItem('token'))
+        this.$store.commit(types.LOGIN, 'success')
         let redirect = decodeURIComponent(this.$route.query.redirect || '/')
         this.$router.push({path: redirect})
       }).catch((er) => {

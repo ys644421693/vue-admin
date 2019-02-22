@@ -3,6 +3,7 @@ import store from '../store/eunion/store'
 import * as types from '../store/eunion/type'
 import router from '../router/index'
 import { Loading, Message } from 'element-ui'
+import qs from 'qs'
 
 // axios 配置
 axios.defaults.timeout = 10000
@@ -17,6 +18,9 @@ axios.interceptors.request.use(
     if (store.state.token) {
       config.headers.Authorization = `token ${store.state.token}`
     }
+    // if (config.method === 'post') {
+    //   config.data = qs.stringify(config.data)
+    // }
     return config
   },
   err => {
@@ -66,11 +70,7 @@ export const postRequest = (url, params) => {
     crossDomain: true,
     withCredentials: true,
     transformRequest: [function (data) {
-      let ret = ''
-      for (let it in data) {
-        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
-      }
-      return ret
+      return qs.stringify(data)
     }],
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
@@ -103,11 +103,7 @@ export const putRequest = (url, params) => {
     crossDomain: true,
     withCredentials: true,
     transformRequest: [function (data) {
-      let ret = ''
-      for (let it in data) {
-        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
-      }
-      return ret
+      return qs.stringify(data)
     }],
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'

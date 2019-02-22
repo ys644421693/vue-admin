@@ -81,10 +81,13 @@ export default {
       }
     },
     loginOut () {
-      this.postRequest('sys/logout', this.login).then((response) => {
-        console.log(response)
+      this.postRequest('sys/loginOut').then((response) => {
+        console.log(response.data)
         store.commit(types.LOGOUT)
-        window.location.href = '/#/login'
+        this.$router.push({path: '/login'})
+      }).catch((er) => {
+        console.error(er)
+        this.$router.push({path: '/login'})
       })
     }
   },

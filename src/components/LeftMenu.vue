@@ -116,6 +116,7 @@ export default {
         console.log(response.data)
       }).catch((er) => {
         console.error(er)
+        this.$router.push({path: '/login'})
       })
     }
   }
