@@ -84,8 +84,9 @@
           </el-table>
           <el-pagination
             background
+            @current-change="handleCurrentChange"
             layout="prev, pager, next"
-            :total="1000">
+            :total="pageTotal">
           </el-pagination>
         </el-card>
     </el-row>
@@ -221,7 +222,8 @@ export default {
       formLabelWidth: '120px',
       product: {},
       dialogFormVisible: false,
-      query: {}
+      query: {},
+      pageTotal: 10
     }
   },
   methods: {
@@ -263,6 +265,15 @@ export default {
     handleChange (file, fileList) {
       this.product.fileList = fileList.slice(-3)
     },
+    handleCurrentChange (val) {
+      console.log(`当前页: ${val}`)
+      const dataPage = {pageNo: val - 1, size: 10}
+      dataPage.data = {}
+      dataPage.data.name = this.query.name
+      dataPage.data.assign = []
+      dataPage.data.assign.push(this.query.region)
+      this.getProduct(dataPage)
+    },
     saveInfo (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -296,7 +307,19 @@ export default {
       this.product = row
     },
     queryParam () {
+    },
+    getProduct (data) {
+      this.getRequest('product/getPageData', data).then((response) => {
+        console.log(response.data)
+        this.pageTotal = response.data.count
+      }).catch((er) => {
+        console.error(er)
+      })
     }
+  },
+  mounted: function () {
+    const data = {pageNo: 0, size: 10}
+    this.getProduct(data)
   }
 }
 </script>

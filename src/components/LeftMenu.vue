@@ -55,42 +55,42 @@ export default {
       menus: [
         {
           title: '首页',
-          index: '6',
+          index: '1',
           icon: 'el-icon-menu',
           view: '/',
           childs: []
         },
         {
           title: '主页信息',
-          index: '1',
+          index: '2',
           icon: 'el-icon-location',
           childs: [{
             title: '产品设置',
-            index: '2',
+            index: '3',
             icon: 'el-icon-menu',
             view: '/product'
           },
           {
             title: '员工信息',
-            index: '6',
+            index: '4',
             icon: 'el-icon-menu',
             view: '/PersonnelInfo'
           }]
         },
         {
           title: '导航2',
-          index: '3',
+          index: '5',
           icon: 'el-icon-location',
           childs: [{
             title: '导航er',
-            index: '4',
+            index: '6',
             icon: 'el-icon-menu',
             view: '/home/second'
           }]
         },
         {
           title: '导航3',
-          index: '5',
+          index: '7',
           icon: 'el-icon-menu',
           view: '/home/three',
           childs: []

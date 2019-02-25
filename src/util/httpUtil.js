@@ -14,13 +14,10 @@ var loadinginstace
 // http request 拦截器
 axios.interceptors.request.use(
   config => {
-    loadinginstace = Loading.service({ target: '#loginId', fullscreen: true, background: 'rgba(255, 255, 255, 0.3)' })
+    loadinginstace = Loading.service({ target: '#app', fullscreen: true, background: 'rgba(255, 255, 255, 0.3)' })
     if (store.state.token) {
       config.headers.Authorization = `token ${store.state.token}`
     }
-    // if (config.method === 'post') {
-    //   config.data = qs.stringify(config.data)
-    // }
     return config
   },
   err => {
@@ -35,10 +32,6 @@ axios.interceptors.response.use(
   response => {
     console.log(response)
     loadinginstace.close()
-    router.replace({
-      path: '/',
-      query: {redirect: router.currentRoute.fullPath}
-    })
     return response
   },
   error => {
@@ -120,9 +113,10 @@ export const deleteRequest = (url) => {
     url: `${store.state.baseUrl}${url}`
   })
 }
-export const getRequest = (url) => {
+export const getRequest = (url, params) => {
   return axios({
     method: 'get',
+    params: params,
     xhrFields: {
       withCredentials: true
     },
