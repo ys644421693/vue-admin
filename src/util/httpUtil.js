@@ -14,7 +14,9 @@ var loadinginstace
 // http request 拦截器
 axios.interceptors.request.use(
   config => {
-    loadinginstace = Loading.service({ target: '#app', fullscreen: true, background: 'rgba(255, 255, 255, 0.3)' })
+    if (!loadinginstace) {
+      loadinginstace = Loading.service({ target: '#app', fullscreen: true, background: 'rgba(255, 255, 255, 0.3)' })
+    }
     if (store.state.token) {
       config.headers.Authorization = `token ${store.state.token}`
     }
