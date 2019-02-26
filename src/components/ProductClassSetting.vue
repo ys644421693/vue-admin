@@ -31,8 +31,7 @@
       </el-card>
     </el-row>
     <el-row>
-      <el-card class="box-card">
-        <el-row v-if="!showForm">
+        <el-card class="box-card">
           <el-table
             :data="productList.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
             style="width: 100%">
@@ -63,22 +62,20 @@
                 </el-form>
               </template>
             </el-table-column>
-            <el-table-column label="商品 ID" prop="id"></el-table-column>
+            <el-table-column label="商品 ID"  prop="id"></el-table-column>
             <el-table-column label="商品名称" prop="name"></el-table-column>
             <el-table-column label="商品分类" prop="region" :formatter="typeTransfer"></el-table-column>
             <el-table-column label="提供商" show-overflow-tooltip prop="provide"></el-table-column>
             <el-table-column label="价格" prop="price" :formatter="amountUnit"></el-table-column>
             <el-table-column label="状态" prop="state">
               <template slot-scope="scope">
-                <el-tag :type="scope.row.state === 1 ? 'success' : 'danger'" disable-transitions size="mini">
-                  {{scope.row.state ===1?'销售中':'下架'}}
-                </el-tag>
+                <el-tag :type="scope.row.state === 1 ? 'success' : 'danger'" disable-transitions size="mini">{{scope.row.state ===1?'销售中':'下架'}}</el-tag>
               </template>
             </el-table-column>
             <el-table-column label="排序" prop="sortNumber"></el-table-column>
             <el-table-column align="center">
               <template slot="header" slot-scope="scope" class="operaClass">
-                <el-button type="primary" size="mini" @click="showForm = true">添加商品</el-button>
+                <el-button type="primary" size="mini" @click="dialogFormVisible = true">添加商品</el-button>
               </template>
               <template slot-scope="scope">
                 <el-button type="primary" size="mini" @click="updateData(scope.row)">修改</el-button>
@@ -92,73 +89,68 @@
             layout="prev, pager, next"
             :total="pageTotal">
           </el-pagination>
-        </el-row>
-        <el-row v-if="showForm">
-          <el-col :span="12" :offset="6">
-            <el-form :model="product" label-position="left" :rules="rules">
-              <el-form-item label="商品名称" :label-width="formLabelWidth">
-                <el-input v-model="product.name" autocomplete="off" size="mini"></el-input>
-              </el-form-item>
-              <el-form-item label="商品副标题" :label-width="formLabelWidth">
-                <el-input v-model="product.subheading" autocomplete="off" size="mini"></el-input>
-              </el-form-item>
-              <el-form-item label="提供商" :label-width="formLabelWidth">
-                <el-input v-model="product.provide" autocomplete="off" size="mini"></el-input>
-              </el-form-item>
-              <el-form-item label="提供商电话" :label-width="formLabelWidth">
-                <el-input v-model="product.providePhone" autocomplete="off" size="mini"></el-input>
-              </el-form-item>
-              <el-form-item label="商品分类" :label-width="formLabelWidth">
-                <el-select v-model="product.region" size="mini" placeholder="--请选择商品分类--">
-                  <el-option label="VR" value="1"></el-option>
-                  <el-option label="香薰机" value="2"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="商品描述" :label-width="formLabelWidth">
-                <el-input type="textarea" :rows="2" placeholder="商品描述" v-model="product.describe">
-                </el-input>
-              </el-form-item>
-              <br>
-              <el-form-item label="价格" :label-width="formLabelWidth">
-                <el-input-number v-model="product.price" :precision="2" :step="5.0" size="mini"></el-input-number>
-              </el-form-item>
-              <el-form-item label="单位" :label-width="formLabelWidth">
-                <el-radio-group v-model="product.unit">
-                  <el-radio label="USD">美元</el-radio>
-                  <el-radio label="CNY">人民币</el-radio>
-                </el-radio-group>
-              </el-form-item>
-              <el-form-item label="主页显示" :label-width="formLabelWidth">
-                <el-switch v-model="product.isShowIndex" active-color="#13ce66" inactive-color="#ff4949">
-                </el-switch>
-              </el-form-item>
-              <el-form-item label="商品排序" :label-width="formLabelWidth">
-                <el-input-number v-model="product.sortNumber" @change="handleChange" :min="1" :max="10" label="序号"
-                                 size="mini"></el-input-number>
-              </el-form-item>
-              <el-form-item label="商品图片" :label-width="formLabelWidth">
-                <el-upload
-                  action="https://jsonplaceholder.typicode.com/posts/"
-                  list-type="picture-card"
-                  :on-preview="handlePictureCardPreview"
-                  :on-remove="handleRemove"
-                  accept="image/png,image/gif,image/jpg,image/jpeg">
-                  <i class="el-icon-plus"></i>
-                </el-upload>
-                <el-dialog :visible.sync="dialogVisible">
-                  <img width="100%" :src="dialogImageUrl" alt="">
-                </el-dialog>
-              </el-form-item>
-              <br>
-              <el-form-item style="padding-top:100px;">
-                <el-button type="primary" @click="saveInfo('')" size="mini">保 存</el-button>
-                <el-button type="danger" @click="showForm = false" size="mini">取 消</el-button>
-              </el-form-item>
-            </el-form>
-          </el-col>
-        </el-row>
-      </el-card>
+        </el-card>
     </el-row>
+    <el-dialog title="商品信息" :visible.sync="dialogFormVisible" width="30%">
+      <el-form :model="product" label-position="left" :rules="rules">
+        <el-form-item label="商品名称" :label-width="formLabelWidth">
+          <el-input v-model="product.name" autocomplete="off" size="mini"></el-input>
+        </el-form-item>
+        <el-form-item label="商品副标题" :label-width="formLabelWidth">
+          <el-input v-model="product.subheading" autocomplete="off" size="mini"></el-input>
+        </el-form-item>
+        <el-form-item label="提供商" :label-width="formLabelWidth">
+          <el-input v-model="product.provide" autocomplete="off" size="mini"></el-input>
+        </el-form-item>
+        <el-form-item label="提供商电话" :label-width="formLabelWidth">
+          <el-input v-model="product.providePhone" autocomplete="off" size="mini"></el-input>
+        </el-form-item>
+        <el-form-item label="商品分类" :label-width="formLabelWidth">
+          <el-select v-model="product.region" size="mini" placeholder="--请选择商品分类--">
+            <el-option label="VR" value="1"></el-option>
+            <el-option label="香薰机" value="2"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="商品描述" :label-width="formLabelWidth">
+          <el-input type="textarea" :rows="2" placeholder="商品描述" v-model="product.describe">
+          </el-input>
+        </el-form-item>
+        <br>
+        <el-form-item label="价格" :label-width="formLabelWidth">
+          <el-input-number v-model="product.price" :precision="2" :step="5.0" size="mini"></el-input-number>
+        </el-form-item>
+        <el-form-item label="单位" :label-width="formLabelWidth">
+          <el-radio-group v-model="product.unit">
+            <el-radio label="USD">美元</el-radio>
+            <el-radio label="CNY">人民币</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="主页显示" :label-width="formLabelWidth">
+          <el-switch v-model="product.isShowIndex" active-color="#13ce66" inactive-color="#ff4949">
+          </el-switch>
+        </el-form-item>
+        <el-form-item label="商品排序" :label-width="formLabelWidth">
+          <el-input-number v-model="product.sortNumber" @change="handleChange" :min="1" :max="10" label="序号" size="mini"></el-input-number>
+        </el-form-item>
+        <el-form-item label="商品图片" :label-width="formLabelWidth">
+          <el-upload
+            class="upload-demo"
+            ref="upload"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            :on-preview="handlePreview"
+            :on-remove="handleRemove"
+            :file-list="product.fileList"
+            :auto-upload="false">
+            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+            <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+          </el-upload>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="saveInfo('')" size="mini">保 存</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -171,20 +163,18 @@ export default {
       productList: [],
       rules: {
         name: [
-          {required: true, message: '请输入商品名称', trigger: 'blur'},
-          {min: 3, max: 20, message: '长度在 3 到 5 个字符', trigger: 'blur'}
+          { required: true, message: '请输入商品名称', trigger: 'blur' },
+          { min: 3, max: 20, message: '长度在 3 到 5 个字符', trigger: 'blur' }
         ]
       },
       search: '',
       formLabelWidth: '120px',
       product: {},
-      dialogImageUrl: '',
-      dialogVisible: false,
+      dialogFormVisible: false,
       query: {},
       pageTotal: 10,
       currentPage: 1,
-      classType: [],
-      showForm: false
+      classType: []
     }
   },
   methods: {
@@ -223,10 +213,6 @@ export default {
     handlePreview (file) {
       console.log(file)
     },
-    handlePictureCardPreview (file) {
-      this.dialogImageUrl = file.url
-      this.dialogVisible = true
-    },
     handleChange (file, fileList) {
       this.product.fileList = fileList.slice(-3)
     },
@@ -244,6 +230,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           alert('submit!')
+          this.dialogFormVisible = false
         } else {
           console.log('error submit!!')
           return false
@@ -268,8 +255,8 @@ export default {
       return cellValue + unit
     },
     updateData (row) {
+      this.dialogFormVisible = true
       this.product = row
-      this.showForm = true
     },
     queryParam () {
       this.handleCurrentChange(this.currentPage)
@@ -305,59 +292,49 @@ export default {
   .demo-table-expand {
     font-size: 0;
   }
-
   .demo-table-expand label {
     width: 90px;
     color: #99a9bf;
   }
-
   .demo-table-expand .el-form-item {
     margin-right: 0;
     margin-bottom: 0;
     width: 50%;
   }
-
   .el-card {
     margin-bottom: 10px;
   }
-
   .el-pagination {
     margin-top: 25px;
   }
-
   .el-table >>> .warning-row {
-    background: rgba(255, 0, 0, 0.1);
+    background: rgba(255,0,0, 0.1);
   }
 
   .el-table >>> .success-row {
-    background: rgba(0, 128, 0, 0.1);
+    background: rgba(0,128,0, 0.1);
   }
-
-  .el-form >>> .el-form-item__content {
+  .el-form >>> .el-form-item__content{
     height: 40px;
     text-align: left;
   }
-
   .el-form-item {
     margin: 0px;
     height: 40px;
   }
-
-  .el-table >>> th {
+  .el-table >>> th{
     padding: 0px;
   }
-
   .el-table >>> label {
     width: 90px;
     color: #99a9bf;
     font-weight: bold;
   }
-
   .el-dialog__wrapper >>> .el-dialog__body {
     height: 450px;
   }
 
-  .box-card h3 {
+  .box-card h3{
     text-align: left;
   }
 </style>

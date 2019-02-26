@@ -4,6 +4,7 @@ import HelloWorld from '@/components/HelloWorld'
 import ContentIndex from '@/components/ContentIndex'
 import CmsIndex from '@/cms/CmsIndex'
 import ProductSetting from '@/components/ProductSetting'
+import ProductClassSetting from '@/components/ProductClassSetting'
 import PersonnelInfo from '@/components/PersonnelInfo'
 import Login from '@/components/Login'
 import store from '../store/eunion/store'
@@ -21,6 +22,10 @@ const router = [{
   {
     path: '/product',
     component: ProductSetting
+  },
+  {
+    path: '/productClass',
+    component: ProductClassSetting
   },
   {
     path: '/PersonnelInfo',

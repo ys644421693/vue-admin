@@ -61,24 +61,23 @@ export default {
           childs: []
         },
         {
-          title: '主页信息',
+          title: '产品管理',
           index: '2',
           icon: 'el-icon-location',
           childs: [{
-            title: '产品设置',
+            title: '产品信息',
             index: '3',
             icon: 'el-icon-menu',
             view: '/product'
-          },
-          {
-            title: '员工信息',
-            index: '4',
+          }, {
+            title: '产品类型',
+            index: '8',
             icon: 'el-icon-menu',
-            view: '/PersonnelInfo'
+            view: '/productClass'
           }]
         },
         {
-          title: '导航2',
+          title: '人员管理',
           index: '5',
           icon: 'el-icon-location',
           childs: [{
@@ -86,6 +85,11 @@ export default {
             index: '6',
             icon: 'el-icon-menu',
             view: '/home/second'
+          }, {
+            title: '员工信息',
+            index: '4',
+            icon: 'el-icon-menu',
+            view: '/PersonnelInfo'
           }]
         },
         {
