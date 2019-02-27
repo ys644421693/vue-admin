@@ -208,10 +208,8 @@ export default {
       this.$refs.upload.submit()
     },
     handleRemove (file, fileList) {
-      console.log(file, fileList)
     },
     handlePreview (file) {
-      console.log(file)
     },
     handleChange (file, fileList) {
       this.product.fileList = fileList.slice(-3)
@@ -263,7 +261,6 @@ export default {
     },
     getProduct (data) {
       this.getRequest('product/getPageData', data).then((response) => {
-        console.log(response.data)
         this.pageTotal = response.data.count
         this.productList = response.data.result
       }).catch((er) => {
@@ -272,7 +269,6 @@ export default {
     },
     getProductClass () {
       this.getRequest('productClass/getAllData').then((response) => {
-        console.log(response.data)
         this.classType = response.data.result
       }).catch((er) => {
         console.error(er)

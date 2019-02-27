@@ -41,7 +41,6 @@ export default {
         Message.warning('请填密码')
         return
       }
-      console.log(this.login)
       this.postRequest('sys/login', this.login).then((response) => {
         // if (response.data.errorCode === 'LOGIN_FAIL') {
         //   Message.error({message: response.data.errorMsg})
@@ -50,7 +49,6 @@ export default {
         //   this.$store.commit(types.LOGIN, 'SUCCESS')
         //   window.location.href = '/#' + this.$route.query.redirect
         // }
-        console.log(window.localStorage.getItem('token'))
         this.$store.commit(types.LOGIN, 'success')
         let redirect = decodeURIComponent(this.$route.query.redirect || '/')
         this.$router.push({path: redirect})

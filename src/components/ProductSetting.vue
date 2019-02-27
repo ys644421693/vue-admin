@@ -11,7 +11,7 @@
       </el-card>
     </el-row>
     <el-row>
-      <el-card class="box-card">
+      <el-card class="box-card" v-if="!showForm">
         <h3>搜索条件</h3>
         <el-form label-position="left" :inline="true">
           <el-form-item label="商品名称">
@@ -70,8 +70,8 @@
             <el-table-column label="价格" prop="price" :formatter="amountUnit"></el-table-column>
             <el-table-column label="状态" prop="state">
               <template slot-scope="scope">
-                <el-tag :type="scope.row.state === 1 ? 'success' : 'danger'" disable-transitions size="mini">
-                  {{scope.row.state ===1?'销售中':'下架'}}
+                <el-tag :type="scope.row.status === 1 ? 'success' : 'danger'" disable-transitions size="mini">
+                  {{scope.row.status ===1?'销售中':'下架'}}
                 </el-tag>
               </template>
             </el-table-column>
@@ -102,12 +102,6 @@
               <el-form-item label="商品副标题" :label-width="formLabelWidth">
                 <el-input v-model="product.subheading" autocomplete="off" size="mini"></el-input>
               </el-form-item>
-              <el-form-item label="提供商" :label-width="formLabelWidth">
-                <el-input v-model="product.provide" autocomplete="off" size="mini"></el-input>
-              </el-form-item>
-              <el-form-item label="提供商电话" :label-width="formLabelWidth">
-                <el-input v-model="product.providePhone" autocomplete="off" size="mini"></el-input>
-              </el-form-item>
               <el-form-item label="商品分类" :label-width="formLabelWidth">
                 <el-select v-model="product.region" size="mini" placeholder="--请选择商品分类--">
                   <el-option label="VR" value="1"></el-option>
@@ -115,14 +109,28 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="商品描述" :label-width="formLabelWidth">
-                <el-input type="textarea" :rows="2" placeholder="商品描述" v-model="product.describe">
+                <el-input type="textarea" :rows="2" placeholder="商品描述" v-model="product.descript">
                 </el-input>
               </el-form-item>
               <br>
-              <el-form-item label="价格" :label-width="formLabelWidth">
+              <el-form-item label="成本价格" :label-width="formLabelWidth">
+                <el-input-number v-model="product.costPrice" :precision="2" :step="5.0" size="mini"></el-input-number>
+              </el-form-item>
+              <el-form-item label="销售单价" :label-width="formLabelWidth">
                 <el-input-number v-model="product.price" :precision="2" :step="5.0" size="mini"></el-input-number>
               </el-form-item>
-              <el-form-item label="单位" :label-width="formLabelWidth">
+              <el-form-item label="库存" :label-width="formLabelWidth">
+                <el-input-number v-model="product.stock" :precision="2" :step="5.0" size="mini"></el-input-number>
+              </el-form-item>
+              <el-form-item label="生产日期" :label-width="formLabelWidth">
+                <el-date-picker v-model="product.productDate" type="date" placeholder="选择日期" size="mini" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
+                </el-date-picker>
+              </el-form-item>
+              <el-form-item label="过期时间" :label-width="formLabelWidth">
+                <el-date-picker v-model="product.termOfValidity" type="date" placeholder="选择日期" size="mini" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
+                </el-date-picker>
+              </el-form-item>
+              <el-form-item label="币种" :label-width="formLabelWidth">
                 <el-radio-group v-model="product.unit">
                   <el-radio label="USD">美元</el-radio>
                   <el-radio label="CNY">人民币</el-radio>
@@ -138,10 +146,11 @@
               </el-form-item>
               <el-form-item label="商品图片" :label-width="formLabelWidth">
                 <el-upload
-                  action="https://jsonplaceholder.typicode.com/posts/"
+                  :action="uploadPath"
                   list-type="picture-card"
                   :on-preview="handlePictureCardPreview"
-                  :on-remove="handleRemove"
+                  :with-credentials="true"
+                  :on-success="uploadSuccess"
                   accept="image/png,image/gif,image/jpg,image/jpeg">
                   <i class="el-icon-plus"></i>
                 </el-upload>
@@ -151,8 +160,8 @@
               </el-form-item>
               <br>
               <el-form-item style="padding-top:100px;">
-                <el-button type="primary" @click="saveInfo('')" size="mini">保 存</el-button>
-                <el-button type="danger" @click="showForm = false" size="mini">取 消</el-button>
+                <el-button type="primary" @click="addProductInfo()" size="mini">保 存</el-button>
+                <el-button type="danger" @click="showForm = false" size="mini">返 回</el-button>
               </el-form-item>
             </el-form>
           </el-col>
@@ -163,8 +172,10 @@
 </template>
 
 <script>
+import store from '../store/eunion/store'
 export default {
   name: 'HelloWorld',
+  store,
   data () {
     return {
       msg: 'Welcome to Your Vue.js App',
@@ -184,7 +195,8 @@ export default {
       pageTotal: 10,
       currentPage: 1,
       classType: [],
-      showForm: false
+      showForm: false,
+      uploadPath: this.$store.state.baseUrl + 'fileUpload/singleFileUpload?type=1'
     }
   },
   methods: {
@@ -203,9 +215,19 @@ export default {
         type: 'warning',
         center: true
       }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
+        this.deleteRequest('product/deleteData', {id: row.id}).then((response) => {
+          console.log(response.data)
+          for (var i = 0; i < this.productList.length; i++) {
+            if (this.productList[i].id === row.id) {
+              this.productList.splice(i, 1)
+            }
+          }
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+        }).catch((er) => {
+          console.error(er)
         })
       }).catch(() => {
         this.$message({
@@ -216,12 +238,6 @@ export default {
     },
     submitUpload () {
       this.$refs.upload.submit()
-    },
-    handleRemove (file, fileList) {
-      console.log(file, fileList)
-    },
-    handlePreview (file) {
-      console.log(file)
     },
     handlePictureCardPreview (file) {
       this.dialogImageUrl = file.url
@@ -239,16 +255,6 @@ export default {
         dataPage.data.type = Number(this.query.region)
       }
       this.getProduct(dataPage)
-    },
-    saveInfo (formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert('submit!')
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
     },
     typeTransfer (row, column, cellValue, index) {
       if (cellValue === 1) {
@@ -276,7 +282,6 @@ export default {
     },
     getProduct (data) {
       this.getRequest('product/getPageData', data).then((response) => {
-        console.log(response.data)
         this.pageTotal = response.data.count
         this.productList = response.data.result
       }).catch((er) => {
@@ -285,11 +290,21 @@ export default {
     },
     getProductClass () {
       this.getRequest('productClass/getAllData').then((response) => {
-        console.log(response.data)
         this.classType = response.data.result
       }).catch((er) => {
         console.error(er)
       })
+    },
+    addProductInfo () {
+      this.postRequest('product/addData', this.product).then((response) => {
+        console.log(response.data)
+      }).catch((er) => {
+        console.error(er)
+      })
+    },
+    uploadSuccess (response, file, fileList) {
+      this.product.productPropertySet = []
+      this.product.productPropertySet.push(response.result)
     }
   },
   mounted: function () {

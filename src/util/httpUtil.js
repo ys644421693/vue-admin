@@ -32,7 +32,6 @@ axios.interceptors.request.use(
 // http response 拦截器
 axios.interceptors.response.use(
   response => {
-    console.log(response)
     loadinginstace.close()
     return response
   },
@@ -65,7 +64,10 @@ export const postRequest = (url, params) => {
     crossDomain: true,
     withCredentials: true,
     transformRequest: [function (data) {
-      return qs.stringify(data)
+      return qs.stringify(data, {allowDots: true,
+        serializeDate: (date) => {
+          return format(date, 'yyyy-MM-dd HH:mm:ss')
+        }})
     }],
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
@@ -98,19 +100,26 @@ export const putRequest = (url, params) => {
     crossDomain: true,
     withCredentials: true,
     transformRequest: [function (data) {
-      return qs.stringify(data)
+      return qs.stringify(data, {allowDots: true,
+        serializeDate: (date) => {
+          return format(date, 'yyyy-MM-dd HH:mm:ss')
+        }})
     }],
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
     }
   })
 }
-export const deleteRequest = (url) => {
+export const deleteRequest = (url, params) => {
   return axios({
     method: 'delete',
+    params: params,
     xhrFields: {
       withCredentials: true
     },
+    transformRequest: [function (data) {
+      return qs.stringify(data)
+    }],
     crossDomain: true,
     url: `${store.state.baseUrl}${url}`
   })
@@ -126,4 +135,20 @@ export const getRequest = (url, params) => {
     withCredentials: true,
     url: `${store.state.baseUrl}${url}`
   })
+}
+export const format = (data, fmt) => {
+  var o = {
+    'M+': data.getMonth() + 1,
+    'd+': data.getDate(),
+    'h+': data.getHours(),
+    'm+': data.getMinutes(),
+    's+': data.getSeconds(),
+    'q+': Math.floor((data.getMonth() + 3) / 3),
+    'S': this.getMilliseconds()
+  }
+  if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (data.getFullYear() + '').substr(4 - RegExp.$1.length))
+  for (var k in o) {
+    if (new RegExp('(' + k + ')').test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
+  }
+  return fmt
 }
