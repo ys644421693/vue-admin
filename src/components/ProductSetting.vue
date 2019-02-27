@@ -297,7 +297,11 @@ export default {
     },
     addProductInfo () {
       this.postRequest('product/addData', this.product).then((response) => {
-        console.log(response.data)
+        this.handleCurrentChange(this.currentPage)
+        this.$message({
+          type: 'success',
+          message: '添加成功!'
+        })
       }).catch((er) => {
         console.error(er)
       })
