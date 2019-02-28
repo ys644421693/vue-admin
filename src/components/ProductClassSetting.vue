@@ -59,9 +59,9 @@
           <el-input-number v-model="productClass.orderId" autocomplete="off" size="mini"></el-input-number>
         </el-form-item>
         <el-form-item label="父分类" :label-width="formLabelWidth">
-          <el-select v-model="productClass.parentId" placeholder="请选择" size="mini">
+          <el-select v-model="productClass.productClass" placeholder="请选择" size="mini">
             <el-option value="0" label="基本分类"></el-option>
-            <el-option v-for="item in classAllData" :key="item.id" :label="item.title" :value="item.id">
+            <el-option v-for="item in classAllData" :key="item.id" :label="item.title" :value="item">
             </el-option>
           </el-select>
         </el-form-item>
