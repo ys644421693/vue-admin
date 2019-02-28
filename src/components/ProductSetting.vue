@@ -174,7 +174,7 @@
 <script>
 import store from '../store/eunion/store'
 export default {
-  name: 'HelloWorld',
+  name: 'ProductSetting',
   store,
   data () {
     return {

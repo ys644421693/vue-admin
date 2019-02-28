@@ -14,15 +14,8 @@
       <el-card class="box-card">
         <h3>搜索条件</h3>
         <el-form label-position="left" :inline="true">
-          <el-form-item label="商品名称">
-            <el-input v-model="query.name" placeholder="商品名称" size="mini"></el-input>
-          </el-form-item>
-          <el-form-item label="商品类型">
-            <el-select v-model="query.region" size="mini" placeholder="--请选择商品分类--">
-              <el-option label="不限" value=""></el-option>
-              <el-option label="VR" value="1"></el-option>
-              <el-option label="香薰机" value="2"></el-option>
-            </el-select>
+          <el-form-item label="商品分类名称">
+            <el-input v-model="query.title" placeholder="商品分类名称" size="mini"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="queryParam" size="mini">查询</el-button>
@@ -33,49 +26,15 @@
     <el-row>
         <el-card class="box-card">
           <el-table
-            :data="productList.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+            :data="productClassList.filter(data => !search || data.title.toLowerCase().includes(search.toLowerCase()))"
             style="width: 100%">
-            <el-table-column type="expand">
-              <template slot-scope="props">
-                <el-form label-position="left" inline class="demo-table-expand">
-                  <el-form-item label="商品名称">
-                    <span>{{ props.row.name }}</span>
-                  </el-form-item>
-                  <el-form-item label="所属店铺">
-                    <span>{{ props.row.shop }}</span>
-                  </el-form-item>
-                  <el-form-item label="商品 ID">
-                    <span>{{ props.row.id }}</span>
-                  </el-form-item>
-                  <el-form-item label="店铺 ID">
-                    <span>{{ props.row.shopId }}</span>
-                  </el-form-item>
-                  <el-form-item label="商品分类">
-                    <span>{{ props.row.category }}</span>
-                  </el-form-item>
-                  <el-form-item label="店铺地址">
-                    <span>{{ props.row.address }}</span>
-                  </el-form-item>
-                  <el-form-item label="商品描述">
-                    <span>{{ props.row.desc }}</span>
-                  </el-form-item>
-                </el-form>
-              </template>
-            </el-table-column>
-            <el-table-column label="商品 ID"  prop="id"></el-table-column>
-            <el-table-column label="商品名称" prop="name"></el-table-column>
-            <el-table-column label="商品分类" prop="region" :formatter="typeTransfer"></el-table-column>
-            <el-table-column label="提供商" show-overflow-tooltip prop="provide"></el-table-column>
-            <el-table-column label="价格" prop="price" :formatter="amountUnit"></el-table-column>
-            <el-table-column label="状态" prop="state">
-              <template slot-scope="scope">
-                <el-tag :type="scope.row.state === 1 ? 'success' : 'danger'" disable-transitions size="mini">{{scope.row.state ===1?'销售中':'下架'}}</el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column label="排序" prop="sortNumber"></el-table-column>
+            <el-table-column label="分类 ID"  prop="id"></el-table-column>
+            <el-table-column label="排序编号" prop="orderId"></el-table-column>
+            <el-table-column label="父分类" prop="parentId"></el-table-column>
+            <el-table-column label="分类名称" prop="title"></el-table-column>
             <el-table-column align="center">
               <template slot="header" slot-scope="scope" class="operaClass">
-                <el-button type="primary" size="mini" @click="dialogFormVisible = true">添加商品</el-button>
+                <el-button type="primary" size="mini" @click="dialogFormVisible = true">新增分类</el-button>
               </template>
               <template slot-scope="scope">
                 <el-button type="primary" size="mini" @click="updateData(scope.row)">修改</el-button>
@@ -91,64 +50,25 @@
           </el-pagination>
         </el-card>
     </el-row>
-    <el-dialog title="商品信息" :visible.sync="dialogFormVisible" width="30%">
-      <el-form :model="product" label-position="left" :rules="rules">
-        <el-form-item label="商品名称" :label-width="formLabelWidth">
-          <el-input v-model="product.name" autocomplete="off" size="mini"></el-input>
+    <el-dialog title="商品分类信息" :visible.sync="dialogFormVisible" width="30%">
+      <el-form :model="productClass" label-position="left">
+        <el-form-item label="分类名称" :label-width="formLabelWidth">
+          <el-input v-model="productClass.title" autocomplete="off" size="mini"></el-input>
         </el-form-item>
-        <el-form-item label="商品副标题" :label-width="formLabelWidth">
-          <el-input v-model="product.subheading" autocomplete="off" size="mini"></el-input>
+        <el-form-item label="分类排序" :label-width="formLabelWidth">
+          <el-input-number v-model="productClass.orderId" autocomplete="off" size="mini"></el-input-number>
         </el-form-item>
-        <el-form-item label="提供商" :label-width="formLabelWidth">
-          <el-input v-model="product.provide" autocomplete="off" size="mini"></el-input>
-        </el-form-item>
-        <el-form-item label="提供商电话" :label-width="formLabelWidth">
-          <el-input v-model="product.providePhone" autocomplete="off" size="mini"></el-input>
-        </el-form-item>
-        <el-form-item label="商品分类" :label-width="formLabelWidth">
-          <el-select v-model="product.region" size="mini" placeholder="--请选择商品分类--">
-            <el-option label="VR" value="1"></el-option>
-            <el-option label="香薰机" value="2"></el-option>
+        <el-form-item label="父分类" :label-width="formLabelWidth">
+          <el-select v-model="productClass.parentId" placeholder="请选择" size="mini">
+            <el-option value="0" label="基本分类"></el-option>
+            <el-option v-for="item in classAllData" :key="item.id" :label="item.title" :value="item.id">
+            </el-option>
           </el-select>
-        </el-form-item>
-        <el-form-item label="商品描述" :label-width="formLabelWidth">
-          <el-input type="textarea" :rows="2" placeholder="商品描述" v-model="product.describe">
-          </el-input>
-        </el-form-item>
-        <br>
-        <el-form-item label="价格" :label-width="formLabelWidth">
-          <el-input-number v-model="product.price" :precision="2" :step="5.0" size="mini"></el-input-number>
-        </el-form-item>
-        <el-form-item label="单位" :label-width="formLabelWidth">
-          <el-radio-group v-model="product.unit">
-            <el-radio label="USD">美元</el-radio>
-            <el-radio label="CNY">人民币</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="主页显示" :label-width="formLabelWidth">
-          <el-switch v-model="product.isShowIndex" active-color="#13ce66" inactive-color="#ff4949">
-          </el-switch>
-        </el-form-item>
-        <el-form-item label="商品排序" :label-width="formLabelWidth">
-          <el-input-number v-model="product.sortNumber" @change="handleChange" :min="1" :max="10" label="序号" size="mini"></el-input-number>
-        </el-form-item>
-        <el-form-item label="商品图片" :label-width="formLabelWidth">
-          <el-upload
-            class="upload-demo"
-            ref="upload"
-            action="https://jsonplaceholder.typicode.com/posts/"
-            :on-preview="handlePreview"
-            :on-remove="handleRemove"
-            :file-list="product.fileList"
-            :auto-upload="false">
-            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-            <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-          </el-upload>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="saveInfo('')" size="mini">保 存</el-button>
+        <el-button type="primary" @click="addProductClass()" size="mini">保 存</el-button>
+        <el-button type="danger" size="mini" @click="dialogFormVisible = false">返 回</el-button>
       </div>
     </el-dialog>
   </div>
@@ -156,36 +76,21 @@
 
 <script>
 export default {
-  name: 'HelloWorld',
+  name: 'ProductClassSetting',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App',
-      productList: [],
-      rules: {
-        name: [
-          { required: true, message: '请输入商品名称', trigger: 'blur' },
-          { min: 3, max: 20, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-        ]
-      },
+      productClassList: [],
       search: '',
       formLabelWidth: '120px',
-      product: {},
+      productClass: {},
       dialogFormVisible: false,
       query: {},
       pageTotal: 10,
       currentPage: 1,
-      classType: []
+      classAllData: []
     }
   },
   methods: {
-    tableRowClassName ({row, rowIndex}) {
-      if (row.state === 2) {
-        return 'warning-row'
-      } else if (row.state === 1) {
-        return 'success-row'
-      }
-      return ''
-    },
     deleteData (row) {
       this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -193,9 +98,24 @@ export default {
         type: 'warning',
         center: true
       }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
+        this.deleteRequest('productClass/deleteData', {id: row.id}).then((response) => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+          for (var i = 0; i < this.productClassList.length; i++) {
+            if (this.productClassList[i].id === row.id) {
+              this.productClassList.splice(i, 1)
+            }
+          }
+
+          for (i = 0; i < this.classAllData.length; i++) {
+            if (this.classAllData[i].id === row.id) {
+              this.classAllData.splice(i, 1)
+            }
+          }
+        }).catch((er) => {
+          console.error(er)
         })
       }).catch(() => {
         this.$message({
@@ -207,13 +127,6 @@ export default {
     submitUpload () {
       this.$refs.upload.submit()
     },
-    handleRemove (file, fileList) {
-    },
-    handlePreview (file) {
-    },
-    handleChange (file, fileList) {
-      this.product.fileList = fileList.slice(-3)
-    },
     handleCurrentChange (val) {
       this.currentPage = val
       const dataPage = {pageNo: this.currentPage - 1, size: 10}
@@ -222,54 +135,37 @@ export default {
       if (this.query.region) {
         dataPage.data.type = Number(this.query.region)
       }
-      this.getProduct(dataPage)
-    },
-    saveInfo (formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert('submit!')
-          this.dialogFormVisible = false
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
-    },
-    typeTransfer (row, column, cellValue, index) {
-      if (cellValue === 1) {
-        return 'VR'
-      } else if (cellValue === 2) {
-        return '香薰机'
-      }
-      return '无'
-    },
-    amountUnit (row, column, cellValue, index) {
-      var unit = ''
-      if (row.unit === 'USD') {
-        unit = '(美元)'
-      } else if (row.unit === 'CNY') {
-        unit = '(人民币)'
-      }
-      return cellValue + unit
+      this.getProductClassPage(dataPage)
     },
     updateData (row) {
       this.dialogFormVisible = true
-      this.product = row
+      this.productClass = row
     },
     queryParam () {
       this.handleCurrentChange(this.currentPage)
     },
-    getProduct (data) {
-      this.getRequest('product/getPageData', data).then((response) => {
+    getProductClassPage (data) {
+      this.getRequest('productClass/getPageData', data).then((response) => {
         this.pageTotal = response.data.count
-        this.productList = response.data.result
+        this.productClassList = response.data.result
       }).catch((er) => {
         console.error(er)
       })
     },
     getProductClass () {
       this.getRequest('productClass/getAllData').then((response) => {
-        this.classType = response.data.result
+        this.classAllData = response.data
+      }).catch((er) => {
+        console.error(er)
+      })
+    },
+    addProductClass () {
+      this.postRequest('productClass/addData', this.productClass).then((response) => {
+        this.$message({
+          type: 'success',
+          message: '添加成功!'
+        })
+        this.handleCurrentChange(this.currentPage)
       }).catch((er) => {
         console.error(er)
       })
@@ -277,7 +173,7 @@ export default {
   },
   mounted: function () {
     const data = {pageNo: 0, size: 10}
-    this.getProduct(data)
+    this.getProductClassPage(data)
     this.getProductClass()
   }
 }
