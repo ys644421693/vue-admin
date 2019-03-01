@@ -144,7 +144,7 @@ export const format = (data, fmt) => {
     'm+': data.getMinutes(),
     's+': data.getSeconds(),
     'q+': Math.floor((data.getMonth() + 3) / 3),
-    'S': this.getMilliseconds()
+    'S': data.getMilliseconds()
   }
   if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (data.getFullYear() + '').substr(4 - RegExp.$1.length))
   for (var k in o) {

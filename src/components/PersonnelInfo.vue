@@ -15,7 +15,7 @@
         <h3>搜索条件</h3>
         <el-form label-position="left" :inline="true">
           <el-form-item label="姓名">
-            <el-input v-model="query.name" placeholder="姓名" size="mini"></el-input>
+            <el-input v-model="query.userName" placeholder="姓名" size="mini"></el-input>
           </el-form-item>
           <el-form-item label="身份证">
             <el-input v-model="query.idCard" placeholder="身份证" size="mini"></el-input>
@@ -35,7 +35,7 @@
               <template slot-scope="props">
                 <el-form label-position="left" inline class="demo-table-expand">
                   <el-form-item label="姓名">
-                    <span>{{ props.row.name }}</span>
+                    <span>{{ props.row.userName }}</span>
                   </el-form-item>
                   <el-form-item label="昵称">
                     <span>{{ props.row.alias }}</span>
@@ -44,7 +44,7 @@
                     <span>{{ props.row.email }}</span>
                   </el-form-item>
                   <el-form-item label="手机">
-                    <span>{{ props.row.phone }}</span>
+                    <span>{{ props.row.tel }}</span>
                   </el-form-item>
                   <el-form-item label="生日">
                     <span>{{ props.row.birthday }}</span>
@@ -56,10 +56,10 @@
               </template>
             </el-table-column>
             <el-table-column label="工号ID"  prop="id"></el-table-column>
-            <el-table-column label="姓名" prop="name"></el-table-column>
+            <el-table-column label="姓名" prop="userName"></el-table-column>
             <el-table-column label="昵称" prop="alias"></el-table-column>
             <el-table-column label="邮箱" prop="email"></el-table-column>
-            <el-table-column label="手机" prop="phone"></el-table-column>
+            <el-table-column label="手机" prop="tel"></el-table-column>
             <el-table-column label="生日" prop="birthday"></el-table-column>
             <el-table-column label="身份证" prop="idCard"></el-table-column>
             <el-table-column label="性别" prop="gender">
@@ -83,14 +83,18 @@
               </template>
             </el-table-column>
           </el-table>
-          <el-pagination background layout="prev, pager, next" :total="1000">
+          <el-pagination
+            background
+            @current-change="handleCurrentChange"
+            layout="prev, pager, next"
+            :total="pageTotal">
           </el-pagination>
         </el-card>
     </el-row>
     <el-dialog title="员工信息" :visible.sync="dialogFormVisible" width="30%">
       <el-form :model="personnel" label-position="left" :rules="rules" ref="personnelForm">
-        <el-form-item label="姓名" :label-width="formLabelWidth" prop="name">
-          <el-input v-model="personnel.name" autocomplete="off" size="mini"></el-input>
+        <el-form-item label="姓名" :label-width="formLabelWidth" prop="userName">
+          <el-input v-model="personnel.userName" autocomplete="off" size="mini"></el-input>
         </el-form-item>
         <el-form-item label="昵称" :label-width="formLabelWidth" prop="alias">
           <el-input v-model="personnel.alias" autocomplete="off" size="mini"></el-input>
@@ -98,11 +102,11 @@
         <el-form-item label="邮箱" :label-width="formLabelWidth" prop="email">
           <el-input v-model="personnel.email" autocomplete="off" size="mini"></el-input>
         </el-form-item>
-        <el-form-item label="电话" :label-width="formLabelWidth" prop="phone">
-          <el-input v-model="personnel.phone" autocomplete="off" size="mini"></el-input>
+        <el-form-item label="电话" :label-width="formLabelWidth" prop="tel">
+          <el-input v-model="personnel.tel" autocomplete="off" size="mini"></el-input>
         </el-form-item>
         <el-form-item label="生日" :label-width="formLabelWidth" prop="birthday">
-          <el-date-picker v-model="personnel.birthday" type="date" placeholder="选择日期" size="mini">
+          <el-date-picker v-model="personnel.birthday" type="date" placeholder="选择日期" size="mini" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="身份证" :label-width="formLabelWidth" prop="idCard">
@@ -123,7 +127,11 @@
         </el-form-item>
         <br>
         <el-form-item label="主页显示" :label-width="formLabelWidth">
-          <el-switch v-model="personnel.isShowIndex" active-color="#13ce66" inactive-color="#ff4949">
+          <el-switch v-model="personnel.showIndex" active-color="#13ce66" inactive-color="#ff4949">
+          </el-switch>
+        </el-form-item>
+        <el-form-item label="创建管理账号" :label-width="formLabelWidth">
+          <el-switch v-model="personnel.createName" active-color="#13ce66" inactive-color="#ff4949">
           </el-switch>
         </el-form-item>
         <el-form-item label="员工排序" :label-width="formLabelWidth">
@@ -131,7 +139,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="saveInfo('personnelForm')" size="mini">保 存</el-button>
+        <el-button type="primary" @click="addPersonnelInfo()" size="mini">保 存</el-button>
+        <el-button type="danger" size="mini" @click="dialogFormVisible = false">关 闭</el-button>
       </div>
     </el-dialog>
   </div>
@@ -139,63 +148,11 @@
 
 <script>
 export default {
-  name: 'HelloWorld',
+  name: 'PersonnelInfo',
   data () {
     return {
       msg: 'Welcome to Your Vue.js App',
-      personnelList: [{
-        id: '12987122',
-        name: 'test1',
-        alias: 'alice',
-        email: '644421693@qq.com',
-        phone: '13889536179',
-        birthday: '1998-02-06',
-        idCard: '王小虎夫妻店',
-        gender: '1',
-        position: '开发',
-        positionDescribe: '开发员工',
-        isShowIndex: 1,
-        sortNumber: 1
-      }, {
-        id: '12987123',
-        name: 'test1',
-        alias: 'alice',
-        email: '644421693@qq.com',
-        phone: '13889536179',
-        birthday: '1998-02-06',
-        idCard: '王小虎夫妻店',
-        gender: '1',
-        position: '开发',
-        positionDescribe: '开发员工',
-        isShowIndex: 1,
-        sortNumber: 1
-      }, {
-        id: '12987125',
-        name: 'test1',
-        alias: 'alice',
-        email: '644421693@qq.com',
-        phone: '13889536179',
-        birthday: '1998-02-06',
-        idCard: '王小虎夫妻店',
-        gender: '1',
-        position: '开发',
-        positionDescribe: '开发员工',
-        isShowIndex: 1,
-        sortNumber: 1
-      }, {
-        id: '12987126',
-        name: 'test1',
-        alias: 'alice',
-        email: '644421693@qq.com',
-        phone: '13889536179',
-        birthday: '1998-02-06',
-        idCard: '王小虎夫妻店',
-        gender: '0',
-        position: '开发',
-        positionDescribe: '开发员工',
-        isShowIndex: 1,
-        sortNumber: 1
-      }],
+      personnelList: [],
       rules: {
         name: [
           { required: true, message: '', trigger: 'blur' },
@@ -205,7 +162,9 @@ export default {
       search: '',
       formLabelWidth: '120px',
       personnel: {},
+      pageTotal: 10,
       dialogFormVisible: false,
+      currentPage: 1,
       query: {}
     }
   },
@@ -217,9 +176,16 @@ export default {
         type: 'warning',
         center: true
       }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
+        this.deleteRequest('user/deleteData', {id: row.id}).then((response) => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+          for (var i = 0; i < this.personnelList.length; i++) {
+            if (this.personnelList[i].id === row.id) {
+              this.personnelList.splice(i, 1)
+            }
+          }
         })
       }).catch(() => {
         this.$message({
@@ -228,18 +194,35 @@ export default {
         })
       })
     },
-    submitUpload () {
-      this.$refs.upload.submit()
+    handleCurrentChange (val) {
+      this.currentPage = val
+      const dataPage = {pageNo: this.currentPage - 1, size: 10}
+      dataPage.data = {}
+      if (this.query.userName) {
+        dataPage.data.userName = this.query.userName
+      }
+      if (this.query.idCard) {
+        dataPage.data.idCard = Number(this.query.idCard)
+      }
+      this.getPersonnelPage(dataPage)
     },
-    saveInfo (formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert('submit!')
-          this.dialogFormVisible = false
-        } else {
-          console.log('error submit!!')
-          return false
-        }
+    getPersonnelPage (data) {
+      this.getRequest('user/getPageData', data).then((response) => {
+        this.pageTotal = response.data.count
+        this.personnelList = response.data.result
+      }).catch((er) => {
+        console.error(er)
+      })
+    },
+    addPersonnelInfo () {
+      this.postRequest('user/addData', this.personnel).then((response) => {
+        this.$message({
+          type: 'success',
+          message: '添加成功!'
+        })
+        this.handleCurrentChange(this.currentPage)
+      }).catch((er) => {
+        console.error(er)
       })
     },
     updateData (row) {
@@ -247,7 +230,12 @@ export default {
       this.personnel = row
     },
     queryParam () {
+      this.handleCurrentChange(this.currentPage)
     }
+  },
+  mounted: function () {
+    const data = {pageNo: 0, size: 10}
+    this.getPersonnelPage(data)
   }
 }
 </script>

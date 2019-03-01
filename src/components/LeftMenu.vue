@@ -80,24 +80,12 @@ export default {
           title: '人员管理',
           index: '5',
           icon: 'el-icon-location',
-          childs: [{
-            title: '导航er',
-            index: '6',
-            icon: 'el-icon-menu',
-            view: '/home/second'
-          }, {
+          childs: [ {
             title: '员工信息',
             index: '4',
             icon: 'el-icon-menu',
             view: '/PersonnelInfo'
           }]
-        },
-        {
-          title: '导航3',
-          index: '7',
-          icon: 'el-icon-menu',
-          view: '/home/three',
-          childs: []
         }
       ]
     }
