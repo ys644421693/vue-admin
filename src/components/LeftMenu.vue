@@ -6,6 +6,7 @@
       @close="handleClose"
       background-color="#293c55"
       text-color="#fff"
+      unique-opened="true"
       active-text-color="#00B8EC"
       :collapse="isCollapse">
       <div id="menuButton">
@@ -59,8 +60,32 @@ export default {
           icon: 'el-icon-menu',
           view: '/',
           childs: []
-        },
-        {
+        }, {
+          title: '系统管理',
+          index: '6',
+          icon: 'el-icon-menu',
+          childs: [{
+            title: '接口静态资源',
+            index: '11',
+            icon: 'el-icon-menu',
+            view: '/initAccessResource'
+          }, {
+            title: '菜单节点',
+            index: '7',
+            icon: 'el-icon-menu',
+            view: '/menuNode'
+          }, {
+            title: '角色管理',
+            index: '9',
+            icon: 'el-icon-menu',
+            view: '/role'
+          }, {
+            title: '服务管理',
+            index: '10',
+            icon: 'el-icon-menu',
+            view: '/resource'
+          }]
+        }, {
           title: '产品管理',
           index: '2',
           icon: 'el-icon-location',

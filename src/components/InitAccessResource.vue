@@ -14,8 +14,8 @@
       <el-card class="box-card">
         <h3>搜索条件</h3>
         <el-form label-position="left" :inline="true">
-          <el-form-item label="商品分类名称">
-            <el-input v-model="query.title" placeholder="商品分类名称" size="mini"></el-input>
+          <el-form-item label="资源名称">
+            <el-input v-model="query.name" placeholder="资源名称" size="mini"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="queryParam" size="mini">查询</el-button>
@@ -26,15 +26,22 @@
     <el-row>
         <el-card class="box-card">
           <el-table
-            :data="productClassList.filter(data => !search || data.title.toLowerCase().includes(search.toLowerCase()))"
+            :data="initAccessResourceList.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
             style="width: 100%">
-            <el-table-column label="分类 ID"  prop="id"></el-table-column>
-            <el-table-column label="排序编号" prop="orderId"></el-table-column>
-            <el-table-column label="父分类" prop="parentId"></el-table-column>
-            <el-table-column label="分类名称" prop="title"></el-table-column>
+            <el-table-column label="资源 ID"  prop="id"></el-table-column>
+            <el-table-column label="资源名称" prop="name"></el-table-column>
+            <el-table-column label="资源路径" prop="path"></el-table-column>
+            <el-table-column label="资源类型" prop="type">
+              <template slot-scope="scope">
+                <el-tag :type="scope.row.status === 1 ? 'success' : 'danger'" disable-transitions size="mini">
+                  {{scope.row.type ===1?'登录限制':'无权限限制'}}
+                </el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column label="资源描述" prop="description"></el-table-column>
             <el-table-column align="center">
               <template slot="header" slot-scope="scope" class="operaClass">
-                <el-button type="primary" size="mini" @click="dialogFormVisible = true">新增分类</el-button>
+                <el-button type="primary" size="mini" @click="dialogFormVisible = true">新增资源</el-button>
               </template>
               <template slot-scope="scope">
                 <el-button type="primary" size="mini" @click="updateData(scope.row)">修改</el-button>
@@ -50,24 +57,29 @@
           </el-pagination>
         </el-card>
     </el-row>
-    <el-dialog title="商品分类信息" :visible.sync="dialogFormVisible" width="30%">
-      <el-form :model="productClass" label-position="left">
-        <el-form-item label="分类名称" :label-width="formLabelWidth">
-          <el-input v-model="productClass.title" autocomplete="off" size="mini"></el-input>
+    <el-dialog title="接口静态资源信息" :visible.sync="dialogFormVisible" width="30%">
+      <el-form :model="initAccessResource" label-position="left">
+        <el-form-item label="资源名称" :label-width="formLabelWidth">
+          <el-input v-model="initAccessResource.name" autocomplete="off" size="mini"></el-input>
         </el-form-item>
-        <el-form-item label="分类排序" :label-width="formLabelWidth">
-          <el-input-number v-model="productClass.orderId" autocomplete="off" size="mini"></el-input-number>
-        </el-form-item>
-        <el-form-item label="父分类" :label-width="formLabelWidth">
-          <el-select v-model="productClass.productClass" placeholder="请选择" size="mini">
-            <el-option value="0" label="基本分类"></el-option>
-            <el-option v-for="item in classAllData" :key="item.id" :label="item.title" :value="item">
-            </el-option>
+        <el-form-item label="资源路径" :label-width="formLabelWidth">
+          <el-select v-model="initAccessResource.path" placeholder="请选择" size="mini">
+            <el-option value="0" label="无权限限制"></el-option>
+            <el-option v-for="item in resourceAll" :key="item.id" :label="item.name" :value="item.path"></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="资源类型" :label-width="formLabelWidth">
+          <el-select v-model="initAccessResource.type" placeholder="请选择" size="mini">
+          <el-option value="0" label="无权限限制"></el-option>
+          <el-option value="1" label="登录限制"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="资源描述" :label-width="formLabelWidth">
+          <el-input type="textarea" :rows="2" placeholder="商品描述" v-model="initAccessResource.description"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="addProductClass()" size="mini">保 存</el-button>
+        <el-button type="primary" @click="addInitAccessResource()" size="mini">保 存</el-button>
         <el-button type="danger" size="mini" @click="dialogFormVisible = false">返 回</el-button>
       </div>
     </el-dialog>
@@ -76,18 +88,18 @@
 
 <script>
 export default {
-  name: 'ProductClassSetting',
+  name: 'InitAccessResource',
   data () {
     return {
-      productClassList: [],
+      initAccessResourceList: [],
       search: '',
       formLabelWidth: '120px',
-      productClass: {},
+      initAccessResource: {},
       dialogFormVisible: false,
       query: {},
       pageTotal: 10,
       currentPage: 1,
-      classAllData: []
+      resourceAll: []
     }
   },
   methods: {
@@ -98,20 +110,14 @@ export default {
         type: 'warning',
         center: true
       }).then(() => {
-        this.deleteRequest('productClass/deleteData', {id: row.id}).then((response) => {
+        this.deleteRequest('initAccessResource/deleteData', {id: row.id}).then((response) => {
           this.$message({
             type: 'success',
             message: '删除成功!'
           })
-          for (var i = 0; i < this.productClassList.length; i++) {
-            if (this.productClassList[i].id === row.id) {
-              this.productClassList.splice(i, 1)
-            }
-          }
-
-          for (i = 0; i < this.classAllData.length; i++) {
-            if (this.classAllData[i].id === row.id) {
-              this.classAllData.splice(i, 1)
+          for (var i = 0; i < this.initAccessResourceList.length; i++) {
+            if (this.initAccessResourceList[i].id === row.id) {
+              this.initAccessResourceList.splice(i, 1)
             }
           }
         }).catch((er) => {
@@ -135,32 +141,32 @@ export default {
       if (this.query.region) {
         dataPage.data.type = Number(this.query.region)
       }
-      this.getProductClassPage(dataPage)
+      this.getInitAccessResourcePage(dataPage)
     },
     updateData (row) {
       this.dialogFormVisible = true
-      this.productClass = row
+      this.initAccessResource = row
     },
     queryParam () {
       this.handleCurrentChange(this.currentPage)
     },
-    getProductClassPage (data) {
-      this.getRequest('productClass/getPageData', data).then((response) => {
+    getInitAccessResourcePage (data) {
+      this.getRequest('initAccessResource/getPageData', data).then((response) => {
         this.pageTotal = response.data.count
-        this.productClassList = response.data.result
+        this.initAccessResourceList = response.data.result
       }).catch((er) => {
         console.error(er)
       })
     },
-    getProductClass () {
-      this.getRequest('productClass/getAllData').then((response) => {
-        this.classAllData = response.data
+    getResource () {
+      this.getRequest('resource/getAllData').then((response) => {
+        this.resourceAll = response.data.result
       }).catch((er) => {
         console.error(er)
       })
     },
-    addProductClass () {
-      this.postRequest('productClass/addData', this.productClass).then((response) => {
+    addInitAccessResource () {
+      this.postRequest('initAccessResource/addData', this.initAccessResource).then((response) => {
         this.$message({
           type: 'success',
           message: '添加成功!'
@@ -173,8 +179,8 @@ export default {
   },
   mounted: function () {
     const data = {pageNo: 0, size: 10}
-    this.getProductClassPage(data)
-    this.getProductClass()
+    this.getInitAccessResourcePage(data)
+    this.getResource()
   }
 }
 </script>

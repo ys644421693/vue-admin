@@ -6,6 +6,7 @@ import CmsIndex from '@/cms/CmsIndex'
 import ProductSetting from '@/components/ProductSetting'
 import ProductClassSetting from '@/components/ProductClassSetting'
 import PersonnelInfo from '@/components/PersonnelInfo'
+import initAccessResource from '@/components/InitAccessResource'
 import Login from '@/components/Login'
 import store from '../store/eunion/store'
 import * as types from '../store/eunion/type'
@@ -22,6 +23,10 @@ const router = [{
   {
     path: '/product',
     component: ProductSetting
+  },
+  {
+    path: '/initAccessResource',
+    component: initAccessResource
   },
   {
     path: '/productClass',
