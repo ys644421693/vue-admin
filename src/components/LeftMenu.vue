@@ -6,7 +6,7 @@
       @close="handleClose"
       background-color="#293c55"
       text-color="#fff"
-      unique-opened="true"
+      :unique-opened="true"
       active-text-color="#00B8EC"
       :collapse="isCollapse">
       <div id="menuButton">
