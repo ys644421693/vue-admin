@@ -70,7 +70,7 @@
             :key="1">
             <el-table-column
               type="selection"
-              width="55">
+              width="60">
             </el-table-column>
             <el-table-column
               prop="name"
@@ -215,8 +215,11 @@ export default {
         return
       }
       this.resourceDialogData.resourceVos = this.multipleSelection
-      this.postRequest('role/addData', this.resourceDialogData).then((response) => {
-        this.allResourceData = response.data.result
+      this.postRequest('role/addRoleResource', this.resourceDialogData).then((response) => {
+        this.$message({
+          type: 'success',
+          message: '添加成功!'
+        })
       }).catch((er) => {
         console.error(er)
       })
