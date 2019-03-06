@@ -12,20 +12,20 @@
       <div id="menuButton">
         <el-button type="info" icon="el-icon-menu" @click="isCollapse=!isCollapse" size="mini"></el-button>
       </div>
-      <nav v-for="menu in menus" :key="menu.index">
-        <el-submenu :index="menu.index" v-if="menu.childs.length > 0">
+      <nav v-for="menu in systemMenuNodeList" :key="menu.id">
+        <el-submenu :index="menu.id+ ''" v-if="menu.children">
           <template slot="title">
             <i :class="menu.icon"></i>
-            <span slot="title" v-show="!isCollapse">{{menu.title}}</span>
+            <span slot="title" v-show="!isCollapse">{{menu.nodeName}}</span>
           </template>
-          <router-link :to="child.view" :key="child.index" v-for="child in menu.childs" v-if="menu.childs.length > 0">
-            <el-menu-item :index="child.index">{{child.title}}</el-menu-item>
+          <router-link :to="child.viewPath" :key="child.id" v-for="child in menu.children" v-if="menu.children">
+            <el-menu-item :index="child.id + ''">{{child.nodeName}}</el-menu-item>
           </router-link>
         </el-submenu>
-        <router-link :to="menu.view" v-if="menu.childs.length == 0">
-          <el-menu-item :index="menu.index">
+        <router-link :to="menu.viewPath" v-if="!menu.children">
+          <el-menu-item :index="menu.id + ''">
             <i :class="menu.icon"></i>
-            <span slot="title">{{menu.title}}</span>
+            <span slot="title">{{menu.nodeName}}</span>
           </el-menu-item>
         </router-link>
       </nav>
@@ -53,73 +53,15 @@ export default {
   data () {
     return {
       isCollapse: false,
-      menus: [
-        {
-          title: '首页',
-          index: '1',
-          icon: 'el-icon-menu',
-          view: '/',
-          childs: []
-        }, {
-          title: '系统管理',
-          index: '6',
-          icon: 'el-icon-menu',
-          childs: [{
-            title: '接口静态资源',
-            index: '11',
-            icon: 'el-icon-menu',
-            view: '/initAccessResource'
-          }, {
-            title: '菜单节点',
-            index: '7',
-            icon: 'el-icon-menu',
-            view: '/menuNode'
-          }, {
-            title: '角色管理',
-            index: '9',
-            icon: 'el-icon-menu',
-            view: '/role'
-          }, {
-            title: '服务管理',
-            index: '10',
-            icon: 'el-icon-menu',
-            view: '/resource'
-          }]
-        }, {
-          title: '产品管理',
-          index: '2',
-          icon: 'el-icon-location',
-          childs: [{
-            title: '产品信息',
-            index: '3',
-            icon: 'el-icon-menu',
-            view: '/product'
-          }, {
-            title: '产品类型',
-            index: '8',
-            icon: 'el-icon-menu',
-            view: '/productClass'
-          }]
-        },
-        {
-          title: '人员管理',
-          index: '5',
-          icon: 'el-icon-location',
-          childs: [ {
-            title: '员工信息',
-            index: '4',
-            icon: 'el-icon-menu',
-            view: '/PersonnelInfo'
-          }]
-        }
-      ]
+      systemMenuNodeList: [],
+      systemMenuNodeAll: []
     }
   },
   name: 'LeftMenu',
   mounted: function () {
     this.loadData()
     $('.el-header').show()
-    console.log(window.localStorage)
+    this.getSystemMenuNode()
   },
   methods: {
     handleOpen (key, keyPath) {
@@ -134,6 +76,41 @@ export default {
       }).catch((er) => {
         console.error(er)
         this.$router.push({path: '/login'})
+      })
+    },
+    getSystemMenuNode () {
+      this.getRequest('menuNode/getAllDataByRole').then((response) => {
+        this.systemMenuNodeAll = response.data.result.sort(function (a, b) {
+          if (a.sortIndex > b.sortIndex) {
+            return 1
+          } else if (a.sortIndex < b.sortIndex) {
+            return -1
+          } else {
+            return 0
+          }
+        })
+        this.systemMenuNodeList = []
+        if (response.data.result) {
+          this.systemMenuNodeAll.forEach(dt => {
+            if (!dt.parentId) {
+              this.systemMenuNodeList.push(dt)
+              this.dealMenuData(dt)
+            }
+          })
+        }
+      }).catch((er) => {
+        console.error(er)
+      })
+    },
+    dealMenuData (parent) {
+      this.systemMenuNodeAll.forEach(dt => {
+        if (dt.parentId && parent.id === dt.parentId.id) {
+          if (!parent.children) {
+            parent.children = []
+          }
+          parent.children.push(dt)
+          this.dealMenuData(dt)
+        }
       })
     }
   }

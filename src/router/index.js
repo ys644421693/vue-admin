@@ -7,6 +7,8 @@ import ProductSetting from '@/components/ProductSetting'
 import ProductClassSetting from '@/components/ProductClassSetting'
 import PersonnelInfo from '@/components/PersonnelInfo'
 import initAccessResource from '@/components/InitAccessResource'
+import systemMenuNode from '@/components/SystemMenuNode'
+import resourceSetting from '@/components/ResourceSetting'
 import Role from '@/components/role'
 import Login from '@/components/Login'
 import store from '../store/eunion/store'
@@ -30,8 +32,16 @@ const router = [{
     component: initAccessResource
   },
   {
+    path: '/menuNode',
+    component: systemMenuNode
+  },
+  {
     path: '/role',
     component: Role
+  },
+  {
+    path: '/resource',
+    component: resourceSetting
   },
   {
     path: '/productClass',
