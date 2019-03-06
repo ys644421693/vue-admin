@@ -141,8 +141,7 @@
                 </el-switch>
               </el-form-item>
               <el-form-item label="商品排序" :label-width="formLabelWidth">
-                <el-input-number v-model="product.sortNumber" @change="handleChange" :min="1" :max="10" label="序号"
-                                 size="mini"></el-input-number>
+                <el-input-number v-model="product.sortNumber" :min="1" :max="10" label="序号" size="mini"></el-input-number>
               </el-form-item>
               <el-form-item label="商品图片" :label-width="formLabelWidth">
                 <el-upload
@@ -196,7 +195,7 @@ export default {
       currentPage: 1,
       classType: [],
       showForm: false,
-      uploadPath: this.$store.state.baseUrl + 'fileUpload/singleFileUpload?type=1'
+      uploadPath: this.$store.state.baseUrl + 'fileUpload/singleProductFileUpload?type=1'
     }
   },
   methods: {
@@ -242,9 +241,6 @@ export default {
     handlePictureCardPreview (file) {
       this.dialogImageUrl = file.url
       this.dialogVisible = true
-    },
-    handleChange (file, fileList) {
-      this.product.fileList = fileList.slice(-3)
     },
     handleCurrentChange (val) {
       this.currentPage = val
@@ -373,7 +369,7 @@ export default {
   }
 
   .el-dialog__wrapper >>> .el-dialog__body {
-    height: 450px;
+    height: auto;
   }
 
   .box-card h3 {
