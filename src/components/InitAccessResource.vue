@@ -68,7 +68,6 @@
         </el-form-item>
         <el-form-item label="资源路径" :label-width="formLabelWidth">
           <el-select v-model="initAccessResource.path" placeholder="请选择" size="mini" filterable clearable>
-            <el-option :value="0" label="无权限限制"></el-option>
             <el-option v-for="item in resourceAll" :key="item.id" :label="item.name" :value="item.path"></el-option>
           </el-select>
         </el-form-item>
