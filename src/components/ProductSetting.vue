@@ -42,20 +42,8 @@
                   <el-form-item label="商品名称">
                     <span>{{ props.row.name }}</span>
                   </el-form-item>
-                  <el-form-item label="所属店铺">
-                    <span>{{ props.row.shop }}</span>
-                  </el-form-item>
                   <el-form-item label="商品 ID">
                     <span>{{ props.row.id }}</span>
-                  </el-form-item>
-                  <el-form-item label="店铺 ID">
-                    <span>{{ props.row.shopId }}</span>
-                  </el-form-item>
-                  <el-form-item label="商品分类">
-                    <span>{{ props.row.category }}</span>
-                  </el-form-item>
-                  <el-form-item label="店铺地址">
-                    <span>{{ props.row.address }}</span>
                   </el-form-item>
                   <el-form-item label="商品描述">
                     <span>{{ props.row.desc }}</span>
@@ -66,7 +54,13 @@
             <el-table-column label="商品 ID" prop="id"></el-table-column>
             <el-table-column label="商品名称" prop="name"></el-table-column>
             <el-table-column label="商品分类" prop="region" :formatter="typeTransfer"></el-table-column>
-            <el-table-column label="提供商" show-overflow-tooltip prop="provide"></el-table-column>
+            <el-table-column label="主页" prop="showIndex">
+              <template slot-scope="scope">
+                <el-tag :type="scope.row.showIndex ? 'success' : 'danger'" disable-transitions size="mini">
+                  {{scope.row.showIndex ?'显示':'不显示'}}
+                </el-tag>
+              </template>
+            </el-table-column>
             <el-table-column label="价格" prop="price" :formatter="amountUnit"></el-table-column>
             <el-table-column label="状态" prop="state">
               <template slot-scope="scope">
@@ -78,7 +72,7 @@
             <el-table-column label="排序" prop="sortNumber"></el-table-column>
             <el-table-column align="center">
               <template slot="header" slot-scope="scope" class="operaClass">
-                <el-button type="primary" size="mini" @click="showForm = true">添加商品</el-button>
+                <el-button type="primary" size="mini" @click="addBusiness">添加商品</el-button>
               </template>
               <template slot-scope="scope">
                 <el-button type="primary" size="mini" @click="updateData(scope.row)">修改</el-button>
@@ -103,9 +97,8 @@
                 <el-input v-model="product.subheading" autocomplete="off" size="mini"></el-input>
               </el-form-item>
               <el-form-item label="商品分类" :label-width="formLabelWidth">
-                <el-select v-model="product.region" size="mini" placeholder="--请选择商品分类--">
-                  <el-option label="VR" value="1"></el-option>
-                  <el-option label="香薰机" value="2"></el-option>
+                <el-select v-model="classId" size="mini" placeholder="--请选择商品分类--" filterable clearable>
+                  <el-option v-for="item in classType" :key="item.id" :label="item.title" :value="item.id"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="商品描述" :label-width="formLabelWidth">
@@ -137,7 +130,7 @@
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="主页显示" :label-width="formLabelWidth">
-                <el-switch v-model="product.isShowIndex" active-color="#13ce66" inactive-color="#ff4949">
+                <el-switch v-model="product.showIndex" active-color="#13ce66" inactive-color="#ff4949">
                 </el-switch>
               </el-form-item>
               <el-form-item label="商品排序" :label-width="formLabelWidth">
@@ -195,6 +188,7 @@ export default {
       currentPage: 1,
       classType: [],
       showForm: false,
+      classId: '',
       uploadPath: this.$store.state.baseUrl + 'fileUpload/singleProductFileUpload?type=1'
     }
   },
@@ -253,12 +247,7 @@ export default {
       this.getProduct(dataPage)
     },
     typeTransfer (row, column, cellValue, index) {
-      if (cellValue === 1) {
-        return 'VR'
-      } else if (cellValue === 2) {
-        return '香薰机'
-      }
-      return '无'
+      return row.productClassSet[0].title
     },
     amountUnit (row, column, cellValue, index) {
       var unit = ''
@@ -272,6 +261,9 @@ export default {
     updateData (row) {
       this.product = row
       this.showForm = true
+      if (this.product.productClassSet) {
+        this.classId = this.product.productClassSet[0].id
+      }
     },
     queryParam () {
       this.handleCurrentChange(this.currentPage)
@@ -286,18 +278,41 @@ export default {
     },
     getProductClass () {
       this.getRequest('productClass/getAllData').then((response) => {
-        this.classType = response.data.result
+        this.classType = response.data
       }).catch((er) => {
         console.error(er)
       })
     },
     addProductInfo () {
+      if (this.classId) {
+        this.classType.forEach(c => {
+          if (c.id === this.classId) {
+            if (!this.product.productClassSet) {
+              this.product.productClassSet = []
+            }
+            this.product.productClassSet.forEach(p => {
+              if (c.id !== p.id) {
+                this.product.productClassSet.push(c)
+              }
+            })
+          }
+        })
+      }
+      if (this.product.termOfValidity) {
+        this.product.termOfValidity = this.product.termOfValidity.substr(0, 10)
+      }
+      if (this.product.productDate) {
+        this.product.productDate = this.product.productDate.substr(0, 10)
+      }
+      this.product.productSaleLogSet = []
+      this.product.status = 1
       this.postRequest('product/addData', this.product).then((response) => {
         this.handleCurrentChange(this.currentPage)
         this.$message({
           type: 'success',
           message: '添加成功!'
         })
+        this.showForm = false
       }).catch((er) => {
         console.error(er)
       })
@@ -305,6 +320,11 @@ export default {
     uploadSuccess (response, file, fileList) {
       this.product.productPropertySet = []
       this.product.productPropertySet.push(response.result)
+    },
+    addBusiness () {
+      this.showForm = true
+      this.classId = ''
+      this.product = {}
     }
   },
   mounted: function () {

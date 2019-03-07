@@ -63,15 +63,23 @@
           <el-input v-model="initAccessResource.name" autocomplete="off" size="mini"></el-input>
         </el-form-item>
         <el-form-item label="资源路径" :label-width="formLabelWidth">
-          <el-select v-model="initAccessResource.path" placeholder="请选择" size="mini">
+          <el-select v-model="initAccessResource.path" placeholder="请选择" size="mini" filterable clearable>
             <el-option value="0" label="无权限限制"></el-option>
             <el-option v-for="item in resourceAll" :key="item.id" :label="item.name" :value="item.path"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="资源类型" :label-width="formLabelWidth">
           <el-select v-model="initAccessResource.type" placeholder="请选择" size="mini">
-          <el-option value="0" label="无权限限制"></el-option>
-          <el-option value="1" label="登录限制"></el-option>
+            <el-option value="0" label="无权限限制"></el-option>
+            <el-option value="1" label="登录限制"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="匹配类型" :label-width="formLabelWidth">
+          <el-select v-model="initAccessResource.matchingType" placeholder="请选择" size="mini">
+            <el-option value="0" label="精确匹配"></el-option>
+            <el-option value="1" label="开头匹配"></el-option>
+            <el-option value="2" label="结尾匹配"></el-option>
+            <el-option value="3" label="模糊匹配"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="资源描述" :label-width="formLabelWidth">
