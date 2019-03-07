@@ -142,7 +142,9 @@
                   list-type="picture-card"
                   :on-preview="handlePictureCardPreview"
                   :with-credentials="true"
+                  :file-list="fileList"
                   :on-success="uploadSuccess"
+                  :on-remove="removeFile"
                   accept="image/png,image/gif,image/jpg,image/jpeg">
                   <i class="el-icon-plus"></i>
                 </el-upload>
@@ -186,6 +188,7 @@ export default {
       query: {},
       pageTotal: 10,
       currentPage: 1,
+      fileList: [],
       classType: [],
       showForm: false,
       classId: '',
@@ -247,7 +250,10 @@ export default {
       this.getProduct(dataPage)
     },
     typeTransfer (row, column, cellValue, index) {
-      return row.productClassSet[0].title
+      if (row.productClassSet) {
+        return row.productClassSet[0].title
+      }
+      return '无'
     },
     amountUnit (row, column, cellValue, index) {
       var unit = ''
@@ -263,6 +269,13 @@ export default {
       this.showForm = true
       if (this.product.productClassSet) {
         this.classId = this.product.productClassSet[0].id
+      }
+      if (this.product.productPropertySet) {
+        this.product.productPropertySet.forEach(p => {
+          if (p.type === 1) {
+            this.fileList = [{name: p.propertyName, url: this.$store.state.baseUrl + p.value}]
+          }
+        })
       }
     },
     queryParam () {
@@ -285,18 +298,21 @@ export default {
     },
     addProductInfo () {
       if (this.classId) {
-        this.classType.forEach(c => {
-          if (c.id === this.classId) {
+        for (var u = 0; u < this.classType.length; u++) {
+          if (this.classType[u].id === this.classId) {
             if (!this.product.productClassSet) {
               this.product.productClassSet = []
             }
-            this.product.productClassSet.forEach(p => {
-              if (c.id !== p.id) {
-                this.product.productClassSet.push(c)
+            for (var o = 0; this.product.productClassSet.length > o; o++) {
+              if (this.classType[u].id !== this.product.productClassSet[o].id) {
+                this.product.productClassSet.push(this.classType[u])
               }
-            })
+            }
+            if (this.product.productClassSet.length === 0) {
+              this.product.productClassSet.push(this.classType[u])
+            }
           }
-        })
+        }
       }
       if (this.product.termOfValidity) {
         this.product.termOfValidity = this.product.termOfValidity.substr(0, 10)
@@ -304,7 +320,9 @@ export default {
       if (this.product.productDate) {
         this.product.productDate = this.product.productDate.substr(0, 10)
       }
-      this.product.productSaleLogSet = []
+      if (!this.product.productSaleLogSet) {
+        this.product.productSaleLogSet = []
+      }
       this.product.status = 1
       this.postRequest('product/addData', this.product).then((response) => {
         this.handleCurrentChange(this.currentPage)
@@ -325,6 +343,21 @@ export default {
       this.showForm = true
       this.classId = ''
       this.product = {}
+    },
+    removeFile (file, fileList) {
+      var data = {fileName: file.url.substring(this.$store.state.baseUrl.length)}
+      this.deleteRequest('fileUpload/deleteFile', data).then((response) => {
+      }).catch((er) => {
+        console.error(er)
+      })
+      if (this.product.productPropertySet) {
+        for (var i = 0; this.product.productPropertySet.length > i; i++) {
+          if (data.fileName.includes(this.product.productPropertySet[i].value)) {
+            this.product.productPropertySet.splice(i, 1)
+          }
+        }
+      }
+      console.log(this.product)
     }
   },
   mounted: function () {
