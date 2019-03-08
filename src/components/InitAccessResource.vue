@@ -45,7 +45,7 @@
             <el-table-column label="资源描述" prop="description" show-overflow-tooltip></el-table-column>
             <el-table-column align="center">
               <template slot="header" slot-scope="scope" class="operaClass">
-                <el-button type="primary" size="mini" @click="dialogFormVisible = true">新增资源</el-button>
+                <el-button type="primary" size="mini" @click="addResourceInit">新增资源</el-button>
               </template>
               <template slot-scope="scope">
                 <el-button type="primary" size="mini" @click="updateData(scope.row)">修改</el-button>
@@ -62,22 +62,22 @@
         </el-card>
     </el-row>
     <el-dialog title="接口静态资源信息" :visible.sync="dialogFormVisible" width="30%">
-      <el-form :model="initAccessResource" label-position="left">
-        <el-form-item label="资源名称" :label-width="formLabelWidth">
+      <el-form :model="initAccessResource" label-position="left" size="mini" :label-width="formLabelWidth">
+        <el-form-item label="资源名称" >
           <el-input v-model="initAccessResource.name" autocomplete="off" size="mini"></el-input>
         </el-form-item>
-        <el-form-item label="资源路径" :label-width="formLabelWidth">
+        <el-form-item label="资源路径" >
           <el-select v-model="initAccessResource.path" placeholder="请选择" size="mini" filterable clearable>
             <el-option v-for="item in resourceAll" :key="item.id" :label="item.name" :value="item.path"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="资源类型" :label-width="formLabelWidth">
+        <el-form-item label="资源类型" >
           <el-select v-model="initAccessResource.type" placeholder="请选择" size="mini">
             <el-option :value="0" label="无权限限制"></el-option>
             <el-option :value="1" label="登录限制"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="匹配类型" :label-width="formLabelWidth">
+        <el-form-item label="匹配类型" >
           <el-select v-model="initAccessResource.matchingType" placeholder="请选择" size="mini">
             <el-option :value="0" label="精确匹配"></el-option>
             <el-option :value="1" label="开头匹配"></el-option>
@@ -85,7 +85,7 @@
             <el-option :value="3" label="模糊匹配"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="资源描述" :label-width="formLabelWidth">
+        <el-form-item label="资源描述" >
           <el-input type="textarea" :rows="2" placeholder="商品描述" v-model="initAccessResource.description"></el-input>
         </el-form-item>
       </el-form>
@@ -186,6 +186,10 @@ export default {
       }).catch((er) => {
         console.error(er)
       })
+    },
+    addResourceInit () {
+      this.dialogFormVisible = true
+      this.initAccessResource = {}
     }
   },
   mounted: function () {
@@ -205,11 +209,6 @@ export default {
     width: 90px;
     color: #99a9bf;
   }
-  .demo-table-expand .el-form-item {
-    margin-right: 0;
-    margin-bottom: 0;
-    width: 50%;
-  }
   .el-card {
     margin-bottom: 10px;
   }
@@ -223,14 +222,6 @@ export default {
   .el-table >>> .success-row {
     background: rgba(0,128,0, 0.1);
   }
-  .el-form >>> .el-form-item__content{
-    height: 40px;
-    text-align: left;
-  }
-  .el-form-item {
-    margin: 0px;
-    height: 40px;
-  }
   .el-table >>> th{
     padding: 0px;
   }
@@ -238,9 +229,6 @@ export default {
     width: 90px;
     color: #99a9bf;
     font-weight: bold;
-  }
-  .el-dialog__wrapper >>> .el-dialog__body {
-    height: 200px;
   }
 
   .box-card h3{

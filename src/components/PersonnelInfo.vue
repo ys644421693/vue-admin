@@ -91,53 +91,53 @@
           </el-pagination>
           </el-row>
           <el-row v-if="dialogFormVisible">
-            <el-col :span="12" :offset="6">
-              <el-form :model="personnel" label-position="left" :rules="rules"  ref="personnelForm">
-                <el-form-item label="姓名" :label-width="formLabelWidth" prop="userName">
+            <el-col :span="8" :offset="8">
+              <el-form :model="personnel" :rules="rules" size="mini" ref="personnelForm" :label-width="formLabelWidth">
+                <el-form-item label="姓名"  prop="userName">
                   <el-input v-model="personnel.userName" autocomplete="off" size="mini"></el-input>
                 </el-form-item>
-                <el-form-item label="昵称" :label-width="formLabelWidth" prop="alias">
+                <el-form-item label="昵称"  prop="alias">
                   <el-input v-model="personnel.alias" autocomplete="off" size="mini"></el-input>
                 </el-form-item>
-                <el-form-item label="邮箱" :label-width="formLabelWidth" prop="email">
+                <el-form-item label="邮箱"  prop="email">
                   <el-input v-model="personnel.email" autocomplete="off" size="mini"></el-input>
                 </el-form-item>
-                <el-form-item label="电话" :label-width="formLabelWidth" prop="tel">
+                <el-form-item label="电话"  prop="tel">
                   <el-input v-model="personnel.tel" autocomplete="off" size="mini"></el-input>
                 </el-form-item>
-                <el-form-item label="生日" :label-width="formLabelWidth" prop="birthday">
+                <el-form-item label="生日"  prop="birthday">
                   <el-date-picker v-model="personnel.birthday" type="date" placeholder="选择日期" size="mini" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
                   </el-date-picker>
                 </el-form-item>
-                <el-form-item label="身份证" :label-width="formLabelWidth" prop="idCard">
+                <el-form-item label="身份证"  prop="idCard">
                   <el-input v-model="personnel.idCard" autocomplete="off" size="mini"></el-input>
                 </el-form-item>
-                <el-form-item label="性别" :label-width="formLabelWidth" prop="gender">
+                <el-form-item label="性别"  prop="gender">
                   <el-radio-group v-model="personnel.gender">
                     <el-radio label=0>女</el-radio>
                     <el-radio label=1>男</el-radio>
                   </el-radio-group>
                 </el-form-item>
-                <el-form-item label="职位" :label-width="formLabelWidth" prop="position">
+                <el-form-item label="职位"  prop="position">
                   <el-input v-model="personnel.position" autocomplete="off" size="mini"></el-input>
                 </el-form-item>
-                <el-form-item label="职位描述" :label-width="formLabelWidth" prop="positionDescribe">
+                <el-form-item label="职位描述"  prop="positionDescribe">
                   <el-input type="textarea" :rows="2" placeholder="职位描述" v-model="personnel.positionDescribe" size="mini">
                   </el-input>
                 </el-form-item>
                 <br>
-                <el-form-item label="主页显示" :label-width="formLabelWidth">
+                <el-form-item label="主页显示" >
                   <el-switch v-model="personnel.showIndex" active-color="#13ce66" inactive-color="#ff4949">
                   </el-switch>
                 </el-form-item>
-                <el-form-item label="创建管理账号" :label-width="formLabelWidth">
+                <el-form-item label="创建管理账号" >
                   <el-switch v-model="personnel.createName" active-color="#13ce66" inactive-color="#ff4949">
                   </el-switch>
                 </el-form-item>
-                <el-form-item label="员工排序" :label-width="formLabelWidth">
+                <el-form-item label="员工排序" >
                   <el-input-number v-model="personnel.sortNumber" :min="1" :max="10" label="序号" size="mini"></el-input-number>
                 </el-form-item>
-                <el-form-item label="头像图片" :label-width="formLabelWidth">
+                <el-form-item label="头像图片" >
                   <el-upload
                     :action="uploadPath"
                     list-type="picture-card"
@@ -153,7 +153,7 @@
                     <img width="100%" :src="dialogImageUrl" alt="">
                   </el-dialog>
                 </el-form-item>
-                <el-form-item :label-width="formLabelWidth" style="padding-top:110px;">
+                <el-form-item>
                   <el-button type="primary" @click="addPersonnelInfo()" size="mini">保 存</el-button>
                   <el-button type="danger" size="mini" @click="dialogFormVisible = false">关 闭</el-button>
                 </el-form-item>
@@ -280,11 +280,6 @@ export default {
     width: 90px;
     color: #99a9bf;
   }
-  .demo-table-expand .el-form-item {
-    margin-right: 0;
-    margin-bottom: 0;
-    width: 50%;
-  }
   .el-card {
     margin-bottom: 10px;
   }
@@ -297,14 +292,6 @@ export default {
 
   .el-table >>> .success-row {
     background: rgba(0,128,0, 0.1);
-  }
-  .el-form >>> .el-form-item__content{
-    height: 40px;
-    text-align: left;
-  }
-  .el-form-item {
-    margin: 0px;
-    height: 40px;
   }
   .el-table >>> th{
     padding: 0px;

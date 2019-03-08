@@ -63,26 +63,26 @@
         </el-card>
     </el-row>
     <el-dialog title="新建菜单" :visible.sync="dialogFormVisible" width="30%">
-      <el-form :model="systemMenuNode" label-position="left">
-        <el-form-item label="父类菜单" :label-width="formLabelWidth">
+      <el-form :model="systemMenuNode" size="mini" :label-width="formLabelWidth">
+        <el-form-item label="父类菜单" >
           <el-select v-model="tempId" filterable clearable placeholder="不选择为根路径" size="mini">
             <el-option v-for="item in systemMenuNodeAll" :key="item.id" :label="item.nodeName" :value="item.id" v-if="item.id != systemMenuNode.id">
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="菜单名称" :label-width="formLabelWidth">
+        <el-form-item label="菜单名称" >
           <el-input v-model="systemMenuNode.nodeName" autocomplete="off" size="mini"></el-input>
         </el-form-item>
-        <el-form-item label="菜单图标" :label-width="formLabelWidth">
+        <el-form-item label="菜单图标" >
           <el-input v-model="systemMenuNode.icon" autocomplete="off" size="mini"></el-input>
         </el-form-item>
-        <el-form-item label="页面路径" :label-width="formLabelWidth">
+        <el-form-item label="页面路径" >
           <el-select v-model="systemMenuNode.viewPath" filterable clearable placeholder="页面路径" size="mini">
             <el-option v-for="item in pagePath" :key="item.id" :label="item.path" :value="item.path">
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="菜单排序" :label-width="formLabelWidth">
+        <el-form-item label="菜单排序" >
           <el-input-number v-model="systemMenuNode.sortIndex" autocomplete="off" size="mini"></el-input-number>
         </el-form-item>
       </el-form>
@@ -308,11 +308,6 @@ export default {
     width: 90px;
     color: #99a9bf;
   }
-  .demo-table-expand .el-form-item {
-    margin-right: 0;
-    margin-bottom: 0;
-    width: 50%;
-  }
   .el-card {
     margin-bottom: 10px;
   }
@@ -326,14 +321,6 @@ export default {
   .el-table >>> .success-row {
     background: rgba(0,128,0, 0.1);
   }
-  .el-form >>> .el-form-item__content{
-    height: 40px;
-    text-align: left;
-  }
-  .el-form-item {
-    margin: 0px;
-    height: 40px;
-  }
   .el-table >>> th{
     padding: 0px;
   }
@@ -342,10 +329,6 @@ export default {
     color: #99a9bf;
     font-weight: bold;
   }
-  .el-dialog__wrapper >>> .el-dialog__body {
-    height: 200px;
-  }
-
   .box-card h3{
     text-align: left;
   }

@@ -142,6 +142,7 @@ export default {
   }
   .leftElement .el-menu{
     border-right: none;
+    z-index: 100;
   }
   .userInfo{
     color: #ffffff;

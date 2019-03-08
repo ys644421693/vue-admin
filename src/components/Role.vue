@@ -47,7 +47,7 @@
               </template>
               <template slot-scope="scope">
                 <el-button type="primary" size="mini" @click="updateData(scope.row)" v-if="scope.row.id!=1">修改</el-button>
-                <el-button type="primary" size="mini" @click="resourceData(scope.row)">服务添加</el-button>
+                <el-button type="primary" size="mini" @click="resourceData(scope.row)" v-if="scope.row.id!=1">服务管理</el-button>
                 <el-button @click="deleteData(scope.row)" type="danger" size="mini" v-if="scope.row.id!=1">删除</el-button>
               </template>
             </el-table-column>
@@ -82,15 +82,16 @@
             </el-table-column>
             <el-table-column>
               <template slot="header" slot-scope="scope" class="operaClass">
-                <el-button type="primary" size="mini" @click="addResource">保存</el-button>
+                <el-button type="primary" size="mini" @click="addResource">保 存</el-button>
+                <el-button type="primary" size="mini" @click="resourceDialog = false">取 消</el-button>
               </template>
             </el-table-column>
           </el-table>
         </el-card>
     </el-row>
-    <el-dialog title="商品分类信息" :visible.sync="dialogFormVisible" width="30%">
-      <el-form :model="role" label-position="left">
-        <el-form-item label="分类名称" :label-width="formLabelWidth">
+    <el-dialog title="角色信息" :visible.sync="dialogFormVisible" width="30%">
+      <el-form :model="role" size="mini" :label-width="formLabelWidth">
+        <el-form-item label="分类名称" >
           <el-input v-model="role.roleName" autocomplete="off" size="mini"></el-input>
         </el-form-item>
       </el-form>
@@ -257,11 +258,6 @@ export default {
     width: 90px;
     color: #99a9bf;
   }
-  .demo-table-expand .el-form-item {
-    margin-right: 0;
-    margin-bottom: 0;
-    width: 50%;
-  }
   .el-card {
     margin-bottom: 10px;
   }
@@ -275,14 +271,6 @@ export default {
   .el-table >>> .success-row {
     background: rgba(0,128,0, 0.1);
   }
-  .el-form >>> .el-form-item__content{
-    height: 40px;
-    text-align: left;
-  }
-  .el-form-item {
-    margin: 0px;
-    height: 40px;
-  }
   .el-table >>> th{
     padding: 0px;
   }
@@ -291,10 +279,6 @@ export default {
     color: #99a9bf;
     font-weight: bold;
   }
-  .el-dialog__wrapper >>> .el-dialog__body {
-    height: 200px;
-  }
-
   .box-card h3{
     text-align: left;
   }

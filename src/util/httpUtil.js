@@ -37,7 +37,7 @@ axios.interceptors.response.use(
   },
   error => {
     loadinginstace.close()
-    Message.error({message: '请求失败' + error.message})
+    var message = ''
     if (error.response) {
       switch (error.response.status) {
         case 401:
@@ -47,8 +47,17 @@ axios.interceptors.response.use(
             path: 'login',
             query: { redirect: router.currentRoute.path }
           })
+          message = '未登录'
+          break
+        case 500:
+          message = '服务器错误'
+          break
+        case 400:
+          message = '参数错误'
+          break
       }
     }
+    Message.error({message: '请求失败' + message})
     // console.log(JSON.stringify(error));//console : Error: Request failed with status code 402
     return Promise.reject(error.response.data)
   }

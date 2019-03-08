@@ -39,7 +39,6 @@ export default {
   .el-main {
     background-color: #E9EEF3;
     color: #333;
-    text-align: center;
   }
 
   body > .el-container {
@@ -53,5 +52,14 @@ export default {
 
   .el-container:nth-child(7) .el-aside {
     line-height: 320px;
+  }
+</style>
+
+<style>
+  .el-card .el-card__body{
+    text-align: center;
+  }
+  .el-card .el-form-item__content{
+    text-align: left;
   }
 </style>

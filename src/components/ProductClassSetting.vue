@@ -34,7 +34,7 @@
             <el-table-column label="分类名称" prop="title"></el-table-column>
             <el-table-column align="center">
               <template slot="header" slot-scope="scope" class="operaClass">
-                <el-button type="primary" size="mini" @click="dialogFormVisible = true">新增分类</el-button>
+                <el-button type="primary" size="mini" @click="addClassInit">新增分类</el-button>
               </template>
               <template slot-scope="scope">
                 <el-button type="primary" size="mini" @click="updateData(scope.row)">修改</el-button>
@@ -51,14 +51,14 @@
         </el-card>
     </el-row>
     <el-dialog title="商品分类信息" :visible.sync="dialogFormVisible" width="30%">
-      <el-form :model="productClass" label-position="left">
-        <el-form-item label="分类名称" :label-width="formLabelWidth">
+      <el-form :model="productClass" :label-width="formLabelWidth" size="mini">
+        <el-form-item label="分类名称" >
           <el-input v-model="productClass.title" autocomplete="off" size="mini"></el-input>
         </el-form-item>
-        <el-form-item label="分类排序" :label-width="formLabelWidth">
+        <el-form-item label="分类排序" >
           <el-input-number v-model="productClass.orderId" autocomplete="off" size="mini"></el-input-number>
         </el-form-item>
-        <el-form-item label="父分类" :label-width="formLabelWidth">
+        <el-form-item label="父分类" >
           <el-select v-model="productClass.productClass" placeholder="请选择" size="mini">
             <el-option value="0" label="基本分类"></el-option>
             <el-option v-for="item in classAllData" :key="item.id" :label="item.title" :value="item">
@@ -169,6 +169,10 @@ export default {
       }).catch((er) => {
         console.error(er)
       })
+    },
+    addClassInit () {
+      this.dialogFormVisible = true
+      this.productClass = {}
     }
   },
   mounted: function () {
@@ -188,11 +192,7 @@ export default {
     width: 90px;
     color: #99a9bf;
   }
-  .demo-table-expand .el-form-item {
-    margin-right: 0;
-    margin-bottom: 0;
-    width: 50%;
-  }
+
   .el-card {
     margin-bottom: 10px;
   }
@@ -206,14 +206,7 @@ export default {
   .el-table >>> .success-row {
     background: rgba(0,128,0, 0.1);
   }
-  .el-form >>> .el-form-item__content{
-    height: 40px;
-    text-align: left;
-  }
-  .el-form-item {
-    margin: 0px;
-    height: 40px;
-  }
+
   .el-table >>> th{
     padding: 0px;
   }
@@ -222,10 +215,6 @@ export default {
     color: #99a9bf;
     font-weight: bold;
   }
-  .el-dialog__wrapper >>> .el-dialog__body {
-    height: 200px;
-  }
-
   .box-card h3{
     text-align: left;
   }

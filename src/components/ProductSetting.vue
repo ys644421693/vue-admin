@@ -88,55 +88,54 @@
           </el-pagination>
         </el-row>
         <el-row v-if="showForm">
-          <el-col :span="12" :offset="6">
-            <el-form :model="product" label-position="left" :rules="rules">
-              <el-form-item label="商品名称" :label-width="formLabelWidth">
+          <el-col :span="8" :offset="8">
+            <el-form :model="product" :rules="rules" size="mini" :label-width="formLabelWidth">
+              <el-form-item label="商品名称" >
                 <el-input v-model="product.name" autocomplete="off" size="mini"></el-input>
               </el-form-item>
-              <el-form-item label="商品副标题" :label-width="formLabelWidth">
+              <el-form-item label="商品副标题" >
                 <el-input v-model="product.subheading" autocomplete="off" size="mini"></el-input>
               </el-form-item>
-              <el-form-item label="商品分类" :label-width="formLabelWidth">
+              <el-form-item label="商品分类" >
                 <el-select v-model="classId" size="mini" placeholder="--请选择商品分类--" filterable clearable>
                   <el-option v-for="item in classType" :key="item.id" :label="item.title" :value="item.id"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="商品描述" :label-width="formLabelWidth">
+              <el-form-item label="商品描述" >
                 <el-input type="textarea" :rows="2" placeholder="商品描述" v-model="product.descript">
                 </el-input>
               </el-form-item>
-              <br>
-              <el-form-item label="成本价格" :label-width="formLabelWidth">
+              <el-form-item label="成本价格" >
                 <el-input-number v-model="product.costPrice" :precision="2" :step="5.0" size="mini"></el-input-number>
               </el-form-item>
-              <el-form-item label="销售单价" :label-width="formLabelWidth">
+              <el-form-item label="销售单价" >
                 <el-input-number v-model="product.price" :precision="2" :step="5.0" size="mini"></el-input-number>
               </el-form-item>
-              <el-form-item label="库存" :label-width="formLabelWidth">
+              <el-form-item label="库存" >
                 <el-input-number v-model="product.stock" :precision="2" :step="5.0" size="mini"></el-input-number>
               </el-form-item>
-              <el-form-item label="生产日期" :label-width="formLabelWidth">
+              <el-form-item label="生产日期" >
                 <el-date-picker v-model="product.productDate" type="date" placeholder="选择日期" size="mini" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
                 </el-date-picker>
               </el-form-item>
-              <el-form-item label="过期时间" :label-width="formLabelWidth">
+              <el-form-item label="过期时间" >
                 <el-date-picker v-model="product.termOfValidity" type="date" placeholder="选择日期" size="mini" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
                 </el-date-picker>
               </el-form-item>
-              <el-form-item label="币种" :label-width="formLabelWidth">
+              <el-form-item label="币种" >
                 <el-radio-group v-model="product.unit">
                   <el-radio label="USD">美元</el-radio>
                   <el-radio label="CNY">人民币</el-radio>
                 </el-radio-group>
               </el-form-item>
-              <el-form-item label="主页显示" :label-width="formLabelWidth">
+              <el-form-item label="主页显示" >
                 <el-switch v-model="product.showIndex" active-color="#13ce66" inactive-color="#ff4949">
                 </el-switch>
               </el-form-item>
-              <el-form-item label="商品排序" :label-width="formLabelWidth">
+              <el-form-item label="商品排序" >
                 <el-input-number v-model="product.sortNumber" :min="1" :max="10" label="序号" size="mini"></el-input-number>
               </el-form-item>
-              <el-form-item label="商品图片" :label-width="formLabelWidth">
+              <el-form-item label="商品图片" >
                 <el-upload
                   :action="uploadPath"
                   list-type="picture-card"
@@ -152,8 +151,7 @@
                   <img width="100%" :src="dialogImageUrl" alt="">
                 </el-dialog>
               </el-form-item>
-              <br>
-              <el-form-item style="padding-top:100px;">
+              <el-form-item>
                 <el-button type="primary" @click="addProductInfo()" size="mini">保 存</el-button>
                 <el-button type="danger" @click="showForm = false" size="mini">返 回</el-button>
               </el-form-item>
@@ -379,12 +377,6 @@ export default {
     color: #99a9bf;
   }
 
-  .demo-table-expand .el-form-item {
-    margin-right: 0;
-    margin-bottom: 0;
-    width: 50%;
-  }
-
   .el-card {
     margin-bottom: 10px;
   }
@@ -399,16 +391,6 @@ export default {
 
   .el-table >>> .success-row {
     background: rgba(0, 128, 0, 0.1);
-  }
-
-  .el-form >>> .el-form-item__content {
-    height: 40px;
-    text-align: left;
-  }
-
-  .el-form-item {
-    margin: 0px;
-    height: 40px;
   }
 
   .el-table >>> th {
