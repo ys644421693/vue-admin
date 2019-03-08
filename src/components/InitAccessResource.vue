@@ -56,7 +56,7 @@
           <el-pagination
             background
             @current-change="handleCurrentChange"
-            layout="prev, pager, next"
+            layout="total,prev, pager, next"
             :total="pageTotal">
           </el-pagination>
         </el-card>
@@ -183,6 +183,7 @@ export default {
           message: '添加成功!'
         })
         this.handleCurrentChange(this.currentPage)
+        this.dialogFormVisible = false
       }).catch((er) => {
         console.error(er)
       })

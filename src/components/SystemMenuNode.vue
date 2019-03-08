@@ -274,6 +274,7 @@ export default {
           type: 'success',
           message: '添加成功!'
         })
+        this.dialogFormVisible = false
       }).catch((er) => {
         console.error(er)
       })

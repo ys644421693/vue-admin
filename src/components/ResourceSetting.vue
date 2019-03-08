@@ -15,7 +15,7 @@
         <h3>搜索条件</h3>
         <el-form label-position="left" :inline="true">
           <el-form-item label="商品分类名称">
-            <el-input v-model="query.title" placeholder="商品分类名称" size="mini"></el-input>
+            <el-input v-model="query.name" placeholder="商品分类名称" size="mini"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="queryParam" size="mini">查询</el-button>
@@ -26,15 +26,28 @@
     <el-row>
         <el-card class="box-card">
           <el-table
-            :data="productClassList.filter(data => !search || data.title.toLowerCase().includes(search.toLowerCase()))"
+            :data="resourceList.filter(data => !search || data.title.toLowerCase().includes(search.toLowerCase()))"
             style="width: 100%">
-            <el-table-column label="分类 ID"  prop="id"></el-table-column>
-            <el-table-column label="排序编号" prop="orderId"></el-table-column>
-            <el-table-column label="父分类" prop="parentId"></el-table-column>
-            <el-table-column label="分类名称" prop="title"></el-table-column>
+            <el-table-column label="服务 ID"  prop="id"></el-table-column>
+            <el-table-column label="服务名称" prop="name"></el-table-column>
+            <el-table-column label="服务路径" prop="path" show-overflow-tooltip></el-table-column>
+            <el-table-column label="服务类型" prop="type">
+              <template slot-scope="scope">
+                  {{scope.row.type ===0?'普通':'外部接口'}}
+              </template>
+            </el-table-column>
+            <el-table-column label="服务状态" prop="state">
+              <template slot-scope="scope">
+                <el-tag :type="scope.row.state === 0 ? 'success' : 'danger'" disable-transitions size="mini">
+                  {{scope.row.state ===0?'启用':'停用'}}
+                </el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column label="请求方法" prop="method"></el-table-column>
+            <el-table-column label="请求标识" prop="flag"></el-table-column>
             <el-table-column align="center">
               <template slot="header" slot-scope="scope" class="operaClass">
-                <el-button type="primary" size="mini" @click="dialogFormVisible = true">新增分类</el-button>
+                <el-button type="primary" size="mini" @click="addResourceInit">新增服务</el-button>
               </template>
               <template slot-scope="scope">
                 <el-button type="primary" size="mini" @click="updateData(scope.row)">修改</el-button>
@@ -45,29 +58,40 @@
           <el-pagination
             background
             @current-change="handleCurrentChange"
-            layout="prev, pager, next"
+            layout="total,prev, pager, next"
             :total="pageTotal">
           </el-pagination>
         </el-card>
     </el-row>
-    <el-dialog title="商品分类信息" :visible.sync="dialogFormVisible" width="30%">
-      <el-form :model="productClass" size="mini" :label-width="formLabelWidth">
-        <el-form-item label="分类名称" >
-          <el-input v-model="productClass.title" autocomplete="off" size="mini"></el-input>
+    <el-dialog title="服务信息" :visible.sync="dialogFormVisible" width="30%">
+      <el-form :model="resource" size="mini" :label-width="formLabelWidth">
+        <el-form-item label="服务名称" >
+          <el-input v-model="resource.name" autocomplete="off" size="mini"></el-input>
         </el-form-item>
-        <el-form-item label="分类排序" >
-          <el-input-number v-model="productClass.orderId" autocomplete="off" size="mini"></el-input-number>
+        <el-form-item label="服务路径" >
+          <el-input v-model="resource.path" autocomplete="off" size="mini"></el-input>
         </el-form-item>
-        <el-form-item label="父分类" >
-          <el-select v-model="productClass.productClass" placeholder="请选择" size="mini">
-            <el-option value="0" label="基本分类"></el-option>
-            <el-option v-for="item in classAllData" :key="item.id" :label="item.title" :value="item">
-            </el-option>
+        <el-form-item label="服务类型" >
+          <el-select v-model="resource.type" size="mini" placeholder="--服务类型--" filterable clearable>
+            <el-option :value="0" label="普通"></el-option>
+            <el-option :value="1" label="外部接口"></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="服务状态" >
+          <el-select v-model="resource.state" size="mini" placeholder="--服务类型--" filterable clearable>
+            <el-option :value="0" label="启用"></el-option>
+            <el-option :value="1" label="停用"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="请求方法" >
+          <el-input v-model="resource.method" autocomplete="off" size="mini"></el-input>
+        </el-form-item>
+        <el-form-item label="服务标识" >
+          <el-input v-model="resource.flag" autocomplete="off" size="mini"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="addProductClass()" size="mini">保 存</el-button>
+        <el-button type="primary" @click="addResource()" size="mini">保 存</el-button>
         <el-button type="danger" size="mini" @click="dialogFormVisible = false">返 回</el-button>
       </div>
     </el-dialog>
@@ -79,15 +103,14 @@ export default {
   name: 'ResourceSetting',
   data () {
     return {
-      productClassList: [],
+      resourceList: [],
       search: '',
       formLabelWidth: '120px',
-      productClass: {},
+      resource: {},
       dialogFormVisible: false,
       query: {},
       pageTotal: 10,
-      currentPage: 1,
-      classAllData: []
+      currentPage: 1
     }
   },
   methods: {
@@ -98,20 +121,14 @@ export default {
         type: 'warning',
         center: true
       }).then(() => {
-        this.deleteRequest('productClass/deleteData', {id: row.id}).then((response) => {
+        this.deleteRequest('resource/deleteData', {id: row.id}).then((response) => {
           this.$message({
             type: 'success',
             message: '删除成功!'
           })
-          for (var i = 0; i < this.productClassList.length; i++) {
-            if (this.productClassList[i].id === row.id) {
-              this.productClassList.splice(i, 1)
-            }
-          }
-
-          for (i = 0; i < this.classAllData.length; i++) {
-            if (this.classAllData[i].id === row.id) {
-              this.classAllData.splice(i, 1)
+          for (var i = 0; i < this.resourceList.length; i++) {
+            if (this.resourceList[i].id === row.id) {
+              this.resourceList.splice(i, 1)
             }
           }
         }).catch((er) => {
@@ -135,46 +152,43 @@ export default {
       if (this.query.region) {
         dataPage.data.type = Number(this.query.region)
       }
-      this.getProductClassPage(dataPage)
+      this.getResourcePage(dataPage)
     },
     updateData (row) {
       this.dialogFormVisible = true
-      this.productClass = row
+      this.resource = row
     },
     queryParam () {
       this.handleCurrentChange(this.currentPage)
     },
-    getProductClassPage (data) {
-      this.getRequest('productClass/getPageData', data).then((response) => {
+    getResourcePage (data) {
+      this.getRequest('resource/getPageData', data).then((response) => {
         this.pageTotal = response.data.count
-        this.productClassList = response.data.result
+        this.resourceList = response.data.result
       }).catch((er) => {
         console.error(er)
       })
     },
-    getProductClass () {
-      this.getRequest('productClass/getAllData').then((response) => {
-        this.classAllData = response.data
-      }).catch((er) => {
-        console.error(er)
-      })
-    },
-    addProductClass () {
-      this.postRequest('productClass/addData', this.productClass).then((response) => {
+    addResource () {
+      this.postRequest('resource/addData', this.resource).then((response) => {
         this.$message({
           type: 'success',
           message: '添加成功!'
         })
         this.handleCurrentChange(this.currentPage)
+        this.dialogFormVisible = false
       }).catch((er) => {
         console.error(er)
       })
+    },
+    addResourceInit () {
+      this.dialogFormVisible = true
+      this.resource = {}
     }
   },
   mounted: function () {
     const data = {pageNo: 0, size: 10}
-    this.getProductClassPage(data)
-    this.getProductClass()
+    this.getResourcePage(data)
   }
 }
 </script>
@@ -209,9 +223,6 @@ export default {
     width: 90px;
     color: #99a9bf;
     font-weight: bold;
-  }
-  .el-dialog__wrapper >>> .el-dialog__body {
-    height: 200px;
   }
 
   .box-card h3{
