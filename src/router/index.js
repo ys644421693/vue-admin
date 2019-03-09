@@ -9,6 +9,7 @@ import PersonnelInfo from '@/components/PersonnelInfo'
 import initAccessResource from '@/components/InitAccessResource'
 import systemMenuNode from '@/components/SystemMenuNode'
 import resourceSetting from '@/components/ResourceSetting'
+import MerchantInfo from '@/components/MerchantInfo'
 import Role from '@/components/role'
 import Login from '@/components/Login'
 import store from '../store/eunion/store'
@@ -34,6 +35,10 @@ const router = [{
   {
     path: '/menuNode',
     component: systemMenuNode
+  },
+  {
+    path: '/merchantInfo',
+    component: MerchantInfo
   },
   {
     path: '/role',
