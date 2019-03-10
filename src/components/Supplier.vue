@@ -44,8 +44,8 @@
             <el-table-column label="地址" prop="address" show-overflow-tooltip></el-table-column>
             <el-table-column label="商户简介" prop="companyProfile" show-overflow-tooltip></el-table-column>
             <el-table-column label="企业网址" prop="companyUrl" show-overflow-tooltip></el-table-column>
-            <el-table-column label="联系人手机号" prop="mobilePhone"></el-table-column>
-            <el-table-column label="联系固电话" prop="tel"></el-table-column>
+            <el-table-column label="手机号" prop="mobilePhone"></el-table-column>
+            <el-table-column label="固话" prop="tel"></el-table-column>
             <el-table-column label="传真" prop="fax"></el-table-column>
             <el-table-column label="邮箱" prop="email"></el-table-column>
             <el-table-column align="center"  v-if="!showProduct">
@@ -53,9 +53,9 @@
                 <el-button type="primary" size="mini" @click="addSupplierInit">新增商户</el-button>
               </template>
               <template slot-scope="scope">
-                <el-button type="primary" size="mini" @click="getSupplierProductData(scope.row)">产品</el-button>
-                <el-button type="primary" size="mini" @click="updateData(scope.row)">修改</el-button>
-                <el-button @click="deleteData(scope.row)" type="danger" size="mini">删除</el-button>
+                <el-button type="text" size="mini" @click="getSupplierProductData(scope.row)">产品</el-button>
+                <el-button type="text" size="mini" @click="updateData(scope.row)">修改</el-button>
+                <el-button @click="deleteData(scope.row)" type="text" size="mini">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -66,11 +66,10 @@
             :total="pageTotal">
           </el-pagination>
         </el-card>
-        <el-card class="box-card" v-if="showProduct">
+        <el-card class="box-card" v-show="showProduct">
           <el-table
             :data="supplierProductList.filter(data => !search || data.title.toLowerCase().includes(search.toLowerCase()))"
             style="width: 100%">
-            <el-table-column label="商户 ID"  prop="id"></el-table-column>
             <el-table-column label="产品单价" prop="unitPrice"></el-table-column>
             <el-table-column label="产品联系人" prop="productContacts" show-overflow-tooltip></el-table-column>
             <el-table-column label="工厂地址" prop="plantAddress" show-overflow-tooltip></el-table-column>
@@ -78,11 +77,11 @@
             <el-table-column label="年产值" prop="outputValue" show-overflow-tooltip></el-table-column>
             <el-table-column label="年产量" prop="output"></el-table-column>
             <el-table-column label="年产能" prop="capacity"></el-table-column>
-            <el-table-column label="工厂创建日期" prop="createDate"></el-table-column>
-            <el-table-column label="联系人手机" prop="mobilePhone"></el-table-column>
-            <el-table-column align="center"  v-if="showProduct">
+            <el-table-column label="创建日期" prop="createDate"></el-table-column>
+            <el-table-column label="手机号" prop="mobilePhone"></el-table-column>
+            <el-table-column align="center">
               <template slot="header" slot-scope="scope" class="operaClass" >
-                <el-button type="primary" size="mini" @click="addProductSupplierInit">新增商户产品</el-button>
+                <el-button type="primary" size="mini" @click="addProductSupplierInit">新增</el-button>
               </template>
               <template slot-scope="scope">
                 <el-button type="primary" size="mini" @click="updateProductSupplier(scope.row)">修改</el-button>
@@ -94,7 +93,7 @@
             background
             @current-change="handleProductChange"
             layout="total,prev, pager, next"
-            :total="pageTotal">
+            :total="total">
           </el-pagination>
         </el-card>
     </el-row>
@@ -191,6 +190,7 @@ export default {
       dialogFormVisible: false,
       query: {},
       pageTotal: 10,
+      total: 10,
       currentPage: 1,
       supplierProductList: [],
       productSupplier: {},
