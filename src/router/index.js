@@ -6,10 +6,11 @@ import CmsIndex from '@/cms/CmsIndex'
 import ProductSetting from '@/components/ProductSetting'
 import ProductClassSetting from '@/components/ProductClassSetting'
 import PersonnelInfo from '@/components/PersonnelInfo'
-import initAccessResource from '@/components/InitAccessResource'
-import systemMenuNode from '@/components/SystemMenuNode'
+import InitAccessResource from '@/components/InitAccessResource'
+import SystemMenuNode from '@/components/SystemMenuNode'
 import resourceSetting from '@/components/ResourceSetting'
 import MerchantInfo from '@/components/MerchantInfo'
+import Supplier from '@/components/Supplier'
 import Role from '@/components/role'
 import Login from '@/components/Login'
 import store from '../store/eunion/store'
@@ -30,11 +31,15 @@ const router = [{
   },
   {
     path: '/initAccessResource',
-    component: initAccessResource
+    component: InitAccessResource
   },
   {
     path: '/menuNode',
-    component: systemMenuNode
+    component: SystemMenuNode
+  },
+  {
+    path: '/supplier',
+    component: Supplier
   },
   {
     path: '/merchantInfo',
