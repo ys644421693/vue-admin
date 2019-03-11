@@ -58,13 +58,13 @@
             <el-table-column label="工号ID"  prop="id"></el-table-column>
             <el-table-column label="姓名" prop="userName"></el-table-column>
             <el-table-column label="昵称" prop="alias"></el-table-column>
-            <el-table-column label="邮箱" prop="email"></el-table-column>
-            <el-table-column label="手机" prop="tel"></el-table-column>
+            <el-table-column label="邮箱" prop="email" show-overflow-tooltip></el-table-column>
+            <el-table-column label="手机" prop="tel" show-overflow-tooltip></el-table-column>
             <el-table-column label="生日" prop="birthday"></el-table-column>
             <el-table-column label="身份证" prop="idCard"></el-table-column>
             <el-table-column label="性别" prop="gender">
               <template slot-scope="scope">
-                {{scope.row.gender ==='1'?'男':'女'}}
+                {{scope.row.gender === 1?'男':'女'}}
               </template>
             </el-table-column>
             <el-table-column label="状态" prop="state">
@@ -75,11 +75,11 @@
             <el-table-column label="排序" prop="sortNumber"></el-table-column>
             <el-table-column align="center" width="150">
               <template slot="header" slot-scope="scope" class="operaClass">
-                <el-button type="primary" size="mini" @click="dialogFormVisible = true">添加员工</el-button>
+                <el-button type="primary" size="mini" @click="addPersonnelInfoInit">添加员工</el-button>
               </template>
               <template slot-scope="scope">
-                <el-button type="primary" size="mini" @click="updateData(scope.row)">修改</el-button>
-                <el-button @click="deleteData(scope.row)" type="danger" size="mini">删除</el-button>
+                <el-button type="primary" size="mini" @click="updateData(scope.row)" v-if="scope.row.id!=1">修改</el-button>
+                <el-button @click="deleteData(scope.row)" type="danger" size="mini" v-if="scope.row.id!=1">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -112,10 +112,13 @@
                 <el-form-item label="身份证"  prop="idCard">
                   <el-input v-model="personnel.idCard" autocomplete="off" size="mini"></el-input>
                 </el-form-item>
+                <el-form-item label="毕业院校"  prop="idCard">
+                  <el-input v-model="personnel.graduateSchool" autocomplete="off" size="mini"></el-input>
+                </el-form-item>
                 <el-form-item label="性别"  prop="gender">
                   <el-radio-group v-model="personnel.gender">
-                    <el-radio label=0>女</el-radio>
-                    <el-radio label=1>男</el-radio>
+                    <el-radio :label='0'>女</el-radio>
+                    <el-radio :label='1'>男</el-radio>
                   </el-radio-group>
                 </el-form-item>
                 <el-form-item label="职位"  prop="position">
@@ -143,6 +146,7 @@
                     list-type="picture-card"
                     :on-preview="handlePictureCardPreview"
                     :with-credentials="true"
+                    :file-list="fileList"
                     :on-success="uploadSuccess"
                     :multiple="false"
                     :limit="1"
@@ -188,6 +192,7 @@ export default {
       currentPage: 1,
       query: {},
       dialogImageUrl: '',
+      fileList: [],
       dialogVisible: false,
       uploadPath: this.$store.state.baseUrl + 'fileUpload/singleFileUpload?type=1'
     }
@@ -239,6 +244,9 @@ export default {
       })
     },
     addPersonnelInfo () {
+      if (!this.personnel.userPropertiesOrmSet) {
+        this.personnel.userPropertiesOrmSet = []
+      }
       this.postRequest('user/addData', this.personnel).then((response) => {
         this.$message({
           type: 'success',
@@ -253,6 +261,9 @@ export default {
     updateData (row) {
       this.dialogFormVisible = true
       this.personnel = row
+      if (this.personnel.headUrl) {
+        this.fileList = [{name: 'head', url: this.$store.state.baseUrl + this.personnel.headUrl}]
+      }
     },
     queryParam () {
       this.handleCurrentChange(this.currentPage)
@@ -263,6 +274,10 @@ export default {
     handlePictureCardPreview (file) {
       this.dialogImageUrl = file.url
       this.dialogVisible = true
+    },
+    addPersonnelInfoInit () {
+      this.dialogFormVisible = true
+      this.personnel = {}
     }
   },
   mounted: function () {

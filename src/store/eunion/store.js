@@ -9,7 +9,8 @@ export default new Vuex.Store({
     user: {},
     token: null,
     title: '',
-    baseUrl: 'http://localhost:8011/'
+    baseUrl: 'http://localhost:8011/',
+    defaultHead: 'image/head-default.jpeg'
   },
   mutations: {
     [types.LOGIN]: (state, data) => {

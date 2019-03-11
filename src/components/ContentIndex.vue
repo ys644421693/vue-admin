@@ -15,8 +15,11 @@
 <script>
 import LeftMenu from '../components/LeftMenu'
 import FooterInfo from '../components/FooterInfo'
+import store from '../store/eunion/store'
+
 export default {
   name: 'ContentRouter',
+  store,
   components: {FooterInfo, LeftMenu}
 }
 </script>

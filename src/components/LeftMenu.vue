@@ -31,12 +31,11 @@
       </nav>
     </el-menu>
     <div class="footerElement" v-if="!isCollapse">
-      <el-head-button url="https://gss0.baidu.com/-vo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/960a304e251f95ca34336f4ac2177f3e6609520c.jpg"
-                      size="normal" circle></el-head-button>
+      <el-head-button :url="headUrl" size="normal" circle></el-head-button>
       <div class="userInfo">
-        <h2>John Doe</h2>
-        <p class="title">CEO & Founder, Example</p>
-        <p>Harvard University</p>
+        <h2>{{userInfo.alias}}</h2>
+        <p class="title">{{userInfo.position}}</p>
+        <p>{{userInfo.graduateSchool}}</p>
       </div>
       <hr style="width: 80%"/>
     </div>
@@ -45,16 +44,16 @@
 
 <script>
 import elHeadButton from '../util/HeadPic'
-import store from '../store/eunion/store'
 
 export default {
   components: {elHeadButton},
-  store,
   data () {
     return {
       isCollapse: false,
       systemMenuNodeList: [],
-      systemMenuNodeAll: []
+      systemMenuNodeAll: [],
+      headUrl: this.$store.state.baseUrl + this.$store.state.defaultHead,
+      userInfo: {}
     }
   },
   name: 'LeftMenu',
@@ -73,6 +72,10 @@ export default {
     loadData: function () {
       this.getRequest('user/getUserInfo').then((response) => {
         console.log(response.data)
+        this.userInfo = response.data.result
+        if (response.data && response.data.result && response.data.result.headUrl) {
+          this.headUrl = this.$store.state.baseUrl + this.userInfo.headUrl
+        }
       }).catch((er) => {
         console.error(er)
         this.$router.push({path: '/login'})
