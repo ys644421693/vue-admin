@@ -25,17 +25,17 @@
       <el-card class="box-card" v-if="showProduct">
         <h3>搜索条件</h3>
         <el-form label-position="left" :inline="true">
-          <el-form-item label="商户名称">
-            <el-input v-model="query.name" placeholder="商户名称" size="mini"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="queryParam" size="mini">查询</el-button>
+          <el-form-item label="商户">
+            <el-select placeholder="请选择" @change="selectChange" size="mini" v-model="supplier">
+              <el-option v-for="item in supplierList" :key="item.id" :label="item.companyName" :value="item">
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-form>
       </el-card>
     </el-row>
     <el-row>
-        <el-card class="box-card" v-if="!showProduct">
+        <el-card class="box-card" v-show="!showProduct">
           <el-table
             :data="supplierList.filter(data => !search || data.title.toLowerCase().includes(search.toLowerCase()))"
             style="width: 100%">
@@ -70,6 +70,8 @@
           <el-table
             :data="supplierProductList.filter(data => !search || data.title.toLowerCase().includes(search.toLowerCase()))"
             style="width: 100%">
+            <el-table-column label="产品名称" prop="productInfo.name"></el-table-column>
+            <el-table-column label="企业名称" prop="supplierInfoOrm.companyName"></el-table-column>
             <el-table-column label="产品单价" prop="unitPrice"></el-table-column>
             <el-table-column label="产品联系人" prop="productContacts" show-overflow-tooltip></el-table-column>
             <el-table-column label="工厂地址" prop="plantAddress" show-overflow-tooltip></el-table-column>
@@ -81,11 +83,12 @@
             <el-table-column label="手机号" prop="mobilePhone"></el-table-column>
             <el-table-column align="center">
               <template slot="header" slot-scope="scope" class="operaClass" >
-                <el-button type="primary" size="mini" @click="addProductSupplierInit">新增</el-button>
+                <el-button type="text" size="mini" @click="addProductSupplierInit">新增</el-button>
+                <el-button type="text" size="mini" @click="showProduct = false">返回</el-button>
               </template>
               <template slot-scope="scope">
-                <el-button type="primary" size="mini" @click="updateProductSupplier(scope.row)">修改</el-button>
-                <el-button @click="deleteProductSupplier(scope.row)" type="danger" size="mini">删除</el-button>
+                <el-button type="text" size="mini" @click="updateProductSupplier(scope.row)">修改</el-button>
+                <el-button @click="deleteProductSupplier(scope.row)" type="text" size="mini">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -93,7 +96,7 @@
             background
             @current-change="handleProductChange"
             layout="total,prev, pager, next"
-            :total="total">
+            :total="pageTotal">
           </el-pagination>
         </el-card>
     </el-row>
@@ -131,6 +134,16 @@
     </el-dialog>
     <el-dialog title="供应商产品信息" :visible.sync="productSupplierDialog" width="30%">
       <el-form :model="productSupplier" size="mini" :label-width="formLabelWidth">
+        <el-form-item label="商户名称" >
+          <el-select v-model="productSupplier.productInfoId" clearable placeholder="请选择">
+            <el-option
+              v-for="item in productList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="工厂地址" >
           <el-input v-model="productSupplier.plantAddress" autocomplete="off" size="mini"></el-input>
         </el-form-item>
@@ -157,7 +170,7 @@
           <el-input-number v-model="productSupplier.leadTime" placeholder="企业网址" autocomplete="off" size="mini"></el-input-number>
         </el-form-item>
         <el-form-item label="产品单价" >
-          <el-input-number v-model="productSupplier.leadTime" :precision="2" :step="5.0" size="mini"></el-input-number>
+          <el-input-number v-model="productSupplier.unitPrice" :precision="2" :step="5.0" size="mini"></el-input-number>
         </el-form-item>
         <el-form-item label="产品联系人" >
           <el-input v-model="productSupplier.productContacts" autocomplete="off" size="mini"></el-input>
@@ -192,9 +205,11 @@ export default {
       pageTotal: 10,
       total: 10,
       currentPage: 1,
+      productPage: 1,
       supplierProductList: [],
       productSupplier: {},
-      productSupplierDialog: false
+      productSupplierDialog: false,
+      productList: []
     }
   },
   methods: {
@@ -266,14 +281,14 @@ export default {
       this.getSupplierPage(dataPage)
     },
     handleProductChange (val) {
-      this.currentPage = val
-      const dataPage = {pageNo: this.currentPage - 1, size: 10}
+      this.productPage = val
+      const dataPage = {pageNo: this.productPage - 1, size: 10}
       dataPage.data = {}
       dataPage.data.name = this.query.name
       if (this.query.region) {
         dataPage.data.type = Number(this.query.region)
       }
-      this.getSupplierPage(dataPage)
+      this.querySupplierProduct(dataPage)
     },
     updateData (row) {
       this.dialogFormVisible = true
@@ -282,6 +297,7 @@ export default {
     updateProductSupplier (row) {
       this.productSupplierDialog = true
       this.productSupplier = row
+      this.productSupplier.productInfoId = row.productInfo.id
     },
     queryParam () {
       this.handleCurrentChange(this.currentPage)
@@ -307,12 +323,13 @@ export default {
       })
     },
     addProductSupplier () {
-      this.postRequest('productSupplier/addData', this.productSupplier).then((response) => {
+      this.productSupplier.supplierInfoId = this.supplier.id
+      this.postRequest('productSupplier/addDataSupplier', this.productSupplier).then((response) => {
         this.$message({
           type: 'success',
           message: '添加成功!'
         })
-        this.handleCurrentChange(this.currentPage)
+        this.handleProductChange(this.productPage)
         this.productSupplierDialog = false
       }).catch((er) => {
         console.error(er)
@@ -328,6 +345,15 @@ export default {
     },
     getSupplierProductData (rowData) {
       const data = {pageNo: 0, size: 10, data: {supplierInfoOrm: rowData}}
+      this.supplier = rowData
+      this.querySupplierProduct(data)
+      this.getRequest('product/getAllData').then((response) => {
+        this.productList = response.data.result
+      }).catch((er) => {
+        console.error(er)
+      })
+    },
+    querySupplierProduct (data) {
       this.getRequest('productSupplier/getPageData', data).then((response) => {
         this.pageTotal = response.data.count
         this.supplierProductList = response.data.result
@@ -335,6 +361,10 @@ export default {
       }).catch((er) => {
         console.error(er)
       })
+    },
+    selectChange (selVal) {
+      this.supplier = selVal
+      this.getSupplierProductData(selVal)
     }
   },
   mounted: function () {

@@ -301,50 +301,47 @@ export default {
       })
     },
     addProductInfo () {
-      var result = this.$refs.productForm.validate((valid) => {
+      this.$refs.productForm.validate((valid) => {
         if (!valid) {
           return false
         }
-      })
-      if (!result) {
-        return
-      }
-      if (this.classId) {
-        for (var u = 0; u < this.classType.length; u++) {
-          if (this.classType[u].id === this.classId) {
-            if (!this.product.productClassSet) {
-              this.product.productClassSet = []
-            }
-            for (var o = 0; this.product.productClassSet.length > o; o++) {
-              if (this.classType[u].id !== this.product.productClassSet[o].id) {
+        if (this.classId) {
+          for (var u = 0; u < this.classType.length; u++) {
+            if (this.classType[u].id === this.classId) {
+              if (!this.product.productClassSet) {
+                this.product.productClassSet = []
+              }
+              for (var o = 0; this.product.productClassSet.length > o; o++) {
+                if (this.classType[u].id !== this.product.productClassSet[o].id) {
+                  this.product.productClassSet.push(this.classType[u])
+                }
+              }
+              if (this.product.productClassSet.length === 0) {
                 this.product.productClassSet.push(this.classType[u])
               }
             }
-            if (this.product.productClassSet.length === 0) {
-              this.product.productClassSet.push(this.classType[u])
-            }
           }
         }
-      }
-      if (this.product.termOfValidity) {
-        this.product.termOfValidity = this.product.termOfValidity.substr(0, 10)
-      }
-      if (this.product.productDate) {
-        this.product.productDate = this.product.productDate.substr(0, 10)
-      }
-      if (!this.product.productSaleLogSet) {
-        this.product.productSaleLogSet = []
-      }
-      this.product.status = 1
-      this.postRequest('product/addData', this.product).then((response) => {
-        this.handleCurrentChange(this.currentPage)
-        this.$message({
-          type: 'success',
-          message: '添加成功!'
+        if (this.product.termOfValidity) {
+          this.product.termOfValidity = this.product.termOfValidity.substr(0, 10)
+        }
+        if (this.product.productDate) {
+          this.product.productDate = this.product.productDate.substr(0, 10)
+        }
+        if (!this.product.productSaleLogSet) {
+          this.product.productSaleLogSet = []
+        }
+        this.product.status = 1
+        this.postRequest('product/addData', this.product).then((response) => {
+          this.handleCurrentChange(this.currentPage)
+          this.$message({
+            type: 'success',
+            message: '添加成功!'
+          })
+          this.showForm = false
+        }).catch((er) => {
+          console.error(er)
         })
-        this.showForm = false
-      }).catch((er) => {
-        console.error(er)
       })
     },
     uploadSuccess (response, file, fileList) {
