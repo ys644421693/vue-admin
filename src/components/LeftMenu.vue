@@ -15,9 +15,6 @@
       :unique-opened="true"
       active-text-color="#00B8EC"
       :collapse="isCollapse">
-      <div id="menuButton">
-        <el-button type="info" icon="el-icon-menu" @click="isCollapse=!isCollapse" size="mini"></el-button>
-      </div>
       <nav v-for="menu in systemMenuNodeList" :key="menu.id">
         <el-submenu :index="menu.id+ ''" v-if="menu.children">
           <template slot="title">
@@ -130,8 +127,7 @@ export default {
   .footerElement{
     width: 100%;
     text-align: center;
-    bottom:60px;
-    padding-top: 20px;
+    padding-top: 5px;
   }
   .leftElement{
     min-height: 300px;
