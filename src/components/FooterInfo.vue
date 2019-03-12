@@ -27,7 +27,6 @@ export default {
   }
 
   * .gcs-footer {
-    margin-top: 10px;
     width: 100%;
     height: 50px;
     text-align: center;
@@ -55,6 +54,5 @@ export default {
   .gcs-footer p {
     height: 15px;
     color: #888888;
-    margin-top: 30px;
   }
 </style>

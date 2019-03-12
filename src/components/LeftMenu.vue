@@ -1,5 +1,11 @@
 <template>
   <div class="leftElement">
+    <div class="footerElement" v-if="!isCollapse">
+      <el-head-button :url="headUrl" size="normal" circle></el-head-button>
+      <div class="userInfo">
+        <h2>{{userInfo.alias}}</h2>
+      </div>
+    </div>
     <el-menu
       class="el-menu-vertical-demo"
       @open="handleOpen"
@@ -30,15 +36,6 @@
         </router-link>
       </nav>
     </el-menu>
-    <div class="footerElement" v-if="!isCollapse">
-      <el-head-button :url="headUrl" size="normal" circle></el-head-button>
-      <div class="userInfo">
-        <h2>{{userInfo.alias}}</h2>
-        <p class="title">{{userInfo.position}}</p>
-        <p>{{userInfo.graduateSchool}}</p>
-      </div>
-      <hr style="width: 80%"/>
-    </div>
   </div>
 </template>
 
@@ -134,7 +131,6 @@ export default {
     width: 100%;
     text-align: center;
     bottom:60px;
-    position:absolute;
     padding-top: 20px;
   }
   .leftElement{

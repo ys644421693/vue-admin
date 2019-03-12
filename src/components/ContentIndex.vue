@@ -5,7 +5,7 @@
       <el-main>
         <router-view/>
       </el-main>
-      <el-footer style="height: 100px">
+      <el-footer>
         <footer-info></footer-info>
       </el-footer>
     </el-container>
@@ -20,7 +20,32 @@ import store from '../store/eunion/store'
 export default {
   name: 'ContentRouter',
   store,
-  components: {FooterInfo, LeftMenu}
+  components: {FooterInfo, LeftMenu},
+  methods: {
+    websocket () {
+      let ws = new WebSocket('ws://localhost:8011/chat/1/client')
+      ws.onopen = () => {
+        // Web Socket 已连接上，使用 send() 方法发送数据
+        console.log('数据发送中...')
+        ws.send('Holle')
+        console.log('数据发送完成')
+      }
+      ws.onmessage = evt => {
+        console.log('数据已接收...')
+      }
+      ws.onclose = function () {
+        // 关闭 websocket
+        console.log('连接已关闭...')
+      }
+      // 路由跳转时结束websocket链接
+      this.$router.afterEach(function () {
+        ws.close()
+      })
+    }
+  },
+  mounted: function () {
+    this.websocket()
+  }
 }
 </script>
 

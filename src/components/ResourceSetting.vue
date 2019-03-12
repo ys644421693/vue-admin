@@ -14,8 +14,8 @@
       <el-card class="box-card">
         <h3>搜索条件</h3>
         <el-form label-position="left" :inline="true">
-          <el-form-item label="商品分类名称">
-            <el-input v-model="query.name" placeholder="商品分类名称" size="mini"></el-input>
+          <el-form-item label="服务名称">
+            <el-input v-model="query.name" placeholder="服务名称" size="mini"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="queryParam" size="mini">查询</el-button>
