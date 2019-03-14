@@ -10,7 +10,8 @@ export default new Vuex.Store({
     token: null,
     title: '',
     baseUrl: 'http://localhost:8011/',
-    defaultHead: 'image/head-default.jpeg'
+    defaultHead: 'image/head-default.jpeg',
+    menuData: []
   },
   mutations: {
     [types.LOGIN]: (state, data) => {
@@ -23,6 +24,15 @@ export default new Vuex.Store({
     },
     [types.TITLE]: (state, data) => {
       state.title = data
+    },
+    setMenuData (state, data) {
+      console.log(data)
+      state.menuData = data
+    }
+  },
+  getters: {
+    getMenuData: (state) => {
+      return state.menuData
     }
   }
 })

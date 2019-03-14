@@ -16,6 +16,7 @@
 import LeftMenu from '../components/LeftMenu'
 import FooterInfo from '../components/FooterInfo'
 import store from '../store/eunion/store'
+import {getWebSocket} from '../util/Constant'
 
 export default {
   name: 'ContentRouter',
@@ -23,24 +24,21 @@ export default {
   components: {FooterInfo, LeftMenu},
   methods: {
     websocket () {
-      let ws = new WebSocket('ws://localhost:8011/chat/1/client')
+      let ws = getWebSocket()
       ws.onopen = () => {
-        // Web Socket 已连接上，使用 send() 方法发送数据
-        console.log('数据发送中...')
         ws.send('Holle')
-        console.log('数据发送完成')
       }
       ws.onmessage = evt => {
-        console.log('数据已接收...')
+        console.log(evt)
+        var dt = JSON.parse(evt.data)
+        if (dt && dt.type === 1) {
+          this.$store.commit('setMenuData', dt.data)
+        }
       }
       ws.onclose = function () {
         // 关闭 websocket
         console.log('连接已关闭...')
       }
-      // 路由跳转时结束websocket链接
-      this.$router.afterEach(function () {
-        ws.close()
-      })
     }
   },
   mounted: function () {
