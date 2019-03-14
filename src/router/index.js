@@ -1,18 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
-import ContentIndex from '@/components/ContentIndex'
-import CmsIndex from '@/cms/CmsIndex'
-import ProductSetting from '@/components/ProductSetting'
-import ProductClassSetting from '@/components/ProductClassSetting'
-import PersonnelInfo from '@/components/PersonnelInfo'
-import InitAccessResource from '@/components/InitAccessResource'
-import SystemMenuNode from '@/components/SystemMenuNode'
-import resourceSetting from '@/components/ResourceSetting'
-import MerchantInfo from '@/components/MerchantInfo'
-import Supplier from '@/components/Supplier'
-import Role from '@/components/role'
-import Login from '@/components/Login'
 import store from '../store/eunion/store'
 import * as types from '../store/eunion/type'
 
@@ -20,46 +7,46 @@ Vue.use(Router)
 
 const router = [{
   path: '/',
-  component: ContentIndex,
+  component: resolve => require(['@/components/ContentIndex'], resolve),
   children: [{
     path: '/',
-    component: HelloWorld
+    component: resolve => require(['@/components/HelloWorld'], resolve)
   },
   {
     path: '/product',
-    component: ProductSetting
+    component: resolve => require(['@/components/ProductSetting'], resolve)
   },
   {
     path: '/initAccessResource',
-    component: InitAccessResource
+    component: resolve => require(['@/components/InitAccessResource'], resolve)
   },
   {
     path: '/menuNode',
-    component: SystemMenuNode
+    component: resolve => require(['@/components/SystemMenuNode'], resolve)
   },
   {
     path: '/supplier',
-    component: Supplier
+    component: resolve => require(['@/components/Supplier'], resolve)
   },
   {
     path: '/merchantInfo',
-    component: MerchantInfo
+    component: resolve => require(['@/components/MerchantInfo'], resolve)
   },
   {
     path: '/role',
-    component: Role
+    component: resolve => require(['@/components/Role'], resolve)
   },
   {
     path: '/resource',
-    component: resourceSetting
+    component: resolve => require(['@/components/ResourceSetting'], resolve)
   },
   {
     path: '/productClass',
-    component: ProductClassSetting
+    component: resolve => require(['@/components/ProductClassSetting'], resolve)
   },
   {
     path: '/PersonnelInfo',
-    component: PersonnelInfo
+    component: resolve => require(['@/components/PersonnelInfo'], resolve)
   }],
   meta: {
     requireAuth: true
@@ -67,16 +54,16 @@ const router = [{
 {
   path: '/ContentRouter',
   name: 'ContentRouter',
-  component: ContentIndex,
+  component: resolve => require(['@/components/ContentIndex'], resolve),
   children: [{
     path: '/ContentRouter/HelloWorld',
-    component: HelloWorld
+    component: resolve => require(['@/components/HelloWorld'], resolve)
   }]
 },
 {
   path: '/cms',
   name: 'CMS',
-  component: CmsIndex,
+  component: resolve => require(['@/cms/CmsIndex'], resolve),
   meta: {
     requireAuth: true
   }
@@ -84,7 +71,7 @@ const router = [{
 {
   path: '/login',
   name: 'login',
-  component: Login
+  component: resolve => require(['@/components/Login'], resolve)
 }]
 // 页面刷新时，重新赋值token
 if (window.localStorage.getItem('token')) {
