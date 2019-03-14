@@ -38,7 +38,7 @@
 
 <script>
 import elHeadButton from '../util/HeadPic'
-
+import { mapGetters } from 'vuex'
 export default {
   components: {elHeadButton},
   data () {
@@ -109,6 +109,15 @@ export default {
           this.dealMenuData(dt)
         }
       })
+    }
+  },
+  computed: {
+    ...mapGetters({ menuDataAll: 'getMenuData' })
+  },
+  watch: {
+    menuDataAll: function (old, newData) {
+      console.log(old)
+      console.log(newData)
     }
   }
 }
