@@ -86,6 +86,12 @@ module.exports = {
       }
     ]
   },
+  externals: {
+    jquery: 'jQuery',
+    echarts: 'echarts',
+    axios: 'axios',
+    element: 'element'
+  },
   node: {
     // prevent webpack from injecting useless setImmediate polyfill because Vue
     // source contains it (although only uses it if it's native).

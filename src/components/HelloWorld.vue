@@ -17,7 +17,7 @@
 
 <script>
 import calendar from './Calendar'
-import { Notification } from 'element-ui'
+import Notification from 'element-ui/packages/notification'
 export default {
   name: 'HelloWorld',
   data () {

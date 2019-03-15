@@ -2,7 +2,9 @@ import axios from 'axios'
 import store from '../store/eunion/store'
 import * as types from '../store/eunion/type'
 import router from '../router/index'
-import { Loading, Message } from 'element-ui'
+import Message from 'element-ui/packages/message'
+import Loading from 'element-ui/packages/Loading'
+
 import qs from 'qs'
 
 // axios 配置
