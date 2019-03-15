@@ -68,9 +68,9 @@ export default {
   methods: {
     handleSelect (key, keyPath) {
       if (key === '1') {
-        window.location.href = '/#/'
+        this.$router.push({path: '/'})
       } else if (key === '2') {
-        window.location.href = '/#/cms'
+        this.$router.push({path: '/cms'})
       }
     },
     defaultSelect () {

@@ -8,7 +8,6 @@ import ElementUI from 'element-ui'
 import VeLine from 'v-charts/lib/line.common'
 import '../node_modules/element-ui/lib/theme-chalk/index.css'
 import './assets/css/reset.css'
-import 'font-awesome/scss/font-awesome.scss'
 import {getRequest, postRequest, deleteRequest, putRequest} from './util/httpUtil'
 
 Vue.config.productionTip = false
